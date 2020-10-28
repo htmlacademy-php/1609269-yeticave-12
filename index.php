@@ -44,11 +44,7 @@ $user_name = 'Дмитрий'; // укажите здесь ваше имя
 // Функция
 
 function add_r($summ){
-    $summ = ceil($summ);
-    if($summ >= 1000){
-        $summ = number_format($summ, 0,'',' ');
-    }
-    return $summ . '₽';
+    return $summ = number_format(ceil($summ), 0,'',' ') . '₽';
 }
 ?>
 <!DOCTYPE html>
