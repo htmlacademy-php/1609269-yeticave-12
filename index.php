@@ -40,6 +40,18 @@ $products = [
 ];
 $category = ['Доски и лыжи', 'Крепления', 'Ботинки', 'Одежда', 'Инструменты', 'Разное'];
 $user_name = 'Дмитрий'; // укажите здесь ваше имя
+
+// Функция
+
+function add_r($summ){
+    $summ = ceil($summ);
+    if($summ < 1000){
+        $summ = ceil($summ);
+    }else{
+        $summ = number_format($summ, 0,'',' ');
+    }
+    return $summ . '₽';
+}
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -123,7 +135,7 @@ $user_name = 'Дмитрий'; // укажите здесь ваше имя
                     <div class="lot__state">
                         <div class="lot__rate">
                             <span class="lot__amount">Стартовая цена</span>
-                            <span class="lot__cost"><?=$tag_products['price']?><b class="rub">р</b></span>
+                            <span class="lot__cost"><?php echo(add_r($tag_products['price']));?></span>
                         </div>
                         <div class="lot__timer timer">
                             12:23
