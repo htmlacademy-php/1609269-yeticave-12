@@ -40,6 +40,11 @@ $products = [
 ];
 $category = ['Доски и лыжи', 'Крепления', 'Ботинки', 'Одежда', 'Инструменты', 'Разное'];
 $user_name = 'Дмитрий'; // укажите здесь ваше имя
+
+function price_format($price){
+    return number_format(ceil($price),0,'',' ') . ' ₽'; 
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -123,7 +128,7 @@ $user_name = 'Дмитрий'; // укажите здесь ваше имя
                     <div class="lot__state">
                         <div class="lot__rate">
                             <span class="lot__amount">Стартовая цена</span>
-                            <span class="lot__cost"><?=$tag_products['price']?><b class="rub">р</b></span>
+                            <span class="lot__cost"><?= price_format($tag_products['price'])?></span>
                         </div>
                         <div class="lot__timer timer">
                             12:23
