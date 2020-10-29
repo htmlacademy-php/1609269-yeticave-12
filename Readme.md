@@ -1,7 +1,7 @@
 # Личный проект «YetiCave»
 
 * Студент: [Дима Арефьев](https://up.htmlacademy.ru/php/12/user/1609269).
-* Наставник: `Неизвестно`.
+* Наставник: [Роман Шевченко](https://htmlacademy.ru/profile/id1242631).
 
 ---
 
