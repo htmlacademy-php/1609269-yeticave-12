@@ -39,11 +39,10 @@ $products = [
 ];
 $category = ['Доски и лыжи', 'Крепления', 'Ботинки', 'Одежда', 'Инструменты', 'Разное'];
 $title_name = "Главная";
-$main = require("templates/main.php");
 
 function price_format($price){
     return number_format(ceil($price),0,'',' ') . ' ₽'; 
 }
-
+$main = "templates/main.php";
 include("templates/layout.php");
 ?>
