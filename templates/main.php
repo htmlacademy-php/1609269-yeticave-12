@@ -5,10 +5,10 @@
         <ul class="promo__list">
 
         <!-- Перебор простого массива -->
-            <?php foreach($category as $categorys):?>
+            <?php foreach($categorys as $category):?>
 
             <li class="promo__item promo__item--boards">
-                <a class="promo__link" href="pages/all-lots.html"><?= $categorys?></a>
+                <a class="promo__link" href="pages/all-lots.html"><?= $category?></a>
             </li>
             <?php endforeach;?>
         </ul>
@@ -29,7 +29,7 @@
                     <img src="<?= htmlspecialchars($tag_products['img_link'])?>" width="350" height="260" alt="">
                 </div>
                 <div class="lot__info">
-                    <span class="lot__category"><?= htmlspecialchars($category[$tag_products['category']])?></span>
+                    <span class="lot__category"><?= htmlspecialchars($categorys[$tag_products['category']])?></span>
                     <h3 class="lot__title"><a class="text-link" href="pages/lot.html"><?= htmlspecialchars($tag_products['name'])?></a></h3>
                     <div class="lot__state">
                         <div class="lot__rate">

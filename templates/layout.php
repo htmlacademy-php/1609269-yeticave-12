@@ -1,8 +1,3 @@
-<?php
-$is_auth = rand(0, 1);
-$user_name = 'Дмитрий'; // укажите здесь ваше имя
-
-?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
