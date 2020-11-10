@@ -45,8 +45,7 @@
 </header>
 
 
-
-<?php include($main);?>
+<main class="content"><?= $content; ?></main>
 
 
 

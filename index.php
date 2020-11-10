@@ -47,14 +47,8 @@ function price_format($price){
     return number_format(ceil($price),0,'',' ') . ' ₽'; 
 }
 
-require(__DIR__ . "/helpers.php");
-include(__DIR__ . "/templates/layout.php");
-
-
-$first = ['31231','ggrge','rge'];
-$second = ['trhbr','32424','ferfge'];
-echo $summ = ['category' => $categorys , 'product' =>$products]['product'][1]['name'];
-print($content = include_template('main.php', $data = ['category' => $categorys , 'product' =>$products]));
-//$page = include_template('layout.php',['main' => $content, 'title' => 'Главная');
-//echo $page;
+include(__DIR__ . "/helpers.php");
+$content = include_template(__DIR__ . "/templates/main.php",['categorys' => $categorys , 'products' =>$products]);
+$page = include_template(__DIR__ . "/templates/layout.php",['content' => $content, 'title' => 'Главная']);
+print $page;
 ?>
