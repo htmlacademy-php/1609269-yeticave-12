@@ -36,8 +36,12 @@
                             <span class="lot__amount">Стартовая цена</span>
                             <span class="lot__cost"><?= htmlspecialchars(price_format($tag_products['price']))?></span>
                         </div>
-                        <div class="lot__timer timer">
-                            12:23
+                        <div class="lot__timer timer 
+                            <?php if((strtotime($tag_products['date'])-strtotime('now'))/3600<1){
+                                echo "timer--finishing";
+                            }
+                            ?>">
+                            <?=diff_time($tag_products['date'])?>
                         </div>
                     </div>
                 </div>
@@ -48,3 +52,4 @@
         </ul>
     </section>
 </main>
+

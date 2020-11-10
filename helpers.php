@@ -144,4 +144,15 @@ function include_template($name, array $data = []) {
     return $result;
 }
 
-
+function diff_time($time){
+    $hours = floor((strtotime($time) - strtotime('now'))/3600);
+    $min = floor(((strtotime($time) - strtotime('now'))/3600 - $hours)*60);
+    if($hours<10){
+        $hours = '0'.(string)$hours;
+    }
+    if($min<10){
+        $min = '0'.(string)$min;
+    }
+    return "$hours:$min";
+//    return $diff = date_interval_format(date_diff(date_create('now'),date_create($time)),"%dд. %h:%i:%s");
+}
