@@ -145,8 +145,8 @@ function include_template($name, array $data = []) {
 }
 
 function diff_time($time){
-    $hours = floor((strtotime($time) - strtotime('now'))/3600);
-    $min = floor(((strtotime($time) - strtotime('now'))/3600 - $hours)*60);
+    $hours = floor((strtotime($time) - time())/3600);
+    $min = floor(((strtotime($time) - time())/3600 - $hours)*60);
     if($hours<10){
         $hours = '0'.(string)$hours;
     }

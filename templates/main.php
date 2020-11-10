@@ -37,7 +37,7 @@
                             <span class="lot__cost"><?= htmlspecialchars(price_format($tag_products['price']))?></span>
                         </div>
                         <div class="lot__timer timer 
-                            <?php if((strtotime($tag_products['date'])-strtotime('now'))/3600<1){
+                            <?php if((strtotime($tag_products['date'])-time())/3600<1){
                                 echo "timer--finishing";
                             }
                             ?>">
