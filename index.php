@@ -36,13 +36,10 @@ $products = [
         'date' => '2020-11-11'
     ],
     [
-//        'name' => 'Маска Oakley Canopy',
-        'name' => 'CYBERPUNK 2077',
+        'name' => 'Маска Oakley Canopy',
         'category' => 5,
-//        'price' => 	5400,
-        'price' => 	2000,
-        'img_link' => 'img/cyberp.jpg', 
-//        'img_link' => 'img/lot-6.jpg',
+        'price' => 	5400,
+        'img_link' => 'img/lot-6.jpg',
         'date' => '2020-12-10'
     ]
 ];
