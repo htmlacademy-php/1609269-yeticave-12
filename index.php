@@ -43,12 +43,7 @@ $main = "templates/main.php";
 $is_auth = rand(0, 1);
 $user_name = 'Дмитрий';
 
-function price_format($price){
-    return number_format(ceil($price),0,'',' ') . ' ₽'; 
-}
-
 include(__DIR__ . "/helpers.php");
-$content = include_template(__DIR__ . "/templates/main.php",['categorys' => $categorys , 'products' =>$products]);
-$page = include_template(__DIR__ . "/templates/layout.php",['content' => $content, 'title' => 'Главная']);
+$content = include_template("main.php",['categorys' => $categorys , 'products' =>$products]);
+$page = include_template("layout.php",['content' => $content, 'title_name' => 'Главная']);
 print $page;
-?>
