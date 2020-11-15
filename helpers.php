@@ -144,4 +144,11 @@ function include_template($name, array $data = []) {
     return $result;
 }
 
-
+function diff_time($time){
+    $hours = floor((strtotime($time) - time())/3600);
+    $min = floor(((strtotime($time) - time())/3600 - $hours)*60);
+    $hours = str_pad($hours,2,"0",STR_PAD_LEFT);
+    $min = str_pad($min,2,'0',STR_PAD_LEFT);
+    return [$hours,$min,];
+//    return $diff = date_interval_format(date_diff(date_create('now'),date_create($time)),"%dд. %h:%i:%s");
+}
