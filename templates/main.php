@@ -36,8 +36,10 @@
                             <span class="lot__amount">Стартовая цена</span>
                             <span class="lot__cost"><?= htmlspecialchars(price_format($tag_products['price']))?></span>
                         </div>
-                        <div class="lot__timer timer">
-                            12:23
+                        <?php list($hours,$min) = diff_time($tag_products['date'])?>
+                        <?php $finishing = ($hours<1) ? "timer--finishing" : "" ?>
+                        <div class="lot__timer timer <?= $finishing ?>">
+                           <?= $hours.":".$min?>
                         </div>
                     </div>
                 </div>
@@ -48,3 +50,4 @@
         </ul>
     </section>
 </main>
+
