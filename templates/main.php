@@ -39,7 +39,6 @@
                         <?php list($hours,$min) = diff_time($tag_products['date'])?>
                         <?php $finishing = ($hours<1) ? "timer--finishing" : "" ?>
                         <div class="lot__timer timer <?= $finishing ?>">
-                           <?php list($hours,$min) = diff_time($tag_products['date'])?>
                            <?= $hours.":".$min?>
                         </div>
                     </div>
