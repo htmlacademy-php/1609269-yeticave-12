@@ -21,3 +21,7 @@ INSERT INTO lots VALUES
 INSERT INTO bids VALUES
 (1,'2020-11-23',12999,1,1),
 (2,'2020-11-23',6000,6,2);
+
+SELECT category FROM categories;
+
+SELECT date_create, name, start_price, img_link FROM lots ORDER BY date_create DESC;
