@@ -47,7 +47,6 @@ CREATE INDEX lot_creator ON lots(user_id);
 CREATE INDEX lot_winner ON lots(winner_id);
 CREATE INDEX lot_category ON lots(category_id);
 
-CREATE INDEX bid_user ON bids(user_id);
 CREATE INDEX lot_id ON bids(lot_id);
 CREATE INDEX user_id ON bids(user_id);
 
