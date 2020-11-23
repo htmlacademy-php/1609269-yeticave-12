@@ -35,3 +35,14 @@ CREATE TABLE users
    password char(50) not null,
    сontact int not null
 );
+
+SELECT lot.ID, 
+       lot.date_create, 
+       lot.name,
+       lot.img_link, 
+       lot.start_price, 
+       lot.date_completion, 
+       lot.step_rate,
+       users.name,
+       categorys.category
+FROM   lot,users, categorys
