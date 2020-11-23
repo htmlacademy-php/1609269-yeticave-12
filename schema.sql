@@ -41,3 +41,14 @@ CREATE TABLE users
    password varchar(255) not null,
    сontact varchar(255) not null
 )CHARACTER SET utf8mb4;
+
+CREATE INDEX lot_name ON lots(name);
+CREATE INDEX lot_creater ON lots(user_id);
+CREATE INDEX lot_winner ON lots(winner_id);
+CREATE INDEX lot_category ON lots(category_id);
+
+CREATE INDEX bid_user ON bids(user_id);
+
+CREATE INDEX user_email ON users(email);
+CREATE INDEX user_name ON users(name);
+CREATE INDEX user_сontact ON users(сontact);
