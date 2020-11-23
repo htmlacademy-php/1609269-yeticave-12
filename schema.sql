@@ -27,6 +27,7 @@ CREATE TABLE bids
    date_create date not null,
    price int not null,
    lot_id int not null,
+   user_id int not null
 )CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 CREATE TABLE users
