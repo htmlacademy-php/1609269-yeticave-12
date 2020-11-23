@@ -6,7 +6,7 @@ CREATE TABLE categories
    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
    category varchar(255) NOT NULL,
    code varchar(255) NOT NULL
-) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+) CHARACTER SET utf8mb4;
 
 CREATE TABLE lots
 (
@@ -21,7 +21,7 @@ CREATE TABLE lots
    start_price int not null,
    date_completion date not null,
    step_rate int not null
-)CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+)CHARACTER SET utf8mb4;
 
 CREATE TABLE bids
 (
@@ -30,7 +30,7 @@ CREATE TABLE bids
    price int not null,
    lot_id int not null,
    user_id int not null
-)CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+)CHARACTER SET utf8mb4;
 
 CREATE TABLE users
 (
@@ -40,4 +40,4 @@ CREATE TABLE users
    name varchar(255) not null UNIQUE,
    password varchar(255) not null,
    сontact varchar(255) not null
-)CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+)CHARACTER SET utf8mb4;
