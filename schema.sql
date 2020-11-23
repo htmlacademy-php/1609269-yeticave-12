@@ -14,8 +14,8 @@ CREATE TABLE lots
    date_create date not null,
    name varchar(255) not null,
    description varchar(4096) not null,
-   users_creater_id int not null,
-   users_winner_id int not null,
+   user_id int not null,
+   winner_id int not null,
    category_id int not null,
    img_link varchar(255) not null,
    start_price int not null,
@@ -37,7 +37,7 @@ CREATE TABLE users
    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
    date_create date not null,
    email varchar(255) not null UNIQUE,
-   name varchar(255) not null UNIQUE,
+   name varchar(255) not null,
    password varchar(255) not null,
    сontact varchar(255) not null
 )CHARACTER SET utf8mb4;
