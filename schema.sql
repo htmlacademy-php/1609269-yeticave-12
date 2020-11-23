@@ -20,8 +20,7 @@ CREATE TABLE lots
    img_link varchar(255) not null,
    start_price int not null,
    date_completion date not null,
-   step_rate int not null,
-   users_link varchar(255) not null
+   step_rate int not null
 )CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE bids
