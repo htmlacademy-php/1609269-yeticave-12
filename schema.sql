@@ -25,7 +25,9 @@ CREATE TABLE bids
 (
    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
    date_create date not null,
-   price int not null
+   price int not null,
+   lot_id int not null,
+   FOREIGN KEY(lot_id) REFERENCES lots(id)
 )CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 CREATE TABLE users
