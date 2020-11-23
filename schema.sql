@@ -43,7 +43,7 @@ CREATE TABLE users
 )CHARACTER SET utf8mb4;
 
 CREATE INDEX lot_name ON lots(name);
-CREATE INDEX lot_creater ON lots(user_id);
+CREATE INDEX lot_creator ON lots(user_id);
 CREATE INDEX lot_winner ON lots(winner_id);
 CREATE INDEX lot_category ON lots(category_id);
 
