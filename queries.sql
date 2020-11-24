@@ -33,8 +33,10 @@ WHERE lots.date_completion >= '2020-11-24'
 ORDER BY lots.date_create DESC; 
 /*получить самые новые, открытые лоты. Каждый лот должен включать название, стартовую цену, ссылку на изображение, текущую цену, название категории;*/
 
-SELECT id,  
+SELECT lots.id, category  
 FROM lots
-/**/
+JOIN categories
+ON lots.id = categories.id
+/*показать лот по его id. Получите также название категории, к которой принадлежит лот*/
 /**/
 /**/
