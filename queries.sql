@@ -25,13 +25,16 @@ INSERT INTO bids VALUES
 SELECT category FROM categories; 
 /*получить все категории*/
 
-SELECT name, start_price, img_link,step_rate,category_id
-FROM lots 
-WHERE date_completion >= '2020-11-24' 
-ORDER BY date_create DESC; 
+SELECT lots.id ,name, start_price, img_link, step_rate, category
+FROM lots
+JOIN categories
+ON lots.category_id = categories.code
+WHERE lots.date_completion >= '2020-11-24' 
+ORDER BY lots.date_create DESC; 
 /*получить самые новые, открытые лоты. Каждый лот должен включать название, стартовую цену, ссылку на изображение, текущую цену, название категории;*/
 
-SELECT 
+SELECT id,  
+FROM lots
 /**/
 /**/
 /**/
