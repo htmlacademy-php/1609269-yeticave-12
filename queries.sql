@@ -45,7 +45,7 @@ SET name = '2019 Rossignol District Snowboard'
 WHERE id = 1;
 
 /*получить список ставок для лота по его идентификатору с сортировкой по дате*/
-SELECT bids.id,bids.date_create,lots.id,lots.name,lots.date_create,description,lots.user_id,winner_id,category_id,img_link,start_price,date_completion,step_rate
+SELECT bids.id,bids.date_create,lots.*
 FROM bids
 JOIN lots 
 ON bids.lot_id = lots.id
