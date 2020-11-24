@@ -36,7 +36,17 @@ ORDER BY lots.date_create DESC;
 SELECT lots.id, category  
 FROM lots
 JOIN categories
-ON lots.id = categories.id
+ON lots.id = categories.id;
 /*показать лот по его id. Получите также название категории, к которой принадлежит лот*/
-/**/
-/**/
+
+UPDATE lots 
+SET name = '2019 Rossignol District Snowboard'
+WHERE id = 1;
+/*обновить название лота по его идентификатору*/
+
+SELECT bids.id,lots.id,lots.name,bids.date_create
+FROM bids
+JOIN lots 
+ON bids.lot_id = lots.id
+ORDER BY date_create DESC;
+/*получить список ставок для лота по его идентификатору с сортировкой по дате*/
