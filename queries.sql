@@ -29,7 +29,7 @@ SELECT lots.id ,name, start_price, img_link, step_rate, category
 FROM lots
 JOIN categories
 ON lots.category_id = categories.code
-WHERE lots.date_completion >= '2020-11-24' 
+WHERE lots.date_completion >= NOW()
 ORDER BY lots.date_create DESC; 
 /*получить самые новые, открытые лоты. Каждый лот должен включать название, стартовую цену, ссылку на изображение, текущую цену, название категории;*/
 
@@ -44,9 +44,9 @@ SET name = '2019 Rossignol District Snowboard'
 WHERE id = 1;
 /*обновить название лота по его идентификатору*/
 
-SELECT bids.id,lots.id,lots.name,bids.date_create
+SELECT bids.id,bids.date_create,lots.id,lots.name,lots.date_create,description,lots.user_id,winner_id,category_id,img_link,start_price,date_completion,step_rate
 FROM bids
 JOIN lots 
 ON bids.lot_id = lots.id
-ORDER BY date_create DESC;
+ORDER BY bids.date_create DESC;
 /*получить список ставок для лота по его идентификатору с сортировкой по дате*/
