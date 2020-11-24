@@ -22,31 +22,31 @@ INSERT INTO bids VALUES
 (1,'2020-11-23',12999,1,1),
 (2,'2020-11-23',6000,6,2);
 
-SELECT category FROM categories; 
 /*получить все категории*/
+SELECT category FROM categories; 
 
+/*получить самые новые, открытые лоты. Каждый лот должен включать название, стартовую цену, ссылку на изображение, текущую цену, название категории;*/
 SELECT lots.id ,name, start_price, img_link, step_rate, category
 FROM lots
 JOIN categories
 ON lots.category_id = categories.id
 WHERE lots.date_completion >= NOW()
 ORDER BY lots.date_create DESC; 
-/*получить самые новые, открытые лоты. Каждый лот должен включать название, стартовую цену, ссылку на изображение, текущую цену, название категории;*/
 
+/*показать лот по его id. Получите также название категории, к которой принадлежит лот*/
 SELECT lots.id, category  
 FROM lots
 JOIN categories
 ON lots.id = categories.id;
-/*показать лот по его id. Получите также название категории, к которой принадлежит лот*/
 
+/*обновить название лота по его идентификатору*/
 UPDATE lots 
 SET name = '2019 Rossignol District Snowboard'
 WHERE id = 1;
-/*обновить название лота по его идентификатору*/
 
+/*получить список ставок для лота по его идентификатору с сортировкой по дате*/
 SELECT bids.id,bids.date_create,lots.id,lots.name,lots.date_create,description,lots.user_id,winner_id,category_id,img_link,start_price,date_completion,step_rate
 FROM bids
 JOIN lots 
 ON bids.lot_id = lots.id
 ORDER BY bids.date_create DESC;
-/*получить список ставок для лота по его идентификатору с сортировкой по дате*/
