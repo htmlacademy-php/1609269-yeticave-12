@@ -7,8 +7,8 @@ INSERT INTO categories VALUES
 (6,'Разное',5);
 
 INSERT INTO users VALUES
-(1,'2020-11-23','yandex@mail.ru','yandex','12345y','+7988'),
-(2,'2020-11-23','google@mail.ru','google','12345g','+7989');
+(1,'2020-11-23','yandex@mail.ru','yandex','$2y$10$NvdjJOFXly/ybiO1IwSMre0x0mraCebAnGNxe8RJC27yMn4P/vSfK','+7988'),
+(2,'2020-11-23','google@mail.ru','google','$2y$10$hOtl9f4C3VcFdXkBGF.EH.j9cdbnZ3noct/mWGwGjaQryzY3qkFxO','+7989');
 
 INSERT INTO lots VALUES
 (1,'2020-11-23','2014 Rossignol District Snowboard','',1,0,0,'img/lot-1.jpg',10999,'2020-11-25',15000),
