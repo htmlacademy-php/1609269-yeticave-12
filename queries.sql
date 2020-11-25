@@ -32,7 +32,7 @@ SELECT lots.id ,name,lots.date_create,start_price,
 MAX(CASE
  WHEN bids.lot_id = lots.id THEN bids.price
  ELSE lots.start_price
-END AS price),
+END )AS price,
 
 category,img_link,step_rate
 FROM lots
@@ -44,7 +44,6 @@ ON lots.id = categories.id
 WHERE lots.date_completion >= NOW()
 GROUP by lots.id
 ORDER BY lots.date_create DESC;
-
 /*показать лот по его id. Получите также название категории, к которой принадлежит лот*/
 SELECT lots.id, category  
 FROM lots
