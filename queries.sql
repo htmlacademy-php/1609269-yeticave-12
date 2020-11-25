@@ -20,8 +20,8 @@ INSERT INTO lots VALUES
 
 INSERT INTO bids VALUES
 (1,'2020-11-23',15999,1,1),
-(1,'2020-11-23',12999,1,1),
-(2,'2020-11-23',6000,6,2);
+(2,'2020-11-23',12999,1,1),
+(3,'2020-11-23',6000,6,2);
 
 /*получить все категории*/
 SELECT category FROM categories; 
@@ -29,28 +29,26 @@ SELECT category FROM categories;
 /*получить самые новые, открытые лоты. Каждый лот должен включать название, стартовую цену, ссылку на изображение, текущую цену, название категории;*/
 SELECT lots.id ,name,start_price,img_link,
 
-MAX(COALESCE(bids.price,lots.start_price)) AS price_2,
+MAX(COALESCE(bids.price,lots.start_price)) AS price,
 
-MAX(CASE
- WHEN bids.lot_id = lots.id THEN bids.price
- ELSE lots.start_price
-END )AS price, category
+category
 
 FROM lots
 LEFT JOIN bids
-ON lots.category_id = bids.lot_id
+ON lots.id = bids.lot_id
+
 LEFT JOIN categories
 ON lots.id = categories.id
 
 WHERE lots.date_completion >= NOW()
-GROUP by lots.id
+GROUP BY lots.id
 ORDER BY lots.date_create DESC;
 
 /*показать лот по его id. Получите также название категории, к которой принадлежит лот*/
 SELECT lots.id, category  
 FROM lots
 JOIN categories
-ON lots.id = categories.id;
+ON lots.category_id = categories.id;
 
 /*обновить название лота по его идентификатору*/
 UPDATE lots 
@@ -62,4 +60,5 @@ SELECT bids.id,bids.date_create,lots.*
 FROM bids
 JOIN lots 
 ON bids.lot_id = lots.id
+GROUP BY bids.id
 ORDER BY bids.date_create DESC;
