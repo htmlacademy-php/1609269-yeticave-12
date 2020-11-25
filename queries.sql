@@ -27,23 +27,25 @@ INSERT INTO bids VALUES
 SELECT category FROM categories; 
 
 /*получить самые новые, открытые лоты. Каждый лот должен включать название, стартовую цену, ссылку на изображение, текущую цену, название категории;*/
-SELECT lots.id ,name,lots.date_create,start_price,
+SELECT lots.id ,name,start_price,img_link,
+
+MAX(COALESCE(bids.price,lots.start_price)) AS price_2,
 
 MAX(CASE
  WHEN bids.lot_id = lots.id THEN bids.price
  ELSE lots.start_price
-END )AS price,
+END )AS price, category
 
-category,img_link,step_rate
 FROM lots
-left JOIN bids
+LEFT JOIN bids
 ON lots.category_id = bids.lot_id
-left JOIN categories
+LEFT JOIN categories
 ON lots.id = categories.id
 
 WHERE lots.date_completion >= NOW()
 GROUP by lots.id
 ORDER BY lots.date_create DESC;
+
 /*показать лот по его id. Получите также название категории, к которой принадлежит лот*/
 SELECT lots.id, category  
 FROM lots
