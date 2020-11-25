@@ -24,13 +24,11 @@ INSERT INTO bids VALUES
 (3,'2020-11-23',6000,6,2);
 
 /*получить все категории*/
-SELECT category FROM categories; 
+SELECT categories.* FROM categories; 
 
 /*получить самые новые, открытые лоты. Каждый лот должен включать название, стартовую цену, ссылку на изображение, текущую цену, название категории;*/
 SELECT lots.id ,name,start_price,img_link,
-
-MAX(COALESCE(bids.price,lots.start_price)) AS price,
-
+MAX(COALESCE(bids.price,lots.start_price)) AS price, 
 category
 
 FROM lots
@@ -45,7 +43,7 @@ GROUP BY lots.id
 ORDER BY lots.date_create DESC;
 
 /*показать лот по его id. Получите также название категории, к которой принадлежит лот*/
-SELECT lots.id, category  
+SELECT lots.*, category  
 FROM lots
 JOIN categories
 ON lots.category_id = categories.id;
@@ -56,7 +54,7 @@ SET name = '2019 Rossignol District Snowboard'
 WHERE id = 1;
 
 /*получить список ставок для лота по его идентификатору с сортировкой по дате*/
-SELECT bids.id,bids.date_create,lots.*
+SELECT bids.*,lots.*
 FROM bids
 JOIN lots 
 ON bids.lot_id = lots.id
