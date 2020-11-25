@@ -19,6 +19,7 @@ INSERT INTO lots VALUES
 (6,'2020-11-23','Маска Oakley Canopy','',1,2,6,'img/lot-6.jpg',5400,'2021-11-23',200);
 
 INSERT INTO bids VALUES
+(1,'2020-11-23',15999,1,1),
 (1,'2020-11-23',12999,1,1),
 (2,'2020-11-23',6000,6,2);
 
@@ -27,16 +28,21 @@ SELECT category FROM categories;
 
 /*получить самые новые, открытые лоты. Каждый лот должен включать название, стартовую цену, ссылку на изображение, текущую цену, название категории;*/
 SELECT lots.id ,name,lots.date_create,start_price,
-CASE 
+
+MAX(CASE
  WHEN bids.lot_id = lots.id THEN bids.price
  ELSE lots.start_price
-END AS price,category,img_link,step_rate
+END AS price),
+
+category,img_link,step_rate
 FROM lots
 left JOIN bids
 ON lots.category_id = bids.lot_id
 left JOIN categories
 ON lots.id = categories.id
+
 WHERE lots.date_completion >= NOW()
+GROUP by lots.id
 ORDER BY lots.date_create DESC;
 
 /*показать лот по его id. Получите также название категории, к которой принадлежит лот*/
