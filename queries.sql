@@ -14,9 +14,9 @@ INSERT INTO lots VALUES
 (1,'2020-11-23','2014 Rossignol District Snowboard','',1,0,1,'img/lot-1.jpg',10999,'2020-11-25',200),
 (2,'2020-11-23','DC Ply Mens 2016/2017 Snowboard','',1,0,1,'img/lot-2.jpg',159999,'2020-12-23',200),
 (3,'2020-11-23','Крепления Union Contact Pro 2015 года размер L/XL','',2,1,2,'img/lot-3.jpg',8000,'2020-11-24',200),
-(4,'2020-11-23','Ботинки для сноуборда DC Mutiny Charocal','',1,2,3,'img/lot-4.jpg',10999,'2020-11-23',200),
+(4,'2020-11-23','Ботинки для сноуборда DC Mutiny Charocal','',1,2,3,'img/lot-4.jpg',10999,'2020-11-26',200),
 (5,'2020-11-23','Куртка для сноуборда DC Mutiny Charocal','',1,0,4,'img/lot-5.jpg',7500,'2020-11-27',200),
-(6,'2020-11-23','Маска Oakley Canopy','',1,2,6,'img/lot-6.jpg',5400,'2020-11-23',200);
+(6,'2020-11-23','Маска Oakley Canopy','',1,2,6,'img/lot-6.jpg',5400,'2021-11-23',200);
 
 INSERT INTO bids VALUES
 (1,'2020-11-23',12999,1,1),
@@ -26,12 +26,18 @@ INSERT INTO bids VALUES
 SELECT category FROM categories; 
 
 /*получить самые новые, открытые лоты. Каждый лот должен включать название, стартовую цену, ссылку на изображение, текущую цену, название категории;*/
-SELECT lots.id ,name, start_price, img_link, step_rate, category
+SELECT lots.id ,name,lots.date_create,start_price,
+CASE 
+ WHEN bids.lot_id = lots.id THEN bids.price
+ ELSE lots.start_price
+END AS price,category,img_link,step_rate
 FROM lots
-JOIN categories
-ON lots.category_id = categories.id
+left JOIN bids
+ON lots.category_id = bids.lot_id
+left JOIN categories
+ON lots.id = categories.id
 WHERE lots.date_completion >= NOW()
-ORDER BY lots.date_create DESC; 
+ORDER BY lots.date_create DESC;
 
 /*показать лот по его id. Получите также название категории, к которой принадлежит лот*/
 SELECT lots.id, category  
