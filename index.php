@@ -17,6 +17,7 @@ ON lots.id = bids.lot_id
 LEFT JOIN categories
 ON lots.id = categories.id
 
+WHERE lots.date_completion >= NOW()
 GROUP BY lots.id
 ORDER BY lots.date_create DESC;"),MYSQLI_ASSOC);
 
