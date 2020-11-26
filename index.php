@@ -1,11 +1,15 @@
 <?php
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 ini_set('display_errors',1);
 error_reporting(E_ALL);
 
-$con = mysqli_connect("localhost","root","","yeticave");
+$con = mysqli_connect("localhost","root","root","yeticave");
 mysqli_set_charset($con, "utf8mb4");
 
-$products = mysqli_fetch_all(mysqli_query($con,
+$select_categories = 
+"SELECT categories.* 
+FROM categories";
+$select_lots = 
 "SELECT lots.id ,name,start_price,img_link,
 MAX(COALESCE(bids.price,lots.start_price)) AS price, 
 date_completion ,category
@@ -19,11 +23,10 @@ ON lots.id = categories.id
 
 WHERE lots.date_completion >= NOW()
 GROUP BY lots.id
-ORDER BY lots.date_create DESC;"),MYSQLI_ASSOC);
+ORDER BY lots.date_create DESC;";
 
-$categorys = mysqli_fetch_all(mysqli_query($con,
-"SELECT categories.* 
-FROM categories"),MYSQLI_ASSOC);
+$products = mysqli_fetch_all(mysqli_query($con,$select_lots),MYSQLI_ASSOC);
+$categorys = mysqli_fetch_all(mysqli_query($con,$select_categories),MYSQLI_ASSOC);
 
 $title_name = "Главная";
 $main = "templates/main.php";
