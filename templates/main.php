@@ -5,10 +5,10 @@
         <ul class="promo__list">
 
         <!-- Перебор простого массива -->
-            <?php foreach($categorys as $category):?>
+            <?php foreach($categorys as $category => $tag_category):?>
 
-            <li class="promo__item promo__item--boards">
-                <a class="promo__link" href="pages/all-lots.html"><?= htmlspecialchars($category)?></a>
+            <li class="promo__item promo__<?= $tag_category['code']?>">
+                <a class="promo__link" href="pages/all-lots.html"><?= htmlspecialchars($tag_category['category'])?></a>
             </li>
             <?php endforeach;?>
         </ul>
@@ -29,14 +29,14 @@
                     <img src="<?= htmlspecialchars($tag_products['img_link'])?>" width="350" height="260" alt="">
                 </div>
                 <div class="lot__info">
-                    <span class="lot__category"><?= htmlspecialchars($categorys[$tag_products['category']])?></span>
+                    <span class="lot__category"><?= htmlspecialchars($tag_products['category'])?></span>
                     <h3 class="lot__title"><a class="text-link" href="pages/lot.html"><?= htmlspecialchars($tag_products['name'])?></a></h3>
                     <div class="lot__state">
                         <div class="lot__rate">
                             <span class="lot__amount">Стартовая цена</span>
                             <span class="lot__cost"><?= htmlspecialchars(price_format($tag_products['price']))?></span>
                         </div>
-                        <?php list($hours,$min) = diff_time($tag_products['date'])?>
+                        <?php list($hours,$min) = diff_time($tag_products['date_completion'])?>
                         <?php $finishing = ($hours<1) ? "timer--finishing" : "" ?>
                         <div class="lot__timer timer <?= $finishing ?>">
                            <?= $hours.":".$min?>
