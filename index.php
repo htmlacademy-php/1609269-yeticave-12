@@ -1,4 +1,33 @@
-<?php 
+<?php
+$con = mysqli_connect("localhost","root","","yeticave");
+mysqli_set_charset($con, "utf8mb4");
+
+$products = mysqli_fetch_all(mysqli_query($con,
+"SELECT lots.id ,name,start_price,img_link,
+MAX(COALESCE(bids.price,lots.start_price)) AS price, 
+date_completion ,category
+
+FROM lots
+LEFT JOIN bids
+ON lots.id = bids.lot_id
+
+LEFT JOIN categories
+ON lots.id = categories.id
+
+/*WHERE lots.date_completion >= NOW()*/
+GROUP BY lots.id
+ORDER BY lots.date_create DESC;"),MYSQLI_ASSOC);
+
+$categorys = mysqli_fetch_all(mysqli_query($con,
+"SELECT categories.* 
+FROM categories"),MYSQLI_ASSOC);
+
+/*if ($con == false) {
+    print("Ошибка подключения: " . mysqli_connect_error());
+ } 
+ else { 
+    print("Соединение установлено"); 
+ }
 $products = [
     [
         'name' => '2014 Rossignol District Snowboard',
@@ -43,7 +72,7 @@ $products = [
         'date' => date('Y-m-d H:i:s',time()+1000),
     ]
 ];
-$categorys = ['Доски и лыжи', 'Крепления', 'Ботинки', 'Одежда', 'Инструменты', 'Разное'];
+$categorys = ['Доски и лыжи', 'Крепления', 'Ботинки', 'Одежда', 'Инструменты', 'Разное'];*/
 $title_name = "Главная";
 $main = "templates/main.php";
 $is_auth = rand(0, 1);
