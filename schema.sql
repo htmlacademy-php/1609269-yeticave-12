@@ -11,7 +11,7 @@ CREATE TABLE categories
 CREATE TABLE lots
 (
    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-   date_create date not null,
+   date_create datetime not null,
    name varchar(255) not null,
    description varchar(4096) not null,
    user_id int not null,
@@ -19,14 +19,14 @@ CREATE TABLE lots
    category_id int not null,
    img_link varchar(255) not null,
    start_price int not null,
-   date_completion date not null,
+   date_completion datetime not null,
    step_rate int not null
 )CHARACTER SET utf8mb4;
 
 CREATE TABLE bids
 (
    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-   date_create date not null,
+   date_create datetime not null,
    price int not null,
    lot_id int not null,
    user_id int not null
@@ -35,7 +35,7 @@ CREATE TABLE bids
 CREATE TABLE users
 (
    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-   date_create date not null,
+   date_create datetime not null,
    email varchar(255) not null UNIQUE,
    name varchar(255) not null,
    password varchar(255) not null,

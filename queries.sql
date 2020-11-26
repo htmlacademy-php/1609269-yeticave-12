@@ -11,7 +11,7 @@ INSERT INTO users VALUES
 (2,'2020-11-23','google@mail.ru','google','$2y$10$hOtl9f4C3VcFdXkBGF.EH.j9cdbnZ3noct/mWGwGjaQryzY3qkFxO','+7989');
 
 INSERT INTO lots VALUES
-(1,'2020-11-23','2014 Rossignol District Snowboard','',1,0,1,'img/lot-1.jpg',10999,'2020-11-26',200),
+(1,'2020-11-23','2014 Rossignol District Snowboard','',1,0,1,'img/lot-1.jpg',10999,now() + interval 15 minute,200),
 (2,'2020-11-23','DC Ply Mens 2016/2017 Snowboard','',1,0,1,'img/lot-2.jpg',159999,'2020-12-23',200),
 (3,'2020-11-23','Крепления Union Contact Pro 2015 года размер L/XL','',2,1,2,'img/lot-3.jpg',8000,'2020-11-24',200),
 (4,'2020-11-23','Ботинки для сноуборда DC Mutiny Charocal','',1,2,3,'img/lot-4.jpg',10999,'2020-11-26',200),
