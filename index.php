@@ -3,7 +3,7 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 ini_set('display_errors',1);
 error_reporting(E_ALL);
 
-$con = mysqli_connect("localhost","root","root","yeticave");
+$con = mysqli_connect("localhost","root","","yeticave");
 mysqli_set_charset($con, "utf8mb4");
 
 $select_categories = 
