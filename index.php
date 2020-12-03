@@ -35,7 +35,8 @@ $user_name = 'Дмитрий';
 
 include(__DIR__ . "/helpers.php");
 $content = include_template("main.php",['categorys' => $categorys , 'products' =>$products]);
-$page = include_template("layout.php",['content' => $content, 
+$page = include_template("layout.php",['content' => $content,
+                                       'categorys' => $categorys,
                                        'title_name' => 'Главная',
                                        'is_auth' => $is_auth,
                                        'user_name' => $user_name]);

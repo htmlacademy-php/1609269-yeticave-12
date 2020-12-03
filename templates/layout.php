@@ -47,24 +47,11 @@
 <main>
     <nav class="nav">
       <ul class="nav__list container">
+      <?php foreach($categorys as $category):?>
         <li class="nav__item">
-          <a href="all-lots.html">Доски и лыжи</a>
+          <a href="all-lots.html"><?=$category["category"]?></a>
         </li>
-        <li class="nav__item">
-          <a href="all-lots.html">Крепления</a>
-        </li>
-        <li class="nav__item">
-          <a href="all-lots.html">Ботинки</a>
-        </li>
-        <li class="nav__item">
-          <a href="all-lots.html">Одежда</a>
-        </li>
-        <li class="nav__item">
-          <a href="all-lots.html">Инструменты</a>
-        </li>
-        <li class="nav__item">
-          <a href="all-lots.html">Разное</a>
-        </li>
+        <?php endforeach;?>
       </ul>
     </nav>
 <?php endif;?>
@@ -73,37 +60,14 @@
 
 </div>
 <footer class="main-footer">
-<?php if($_SERVER["REQUEST_URI"] != '/index.php'):?>
     <nav class="nav">
       <ul class="nav__list container">
+        <?php foreach($categorys as $category):?>
         <li class="nav__item">
-          <a href="all-lots.html">Доски и лыжи</a>
+          <a href="all-lots.html"><?=$category["category"]?></a>
         </li>
-        <li class="nav__item">
-          <a href="all-lots.html">Крепления</a>
-        </li>
-        <li class="nav__item">
-          <a href="all-lots.html">Ботинки</a>
-        </li>
-        <li class="nav__item">
-          <a href="all-lots.html">Одежда</a>
-        </li>
-        <li class="nav__item">
-          <a href="all-lots.html">Инструменты</a>
-        </li>
-        <li class="nav__item">
-          <a href="all-lots.html">Разное</a>
-        </li>
+        <?php endforeach;?>
       </ul>
-    </nav>
-<?php endif;?>
-    <nav class="nav">
-        <ul class="nav__list container">
-            <!--заполните этот список из массива категорий-->
-            <li class="nav__item">
-                <a href="pages/all-lots.html">Название категории</a>
-            </li>
-        </ul>
     </nav>
     <div class="main-footer__bottom container">
         <div class="main-footer__copyright">
