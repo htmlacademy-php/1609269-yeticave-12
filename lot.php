@@ -35,7 +35,7 @@ WHERE bids.lot_id = $id
 GROUP BY bids.id
 ORDER BY bids.date_create DESC;";
 
-$products = mysqli_fetch_all(mysqli_query($con,$select_lots),MYSQLI_ASSOC);
+$products = mysqli_fetch_all(mysqli_query($con,$select_lots),MYSQLI_ASSOC)[0];
 $categorys = mysqli_fetch_all(mysqli_query($con,$select_categories),MYSQLI_ASSOC);
 $bids =  mysqli_fetch_all(mysqli_query($con,$select_bids),MYSQLI_ASSOC);
 
@@ -54,7 +54,7 @@ $page = include_template("layout.php",['content' => $content,
 print($page);
 }else{
 
-$title_name = $products[0]['name'];
+$title_name = $products['name'];
 $is_auth = rand(0, 1);
 $user_name = 'Дмитрий';
 

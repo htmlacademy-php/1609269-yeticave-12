@@ -23,17 +23,17 @@
     </nav>
 
     <section class="lot-item container">
-      <h2><?=$products[0]['name'];?></h2>
+      <h2><?=$products['name'];?></h2>
       <div class="lot-item__content">
         <div class="lot-item__left">
           <div class="lot-item__image">
-            <img src="<?=$products[0]['img_link']?>" width="730" height="548" alt="Сноуборд">
+            <img src="<?=$products['img_link']?>" width="730" height="548" alt="Сноуборд">
           </div>
-          <p class="lot-item__category">Категория: <span><?=$products[0]['category']?></span></p>
-          <p class="lot-item__description"><?=$products[0]['description']?></p>
+          <p class="lot-item__category">Категория: <span><?=$products['category']?></span></p>
+          <p class="lot-item__description"><?=$products['description']?></p>
         </div>
         <div class="lot-item__right">
-        <?php list($hours,$min) = diff_time($products[0]['date_completion'])?>
+        <?php list($hours,$min) = diff_time($products['date_completion'])?>
         <?php $finishing = ($hours<1) ? "timer--finishing" : "" ?>
           <div class="lot-item__state">
               <div class="lot-item__timer timer <?=$finishing?>">
@@ -42,16 +42,16 @@
             <div class="lot-item__cost-state">
               <div class="lot-item__rate">
                 <span class="lot-item__amount">Текущая цена</span>
-                <span class="lot-item__cost"><?=price_format($products[0]["price"])?></span>
+                <span class="lot-item__cost"><?=price_format($products["price"])?></span>
               </div>
               <div class="lot-item__min-cost">
-                Мин. ставка <span><?=price_format($products[0]["min_bid"])?></span>
+                Мин. ставка <span><?=price_format($products["min_bid"])?></span>
               </div>
             </div>
             <form class="lot-item__form" action="https://echo.htmlacademy.ru" method="post" autocomplete="off">
               <p class="lot-item__form-item form__item form__item--invalid">
                 <label for="cost">Ваша ставка</label>
-                <input id="cost" type="text" name="cost" placeholder="<?=$products[0]["min_bid"]?>">
+                <input id="cost" type="text" name="cost" placeholder="<?=$products["min_bid"]?>">
                 <span class="form__error">Введите наименование лота</span>
               </p>
               <button type="submit" class="button">Сделать ставку</button>
