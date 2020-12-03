@@ -64,22 +64,14 @@
 
 <?php if(count($bids) != 0):?>
           <div class="history">
-           <?php if(count($bids) < 10):?>
             <h3>История ставок (<span><?=count($bids)?></span>)</h3>
-           <?php else:?>
-            <h3>История ставок (<span>10</span>)</h3>
-           <?php endif?>
-            <table class="history__list">
-
-<?php $i = 0;?>
+          <table class="history__list">
 <?php foreach($bids as $bid):?>
               <tr class="history__item">
                 <td class="history__name"><?=$bid['name']?></td>
                 <td class="history__price"><?=$bid['price']?></td>
                 <td class="history__time"><?=$bid['date_create']?></td>
               </tr>
-              <?php $i++;
-              if($i == 10){break;}?>
 <?php endforeach?>
 
             </table>
