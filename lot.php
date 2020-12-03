@@ -48,6 +48,7 @@ include(__DIR__."/helpers.php");
 $content = include_template("404.php",[]);
 $page = include_template("layout.php",['content' => $content,
                                        'is_auth' => $is_auth,
+                                       'categorys' => $categorys,
                                        'title_name' => $title_name,
                                        'user_name' => $user_name]);
 print($page);
