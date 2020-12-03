@@ -35,7 +35,7 @@ WHERE bids.lot_id = $id
 GROUP BY bids.id
 ORDER BY bids.date_create DESC;";
 
-$products = mysqli_fetch_array(mysqli_query($con,$select_lots),MYSQLI_ASSOC);
+$products = mysqli_fetch_assoc(mysqli_query($con,$select_lots));
 $categorys = mysqli_fetch_all(mysqli_query($con,$select_categories),MYSQLI_ASSOC);
 $bids =  mysqli_fetch_all(mysqli_query($con,$select_bids),MYSQLI_ASSOC);
 
