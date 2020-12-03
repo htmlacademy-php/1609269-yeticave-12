@@ -27,13 +27,11 @@ WHERE lots.id = $id
 GROUP BY lots.id
 ORDER BY lots.date_create DESC;";
 $select_bids = 
-"SELECT bids.*,lots.*,users.name
+"SELECT bids.*,users.name
 FROM bids
-JOIN lots 
-ON bids.lot_id = lots.id
 JOIN users
-ON users.id = lots.user_id
-WHERE lots.id = $id
+ON users.id = bids.user_id
+WHERE bids.lot_id = $id
 GROUP BY bids.id
 ORDER BY bids.date_create DESC;";
 
