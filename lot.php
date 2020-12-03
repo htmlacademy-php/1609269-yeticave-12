@@ -27,12 +27,11 @@ WHERE lots.id = $id
 GROUP BY lots.id
 ORDER BY lots.date_create DESC;";
 $select_bids = 
-"SELECT bids.*,users.name
+"SELECT bids.date_create, bids.price ,users.name
 FROM bids
 JOIN users
 ON users.id = bids.user_id
 WHERE bids.lot_id = $id
-GROUP BY bids.id
 ORDER BY bids.date_create DESC;";
 
 $products = mysqli_fetch_assoc(mysqli_query($con,$select_lots));
@@ -59,10 +58,12 @@ $is_auth = rand(0, 1);
 $user_name = 'Дмитрий';
 
 include(__DIR__."/helpers.php");
-$content = include_template("lot.main.php",['categorys' => $categorys , 'products' =>$products, 'bids' => $bids]);
+$content = include_template("lot.main.php",['products' =>$products, 'bids' => $bids]);
 $page = include_template("layout.php",['content' => $content,
                                        'is_auth' => $is_auth,
                                        'title_name' => $title_name,
                                        'user_name' => $user_name]);
 print($page);
 }
+
+echo $_SERVER["REQUEST_URI"];
