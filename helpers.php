@@ -160,3 +160,15 @@ function replace_in_query($string_query_sql,$con,$id){
     $stmt->execute();
     return $string_query_sql = $stmt->get_result();
 }
+
+//показ ошибки 404
+function page_404($is_auth,$categorys,$user_name){
+    $title_name = 'Файл не найден';
+    $content = include_template("404.php",[]);
+    $page = include_template("layout.php",['content' => $content,
+                                        'is_auth' => $is_auth,
+                                        'categorys' => $categorys,
+                                        'title_name' => $title_name,
+                                        'user_name' => $user_name]);
+    print($page);
+}

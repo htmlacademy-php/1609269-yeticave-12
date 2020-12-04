@@ -1,7 +1,11 @@
 <?php
 include(__DIR__.'/bootstrap.php');
 
-$id = $_GET['id'];
+if(empty($_GET['id'])){
+    page_404($is_auth,$categorys,$user_name);
+}else{
+    $id = $_GET['id'];
+}
 
 $select_lots = 
     "SELECT lots.id ,name,start_price,img_link,
@@ -34,25 +38,15 @@ $products = mysqli_fetch_assoc($products_query);
 $bids =  mysqli_fetch_all($bids_query,MYSQLI_ASSOC);
 
 if(!$products){
-
-$title_name = 'Файл не найден';
-
-$content = include_template("404.php",[]);
-$page = include_template("layout.php",['content' => $content,
-                                       'is_auth' => $is_auth,
-                                       'categorys' => $categorys,
-                                       'title_name' => $title_name,
-                                       'user_name' => $user_name]);
-print($page);
+    page_404($is_auth,$categorys,$user_name);
 }else{
+    $title_name = $products['name'];
 
-$title_name = $products['name'];
-
-$content = include_template("lot.main.php",['products' =>$products, 'bids' => $bids]);
-$page = include_template("layout.php",['content' => $content,
-                                        'categorys' => $categorys,
-                                       'is_auth' => $is_auth,
-                                       'title_name' => $title_name,
-                                       'user_name' => $user_name]);
-print($page);
+    $content = include_template("lot.main.php",['products' =>$products, 'bids' => $bids]);
+    $page = include_template("layout.php",['content' => $content,
+                                            'categorys' => $categorys,
+                                        'is_auth' => $is_auth,
+                                        'title_name' => $title_name,
+                                        'user_name' => $user_name]);
+    print($page);
 }
