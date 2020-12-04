@@ -3,9 +3,6 @@ include(__DIR__.'/bootstrap.php');
 
 $id = $_GET['id'];
 
-$select_categories = 
-    "SELECT categories.*     
-    FROM categories";
 $select_lots = 
     "SELECT lots.id ,name,start_price,img_link,
     MAX(COALESCE(bids.price,lots.start_price)) AS price, 
@@ -28,13 +25,12 @@ $select_bids =
     JOIN users
     ON users.id = bids.user_id
     WHERE bids.lot_id = ?
-ORDER BY bids.date_create DESC;";
+    ORDER BY bids.date_create DESC;";
 
 $products_query = replace_in_query($select_lots,$con,$id);
 $bids_query = replace_in_query($select_bids,$con,$id);
 
 $products = mysqli_fetch_assoc($products_query);
-$categorys = mysqli_fetch_all(mysqli_query($con,$select_categories),MYSQLI_ASSOC);
 $bids =  mysqli_fetch_all($bids_query,MYSQLI_ASSOC);
 
 if(!$products){

@@ -1,9 +1,6 @@
 <?php
 include(__DIR__.'/bootstrap.php');
 
-$select_categories = 
-    "SELECT categories.* 
-    FROM categories";
 $select_lots = 
     "SELECT lots.id ,name,start_price,img_link,
     MAX(COALESCE(bids.price,lots.start_price)) AS price, 
@@ -21,7 +18,6 @@ $select_lots =
     ORDER BY lots.date_create DESC;";
 
 $products = mysqli_fetch_all(mysqli_query($con,$select_lots),MYSQLI_ASSOC);
-$categorys = mysqli_fetch_all(mysqli_query($con,$select_categories),MYSQLI_ASSOC);
 
 $title_name = "Главная";
 
