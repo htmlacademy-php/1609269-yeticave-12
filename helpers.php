@@ -163,6 +163,7 @@ function replace_in_query($string_query_sql,$con,$id){
 
 //показ ошибки 404
 function page_404($is_auth,$categorys,$user_name){
+    http_response_code(404);
     $title_name = 'Файл не найден';
     $content = include_template("404.php",[]);
     $page = include_template("layout.php",['content' => $content,
