@@ -152,3 +152,24 @@ function diff_time($time){
     return [$hours,$min,];
 //    return $diff = date_interval_format(date_diff(date_create('now'),date_create($time)),"%dд. %h:%i:%s");
 }
+
+//обработка запроса
+function replace_in_query($string_query_sql,$con,$id){
+    $stmt = $con->prepare($string_query_sql);
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    return $string_query_sql = $stmt->get_result();
+}
+
+//показ ошибки 404
+function page_404($is_auth,$categorys,$user_name){
+    http_response_code(404);
+    $title_name = 'Файл не найден';
+    $content = include_template("404.php",[]);
+    $page = include_template("layout.php",['content' => $content,
+                                        'is_auth' => $is_auth,
+                                        'categorys' => $categorys,
+                                        'title_name' => $title_name,
+                                        'user_name' => $user_name]);
+    print($page);
+}
