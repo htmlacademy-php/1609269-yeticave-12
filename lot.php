@@ -1,12 +1,7 @@
 <?php
+include(__DIR__.'/bootstrap.php');
+
 $id = $_GET['id'];
-
-mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-ini_set('display_errors',1);
-error_reporting(E_ALL);
-
-$con = mysqli_connect("localhost","root","","yeticave");
-mysqli_set_charset($con, "utf8mb4");
 
 $select_categories = 
 "SELECT categories.* 
@@ -23,7 +18,7 @@ ON lots.id = bids.lot_id
 LEFT JOIN categories
 ON lots.id = categories.id
 
-WHERE lots.id = $id
+WHERE lots.id = ?
 GROUP BY lots.id
 ORDER BY lots.date_create DESC;";
 $select_bids = 
@@ -31,20 +26,20 @@ $select_bids =
 FROM bids
 JOIN users
 ON users.id = bids.user_id
-WHERE bids.lot_id = $id
+WHERE bids.lot_id = ?
 ORDER BY bids.date_create DESC;";
 
-$products = mysqli_fetch_assoc(mysqli_query($con,$select_lots));
+$products_query = replace_in_query($select_lots,$con,$id);
+$bids_query = replace_in_query($select_bids,$con,$id);
+
+$products = mysqli_fetch_assoc($products_query);
 $categorys = mysqli_fetch_all(mysqli_query($con,$select_categories),MYSQLI_ASSOC);
-$bids =  mysqli_fetch_all(mysqli_query($con,$select_bids),MYSQLI_ASSOC);
+$bids =  mysqli_fetch_all($bids_query,MYSQLI_ASSOC);
 
 if(!$products){
 
 $title_name = 'Файл не найден';
-$is_auth = rand(0, 1);
-$user_name = 'Дмитрий';
 
-include(__DIR__."/helpers.php");
 $content = include_template("404.php",[]);
 $page = include_template("layout.php",['content' => $content,
                                        'is_auth' => $is_auth,
@@ -55,10 +50,7 @@ print($page);
 }else{
 
 $title_name = $products['name'];
-$is_auth = rand(0, 1);
-$user_name = 'Дмитрий';
 
-include(__DIR__."/helpers.php");
 $content = include_template("lot.main.php",['products' =>$products, 'bids' => $bids]);
 $page = include_template("layout.php",['content' => $content,
                                         'categorys' => $categorys,

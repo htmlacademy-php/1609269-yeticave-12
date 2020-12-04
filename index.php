@@ -1,10 +1,5 @@
 <?php
-mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-ini_set('display_errors',1);
-error_reporting(E_ALL);
-
-$con = mysqli_connect("localhost","root","","yeticave");
-mysqli_set_charset($con, "utf8mb4");
+include(__DIR__.'/bootstrap.php');
 
 $select_categories = 
 "SELECT categories.* 
@@ -29,11 +24,7 @@ $products = mysqli_fetch_all(mysqli_query($con,$select_lots),MYSQLI_ASSOC);
 $categorys = mysqli_fetch_all(mysqli_query($con,$select_categories),MYSQLI_ASSOC);
 
 $title_name = "Главная";
-$main = "templates/main.php";
-$is_auth = rand(0, 1);
-$user_name = 'Дмитрий';
 
-include(__DIR__ . "/helpers.php");
 $content = include_template("main.php",['categorys' => $categorys , 'products' =>$products]);
 $page = include_template("layout.php",['content' => $content,
                                        'categorys' => $categorys,

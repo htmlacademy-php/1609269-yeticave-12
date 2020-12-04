@@ -152,3 +152,11 @@ function diff_time($time){
     return [$hours,$min,];
 //    return $diff = date_interval_format(date_diff(date_create('now'),date_create($time)),"%dд. %h:%i:%s");
 }
+
+//обработка запроса
+function replace_in_query($string_query_sql,$con,$id){
+    $stmt = $con->prepare($string_query_sql);
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    return $string_query_sql = $stmt->get_result();
+}
