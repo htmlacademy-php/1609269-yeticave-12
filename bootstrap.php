@@ -4,6 +4,8 @@ include(__DIR__."/config.php");
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 ini_set('display_errors',1);
 error_reporting(E_ALL);
+
+$con = mysqli_connect("$localhost","$name_host","$password_host","$base_name");
 mysqli_set_charset($con, "utf8mb4");
 
 $is_auth = rand(0, 1);
