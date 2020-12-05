@@ -1,13 +1,7 @@
 <?php
-include(__DIR__."boostrap.php");
+include(__DIR__."/bootstrap.php");
 
-$title_name = "Добавление лота";
+$title_name = "Добавление файл";
+$tempates_name = 'add.main.php';
 
-$content = include_template("add.main.php",[]);
-$page = include_template("layout.php",['content' => $content,
-                                        'categorys' => $categorys,
-                                        'is_auth' => $is_auth,
-                                        'title_name' => $title_name,
-                                        'user_name' => $user_name]);
-print($page);
-}
+show_page($title_name,$tempates_name,$categorys,$is_auth,$user_name);

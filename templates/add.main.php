@@ -1,3 +1,4 @@
+<main>
     <form class="form form--add-lot container form--invalid" action="https://echo.htmlacademy.ru" method="post"> <!-- form--invalid -->
       <h2>Добавление лота</h2>
       <div class="form__container-two">
@@ -54,6 +55,4 @@
       <span class="form__error form__error--bottom">Пожалуйста, исправьте ошибки в форме.</span>
       <button type="submit" class="button">Добавить лот</button>
     </form>
-  </main>
-
-</div>
+</main>
