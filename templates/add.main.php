@@ -1,5 +1,5 @@
 <main>
-    <form class="form form--add-lot container form--invalid" action="https://echo.htmlacademy.ru" method="post"> <!-- form--invalid -->
+    <form class="form form--add-lot container form--invalid" action="add.php" method="post"> <!-- form--invalid -->
       <h2>Добавление лота</h2>
       <div class="form__container-two">
         <div class="form__item form__item--invalid"> <!-- form__item--invalid -->
@@ -10,13 +10,11 @@
         <div class="form__item">
           <label for="category">Категория <sup>*</sup></label>
           <select id="category" name="category">
-            <option>Выберите категорию</option>
-            <option>Доски и лыжи</option>
-            <option>Крепления</option>
-            <option>Ботинки</option>
-            <option>Одежда</option>
-            <option>Инструменты</option>
-            <option>Разное</option>
+
+          <?php foreach($categorys as $category):?>
+            <option><?=$category['category']?></option>
+          <?php endforeach;?>
+
           </select>
           <span class="form__error">Выберите категорию</span>
         </div>
@@ -24,7 +22,7 @@
       <div class="form__item form__item--wide">
         <label for="message">Описание <sup>*</sup></label>
         <textarea id="message" name="message" placeholder="Напишите описание лота"></textarea>
-        <span class="form__error">Напишите описание лота</span>
+        <span class="form__error">Напишите описание лота</span> 
       </div>
       <div class="form__item form__item--file">
         <label>Изображение <sup>*</sup></label>
