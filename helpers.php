@@ -187,3 +187,17 @@ function show_page($title_name,$tempates_name,$categorys,$is_auth,$user_name,$co
                                             'user_name' => $user_name]);
     print($page);
 }
+
+//Проверка длины 
+function isCorrectLength($name, $min, $max) {
+    $len = strlen($_POST[$name]);
+
+    if ($len < $min or $len > $max) {
+        return "Значение должно быть от $min до $max символов";
+    }
+}
+
+//сохранить значения полей формы после валидации
+function getPostVal($name) {
+    return $_POST[$name] ?? "";
+}
