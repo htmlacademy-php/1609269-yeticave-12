@@ -191,13 +191,66 @@ function show_page($title_name,$tempates_name,$categorys,$is_auth,$user_name,$co
 //Проверка длины 
 function isCorrectLength($name, $min, $max) {
     $len = strlen($_POST[$name]);
-
+    $name = $_POST[$name];
+    $key = array_search($name, $_POST);
     if ($len < $min or $len > $max) {
-        return "Значение должно быть от $min до $max символов";
+        return FALSE;
+    }else{
+        return true;
+    }
+}
+
+//Проверка на int
+function isInt($name){
+    $num = $_POST[$name];
+    if(is_numeric($num)){
+        return true;
+    }else{
+        return FALSE;
+    }
+}
+//Проверка даты 
+function isCorrectDate($name){
+    if(empty($_POST[$name])){
+        return FALSE;
+    }else{
+        $date = $_POST[$name];
+        $date_array = explode('-',$date); 
+        if(checkdate($date_array[1],$date_array[2],$date_array[0]) == false){
+            return FALSE;
+        }
+        $tomorrow = date("d-m-y",strtotime("+ 1 day")); 
+        $date_by_user = date("d-m-y",strtotime($date));
+        if($date_by_user<$tomorrow){
+            return false;
+        }else{
+            return true;
+        }
     }
 }
 
 //сохранить значения полей формы после валидации
 function getPostVal($name) {
     return $_POST[$name] ?? "";
+}
+
+//Проверка файла
+function isCorrectImg($name){
+    if(empty($_FILES[$name]['tmp_name'])){
+        return false;
+    }else{
+        if($_FILES['lot-img']['size'] > 1048576*100*5){
+            print("Размер файла не может превышать 5мб");
+            return false;
+        }else{
+            $tmp_name = $_FILES['lot-img']['tmp_name'];
+            $type_file = mime_content_type($tmp_name);
+            if(in_array($type_file,['image/jpeg','image/jpg','image/png']) == false){
+                print("\nФайл ".$_FILES['lot-img']['name']." неверного формата");
+                return false;
+            }else{
+                return true;
+            }
+        }
+    }
 }
