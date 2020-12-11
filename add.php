@@ -34,7 +34,9 @@ if( $name_status &&
     $step_status && 
     $date_status&&
     $file_status){
-        
+        $add_pos = 
+        "UPDATE lots
+        "
     }
 
 $title_name = "Добавление файл";
