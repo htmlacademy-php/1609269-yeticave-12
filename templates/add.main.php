@@ -1,10 +1,11 @@
+<?php $form = false;?>
 <main>
     <form class="form form--add-lot container <?=($name_status && 
                                                   $message_status && 
                                                   $rate_status && 
                                                   $step_status && 
                                                   $date_status&&
-                                                  $file_status) ? "":"form--invalid"?>" action="/add.php" method="post" enctype="multipart/form-data"> <!-- form--invalid -->
+                                                  $file_status) ? $form = true and "":"form--invalid"?>" action="/add.php" method="post" enctype="multipart/form-data"> <!-- form--invalid -->
       <h2>Добавление лота</h2>
       <div class="form__container-two <?=($name_status) ? "" : "form__item--invalid"?>">
         <div class="form__item"> <!-- form__item--invalid -->
@@ -56,6 +57,6 @@
         </div>
       </div>
       <span class="form__error form__error--bottom">Пожалуйста, исправьте ошибки в форме.</span>
-      <button type="submit" class="button">Добавить лот</button>
+      <button type="submit" class="button" <?=($form) ? "onclick='window.location.href='/lot.main.php?id=$id '" : ""?>><?=($form) ? "1":"0"?>Добавить лот</button>
     </form>
 </main>
