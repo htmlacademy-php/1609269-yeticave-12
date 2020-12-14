@@ -1,7 +1,6 @@
 <?php
 include(__DIR__."/bootstrap.php");
 
-        $add_pos_query = replace_in_query($insert_add_pos,$con,[
 $lot_link = true;
 $errors =  ['name' => "",
             'message' => '',
