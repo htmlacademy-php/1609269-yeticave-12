@@ -6,6 +6,7 @@ $rate_status = false;
 $step_status  = false;
 $date_status = false;
 $con_add_status = false;
+$lot_link = false;
 //Проверить, что отправлена форма.
 if(!empty($_POST)){   
     foreach($_POST as $key => $value){
@@ -24,7 +25,6 @@ if($file_status){
     $file_path = __DIR__ . '/uploads/';
     $file_url = '/uploads/' . $file_name;
     move_uploaded_file($_FILES['lot-img']['tmp_name'], $file_path . $file_name);
-    $file_link =  str_replace('//','/',str_replace('\\','/',addslashes(__DIR__).$file_url));
 }
 
 if( $name_status && 
@@ -33,6 +33,12 @@ if( $name_status &&
     $step_status && 
     $date_status&&
     $file_status){
+        $check_category_id_query=
+        "SELECT categories.id
+        FROM categories
+        WHERE categories.category = '".$_POST['category']."'
+        ";
+        $category_id = mysqli_fetch_assoc(mysqli_query($con,$check_category_id_query))['id'];
         $add_pos_query=
         "INSERT INTO lots  (date_create,
                             name,
@@ -49,28 +55,20 @@ if( $name_status &&
                 '".$_POST['message']."',
                 0,
                 0,
-                0,
-                '".$file_link."',
+                '".$category_id."',
+                '".$file_url."',
                 '".$_POST['lot-rate']."',
                 '".$_POST['lot-date']."',
                 '".$_POST['lot-step']."');
         ";
         $con ->query($add_pos_query);
         $con_add_status = true;
+        $lot_link = mysqli_insert_id($con);
     }
-$id = 0;
-if($con_add_status){
-    $take_id = 
-    "SELECT lots.id
-    FROM lots
-    WHERE lots.name = '".$_POST['lot-name']."'
-    ";
-    $id = mysqli_fetch_assoc(mysqli_query($con,$take_id))['id'];
-}
 $title_name = "Добавление файл";
 $tempates_name = 'add.main.php';
 show_page($title_name,$tempates_name,$categorys,$is_auth,$user_name, $content_array = [
-                                                                                    'id' => $id,
+                                                                                    'lot_link' => $lot_link,
                                                                                     'categorys' => $categorys, 
                                                                                     'file_status' => $file_status,
                                                                                     "name_status" => $name_status,

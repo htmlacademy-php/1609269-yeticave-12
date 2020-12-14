@@ -45,8 +45,8 @@ if(!$products){
     $content = include_template("lot.main.php",['products' =>$products, 'bids' => $bids]);
     $page = include_template("layout.php",['content' => $content,
                                             'categorys' => $categorys,
-                                        'is_auth' => $is_auth,
-                                        'title_name' => $title_name,
-                                        'user_name' => $user_name]);
+                                            'is_auth' => $is_auth,
+                                            'title_name' => $title_name,
+                                            'user_name' => $user_name]);
     print($page);
 }
