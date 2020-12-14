@@ -154,10 +154,10 @@ function diff_time($time){
 }
 
 //обработка запроса
-function replace_in_query($string_query_sql,$con,$id,$types =""){
-    $types = $types ?: str_repeat("s",count($id));
-    $stmt = $con->prepare($string_query_sql);
-    if(is_array($id)){$stmt->bind_param($types, ...$id);}else{$stmt->bind_param($types, $id);}
+function replace_in_query($string_query_sql,$msqli,$passed_variables=[],$types_variables =""){
+    $types = $types_variables ?: str_repeat("s",count($passed_variables));
+    $stmt = $msqli->prepare($string_query_sql);
+    $stmt->bind_param($types, ...$passed_variables);
     $stmt->execute();
     return $string_query_sql = $stmt->get_result();
 }
@@ -193,6 +193,7 @@ function show_page($title_name,$tempates_name,$categorys,$is_auth,$user_name,$co
 function isCorrectLength($string, $min, $max) {
     $len = strlen($string);
     if ($len < $min or $len > $max) {
+        print("Длина ".$string." не входит в рамки [".$min.":".$max."]");
         return FALSE;
     }else{
         return true;
@@ -202,27 +203,26 @@ function isCorrectLength($string, $min, $max) {
 //Проверка на int
 function isInt($num){
     if(!is_numeric($num)){
+        print($num." не имеет тип int");
         return FALSE;
     }else{
         return true;
     }
 }
 //Проверка даты 
-function isCorrectDate($date){
-    if(empty($date)){
+function isCorrectDate($date,$date_type = "d-m-y",$separator = "-",$condition = "+ 1 days"){
+    $date_array = explode($separator,$date); 
+    if(checkdate($date_array[1],$date_array[2],$date_array[0]) == false){
+        print($date." имеет неверный формат даты");
         return FALSE;
+    }
+    $tomorrow = date($date_type,strtotime($condition)); 
+    $date_by_user = date($date_type,strtotime($date));
+    if($date_by_user<$tomorrow){
+        print("Дата должна подходить под условие ".$condition);
+        return false;
     }else{
-        $date_array = explode('-',$date); 
-        if(checkdate($date_array[1],$date_array[2],$date_array[0]) == false){
-            return FALSE;
-        }
-        $tomorrow = date("d-m-y",strtotime("+ 1 day")); 
-        $date_by_user = date("d-m-y",strtotime($date));
-        if($date_by_user<$tomorrow){
-            return false;
-        }else{
-            return true;
-        }
+        return true;
     }
 }
 
@@ -232,17 +232,18 @@ function getPostVal($name) {
 }
 
 //Проверка файла
-function isCorrectImg($img){
+function isCorrectImg($img,$mb_limit = 5, $expansions = ['jpeg','jpg','png']){
     if(empty($img['tmp_name'])){
+        print($img.": ошибка получения пути файла");
         return false;
     }else{
-        if($img['size'] > 1048576*100*5){
-            print("Размер файла не может превышать 5мб");
+        if($img['size'] > 1048576*100*$mb_limit){
+            print($img['name']." не должен превышать ".$mb_limit." мб");
             return false;
         }else{        
             $type_file = pathinfo(trim(strip_tags($img['name'])), PATHINFO_EXTENSION);
-            if(in_array($type_file,['jpeg','jpg','png']) == false){
-                print("\nФайл ".$img['name']." неверного формата");
+            if(in_array($type_file,$expansions) == false){
+                print("Файл может иметь формат: ".implode(",",$expansions).", а не ".$type_file);
                 return false;
             }else{
                 return true;

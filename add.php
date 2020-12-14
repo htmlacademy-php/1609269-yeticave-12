@@ -8,24 +8,19 @@ $date_statu = false;
 $file_status = false;
 $lot_link = false;
 $form = false;
-//Проверить, что отправлена форма.
-if(!empty($_POST)){   
-    if(!empty($_POST["lot-name"])){$name_status = (isCorrectLength($_POST["lot-name"],5,20)) ?: false;} 
-    if(!empty($_POST["message"])){$message_status=(isCorrectLength($_POST["message"],5,3000)) ?: false;}
-    if(!empty($_POST["lot-rate"])){$rate_status = (isInt($_POST['lot-rate']) and isCorrectLength($_POST["lot-rate"],1,9)and $_POST["lot-rate"]>0) ?: false;};
-    if(!empty($_POST["lot-step"])){$step_status = (isInt($_POST['lot-step']) and isCorrectLength($_POST["lot-step"],1,9) and $_POST["lot-rate"]>0) ?: false;};
-    if(!empty($_POST["lot-date"])){$date_status = (isCorrectDate($_POST['lot-date'])) ?: false;};
-}
-if(!empty($_FILES)){
-    $file_status = isCorrectImg($_FILES["lot-img"]);
-    if($file_status){
-        $file_name = $_FILES['lot-img']['name'];
-        $file_path = __DIR__ . '/uploads/';
-        $file_url = '/uploads/' . $file_name;
-        move_uploaded_file($_FILES['lot-img']['tmp_name'], $file_path . $file_name);
-}
-}
 
+if(!empty($_POST["lot-name"])){$name_status = (isCorrectLength($_POST["lot-name"],5,20)) ?: false;} 
+if(!empty($_POST["message"])){$message_status=(isCorrectLength($_POST["message"],5,3000)) ?: false;}
+if(!empty($_POST["lot-rate"])){$rate_status = (isInt($_POST['lot-rate']) and isCorrectLength($_POST["lot-rate"],1,9)and $_POST["lot-rate"]>0) ?: false;};
+if(!empty($_POST["lot-step"])){$step_status = (isInt($_POST['lot-step']) and isCorrectLength($_POST["lot-step"],1,9) and $_POST["lot-rate"]>0) ?: false;};
+if(!empty($_POST["lot-date"])){$date_status = (isCorrectDate($date = $_POST['lot-date'],$condition = "+ 1 days")) ?: false;};
+if(!empty($_FILES["lot-img"])){$file_status = isCorrectImg($_FILES["lot-img"]);}
+if($file_status){
+    $file_name = $_FILES['lot-img']['name'];
+    $file_path = __DIR__ . '/uploads/';
+    $file_url = '/uploads/' . $file_name;
+    move_uploaded_file($_FILES['lot-img']['tmp_name'], $file_path . $file_name);
+}
 if( $name_status && 
     $message_status && 
     $rate_status && 
@@ -50,18 +45,19 @@ if( $name_status &&
                             date_completion,
                             step_rate)
         VALUES (?,?,?,?,?,?,?,?,?,?);";
-        $check_category_id_query = replace_in_query($select_check_category_id,$con,$_POST['category']);
+        $check_category_id_query = replace_in_query($select_check_category_id,$con,$id = [$_POST['category']]);
         $category_id = mysqli_fetch_assoc($check_category_id_query)['id'];  
-        $add_pos_query = replace_in_query($insert_add_pos,$con,[date("Y-m-d H:i:s"),
-                                                                $_POST['lot-name'],
-                                                                $_POST['message'],
-                                                                0,
-                                                                0,
-                                                                $category_id,
-                                                                $file_url,
-                                                                $_POST['lot-rate'],
-                                                                $_POST['lot-date'],
-                                                                $_POST['lot-step']]);
+        $add_pos_query = replace_in_query($insert_add_pos,$con,[
+                            date("Y-m-d H:i:s"),
+                            $_POST['lot-name'],
+                            $_POST['message'],
+                            0,
+                            0,
+                            $category_id,
+                            $file_url,
+                            $_POST['lot-rate'],
+                            $_POST['lot-date'],
+                            $_POST['lot-step']]);
         $lot_link = mysqli_insert_id($con);
     }
 $title_name = "Добавление файл";
