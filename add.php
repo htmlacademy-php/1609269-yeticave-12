@@ -16,13 +16,14 @@ if(!empty($_POST)){
     if(!empty($_POST["lot-step"])){$step_status = (isInt($_POST['lot-step']) and isCorrectLength($_POST["lot-step"],1,9) and $_POST["lot-rate"]>0) ?: false;};
     if(!empty($_POST["lot-date"])){$date_status = (isCorrectDate($_POST['lot-date'])) ?: false;};
 }
-$file_status = isCorrectImg("lot-img");
-
-if($file_status){
-    $file_name = $_FILES['lot-img']['name'];
-    $file_path = __DIR__ . '/uploads/';
-    $file_url = '/uploads/' . $file_name;
-    move_uploaded_file($_FILES['lot-img']['tmp_name'], $file_path . $file_name);
+if(!empty($_FILES)){
+    $file_status = isCorrectImg($_FILES["lot-img"]);
+    if($file_status){
+        $file_name = $_FILES['lot-img']['name'];
+        $file_path = __DIR__ . '/uploads/';
+        $file_url = '/uploads/' . $file_name;
+        move_uploaded_file($_FILES['lot-img']['tmp_name'], $file_path . $file_name);
+}
 }
 
 if( $name_status && 

@@ -232,18 +232,17 @@ function getPostVal($name) {
 }
 
 //Проверка файла
-function isCorrectImg($name){
-    if(empty($_FILES[$name]['tmp_name'])){
+function isCorrectImg($img){
+    if(empty($img['tmp_name'])){
         return false;
     }else{
-        if($_FILES['lot-img']['size'] > 1048576*100*5){
+        if($img['size'] > 1048576*100*5){
             print("Размер файла не может превышать 5мб");
             return false;
-        }else{
-            $tmp_name = $_FILES['lot-img']['tmp_name'];
-            $type_file = mime_content_type($tmp_name);
-            if(in_array($type_file,['image/jpeg','image/jpg','image/png']) == false){
-                print("\nФайл ".$_FILES['lot-img']['name']." неверного формата");
+        }else{        
+            $type_file = pathinfo(trim(strip_tags($img['name'])), PATHINFO_EXTENSION);
+            if(in_array($type_file,['jpeg','jpg','png']) == false){
+                print("\nФайл ".$img['name']." неверного формата");
                 return false;
             }else{
                 return true;
