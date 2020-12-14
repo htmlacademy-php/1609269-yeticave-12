@@ -1,7 +1,9 @@
 <?php
 include(__DIR__."/bootstrap.php");
 
+$reuslt = [];
 $lot_link = true;
+$error = '';
 $errors =  ['name' => "",
             'message' => '',
             'rate' => '',
@@ -9,30 +11,43 @@ $errors =  ['name' => "",
             'date' => '',
             'file' => '',
             'form' => ''];
-$status =  [['name_error' => $name_status = true,
-            'message#' => $message_status = true, 
+$status =  ['name' => $name_status = true,
+            'message' => $message_status = true, 
             'rate' => $rate_status = true, 
             'step' => $step_status = true, 
             'date' => $date_status = true, 
             'file' => $file_status = true, 
-            'form' => $form = true],
-            [
-                'name_eror'
-            ]];
+            'form' => $form = true];
 if(empty(array_filter(array_values($_POST)))) {
         $status['form'] = true;
 }else{
-        for($i=0;$i++;count($status[0][])){
+        for($i=0;$i++;count($status)){
             $status[$i] = false;
         }
 
-        if(!empty($_POST["lot-name"])){if(isCorrectLength($_POST["lot-name"],5,20) != $error){$status['name'] = true;}
-                                                                                         else{$errors['name'] = $error;
-                                                                                              $status['name'] = false; }}
-        print($status['name']);
-        if(!empty($_POST["message"])){ $status['message']=(isCorrectLength($_POST["message"],5,3000)) ?: false;}
-        if(!empty($_POST["lot-rate"])){$status['rate'] = (isInt($_POST['lot-rate']) and isCorrectLength($_POST["lot-rate"],1,9)and $_POST["lot-rate"]>0) ?: false;};
-        if(!empty($_POST["lot-step"])){$status['step'] = (isInt($_POST['lot-step']) and isCorrectLength($_POST["lot-step"],1,9) and $_POST["lot-step"]>0) ?: false;};
+        if(!empty($_POST["lot-name"])){
+            $reuslt = isCorrectLength($_POST["lot-name"],5,20);
+            if($reuslt ['status']){$status['name'] = true;}
+                              else{$status['name'] = false;$errors['name'] = $reuslt['error'];}              
+        }                                                                                       
+        if(!empty($_POST["message"])){
+            $reuslt = isCorrectLength($_POST["message"],5,20);
+            if($reuslt['status']){$status['message'] = true;}
+                             else{$status['message'] = false;$errors['message'] = $reuslt['error'];}              
+        }     
+
+        if(!empty($_POST["lot-rate"])){
+            $reuslt[0] = isCorrectLength($_POST['lot-rate'],1,9);
+            $reuslt[1] = isInt($_POST['lot-rate']);
+            $reuslt[2] = check_condition($_POST['lot-rate'],'>',0);
+            for($i = 0; $i < count($reuslt); $i++){
+                if($reuslt[$i]['status']){$status[$i]['lot-rate'] = true;}
+                                    else{$status[$i]['lot-rate'] = false;$errors['lot-rate'][$i] = $reuslt[$i]['error'];}
+            }
+            $errors['lot-rate'] = implode('<br>',$errors['lot-rate']);
+            $status['lot-rate'] = check_array_for_the_same($status,'status',true);
+        }
+        if(!empty($_POST["lot-step"])){$status['step'] = (isInt($_POST['lot-step']) and isCorrectLength($_POST["lot-step"],1,9,$error) and $_POST["lot-step"]>0) ?: false;};
         if(!empty($_POST["lot-date"])){$status['date'] = (isCorrectDate($date = $_POST['lot-date'],$condition = "+ 1 days")) ?: false;};
         if(!empty($_FILES["lot-img"])){$status['file'] = isCorrectImg($_FILES["lot-img"]);}
         if($status['file']){
@@ -81,7 +96,7 @@ if(empty(array_filter(array_values($_POST)))) {
                 $lot_link = mysqli_insert_id($con);
     }
 }
-
+print($status['name']);
 $title_name = "Добавление файл";
 $tempates_name = 'add.main.php';
 show_page($title_name,$tempates_name,$categorys,$is_auth,$user_name, $content_array = [

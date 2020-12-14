@@ -191,35 +191,35 @@ function show_page($title_name,$tempates_name,$categorys,$is_auth,$user_name,$co
 
 //Проверка длины 
 function isCorrectLength($string, $min, $max) {
-    $error = "";
     $len = strlen($string);
     if ($len < $min or $len > $max) {
-        return $error = "Длина ".$string." не входит в рамки [".$min.":".$max."]";
+        $error = "Наименование  должно быть от ".$min." до ".$max." символов";
+        return ['status' => false, 'error' => $error];
     }else{
-        return true;
+        return ['status' => true];
     }
 }
 
 //Проверка на int
 function isInt($num){
     if(!is_numeric($num)){
-        return $num." не имеет тип int" and FALSE; 
+        return ['status' => false, 'error' => "Начальная цена может быть только цифрой!"]; 
     }else{
-        return true;
+        return ['status' => true];
     }
 }
 //Проверка даты 
 function isCorrectDate($date,$date_type = "d-m-y",$separator = "-",$condition = "+ 1 days"){
     $date_array = explode($separator,$date); 
     if(checkdate($date_array[1],$date_array[2],$date_array[0]) == false){
-        return $date." имеет неверный формат даты";
+        return ['status' => false, 'error' => $date." имеет неверный формат даты"];
     }
     $tomorrow = date($date_type,strtotime($condition)); 
     $date_by_user = date($date_type,strtotime($date));
     if($date_by_user<$tomorrow){
-        return "Дата должна подходить под условие ".$condition and FALSE;
+        return ['status' => false, 'error' => "Дата должна подходить под условие ".$condition];
     }else{
-        return true;
+        return ['status' => true];
     }
 }
 
@@ -231,17 +231,49 @@ function getPostVal($name) {
 //Проверка файла
 function isCorrectImg($img,$mb_limit = 5, $expansions = ['jpeg','jpg','png']){
     if(isset($img)){
-        return "Файл не был добавлен" and FALSE;
+        return ['status' => false, 'error' => "Файл не был добавлен"];
     }else{
         if($img['size'] > 1048576*100*$mb_limit){
-            return $img['name']." не должен превышать ".$mb_limit." мб" and FALSE;
+            return ['status' => false, 'error' => $img['name']." не должен превышать ".$mb_limit." мб"];
         }else{        
             $type_file = pathinfo(trim(strip_tags($img['name'])), PATHINFO_EXTENSION);
             if(in_array($type_file,$expansions) == false){
-                return "Файл может иметь формат(ы): ".implode(",",$expansions).", а не ".$type_file and FALSE;
+                return ['status' => false, 'error' => "Файл может иметь формат(ы): ".implode(",",$expansions).", а не ".$type_file];
             }else{
-                return true;
+                return ['status' => true];
             }
         }
     }
+}
+
+function check_array_for_the_same($array = [],$tag,$value){
+    $the_same = true;
+    for($i = 0; $i < count($array); $i++){
+        if($array[$i][$tag] != $value){
+            $the_same = false;
+            break;
+        } 
+    }
+    return $the_same;
+}
+
+function check_condition($item_to_compare,$condition = '=',$compare_with = 0){
+    if(num_cond($item_to_compare,$condition,$compare_with)){
+        return['status' => true];
+    }else{
+        return['status' => false,'error' => "Начальная цена должна быть больше 0!"];
+    }
+}
+
+function num_cond ($var1, $op, $var2) {
+
+    switch ($op) {
+        case "=":  return $var1 == $var2;
+        case "!=": return $var1 != $var2;
+        case ">=": return $var1 >= $var2;
+        case "<=": return $var1 <= $var2;
+        case ">":  return $var1 >  $var2;
+        case "<":  return $var1 <  $var2;
+    default:       return true;
+    }   
 }

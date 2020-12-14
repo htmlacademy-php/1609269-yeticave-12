@@ -5,7 +5,7 @@
         <div class="form__item <?=($status['name']) ? "" : "form__item--invalid"?>"> <!-- form__item--invalid -->
           <label for="lot-name">Наименование <sup>*</sup></label>
           <input id="lot-name" type="text" name="lot-name" placeholder="Введите наименование лота" value=<?=getPostVal("lot-name")?>>
-          <span class="form__error" ><?=($status['name']) ? $errors['name'] : ""?></span>
+          <span class="form__error" ><?=($status['name']) ? "" : $errors['name']?></span>
         </div>
         <div class="form__item">
           <label for="category">Категория <sup>*</sup></label>
@@ -22,7 +22,7 @@
       <div class="form__item form__item--wide <?=($status['message']) ? "" : "form__item--invalid" ?>">
         <label for="message">Описание <sup>*</sup></label>
         <textarea id="message" name="message" placeholder="Напишите описание лота"></textarea>
-        <span class="form__error">Напишите описание лота</span> 
+        <span class="form__error"><?=($status['message']) ? "" : $errors['message']?></span> 
       </div>
       <div class="form__item form__item--file <?=($status['file']) ? "" : "form__item--invalid" ?>">
         <label>Изображение <sup>*</sup></label>
@@ -37,7 +37,7 @@
         <div class="form__item form__item--small <?=($status['rate']) ? "" : "form__item--invalid" ?>">
           <label for="lot-rate">Начальная цена <sup>*</sup></label>
           <input id="lot-rate" type="text" name="lot-rate" placeholder="0"  value=<?=getPostVal("lot-rate")?>>
-          <span class="form__error">Введите начальную цену</span>
+          <span class="form__error"><?=($status['rate']) ? "" : $errors['lot-rate']?></span>
         </div>
         <div class="form__item form__item--small <?=($status['step']) ? "" : "form__item--invalid" ?>">
           <label for="lot-step">Шаг ставки <sup>*</sup></label>
