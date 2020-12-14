@@ -12,7 +12,7 @@ $form = false;
 if(!empty($_POST["lot-name"])){$name_status = (isCorrectLength($_POST["lot-name"],5,20)) ?: false;} 
 if(!empty($_POST["message"])){$message_status=(isCorrectLength($_POST["message"],5,3000)) ?: false;}
 if(!empty($_POST["lot-rate"])){$rate_status = (isInt($_POST['lot-rate']) and isCorrectLength($_POST["lot-rate"],1,9)and $_POST["lot-rate"]>0) ?: false;};
-if(!empty($_POST["lot-step"])){$step_status = (isInt($_POST['lot-step']) and isCorrectLength($_POST["lot-step"],1,9) and $_POST["lot-rate"]>0) ?: false;};
+if(!empty($_POST["lot-step"])){$step_status = (isInt($_POST['lot-step']) and isCorrectLength($_POST["lot-step"],1,9) and $_POST["lot-step"]>0) ?: false;};
 if(!empty($_POST["lot-date"])){$date_status = (isCorrectDate($date = $_POST['lot-date'],$condition = "+ 1 days")) ?: false;};
 if(!empty($_FILES["lot-img"])){$file_status = isCorrectImg($_FILES["lot-img"]);}
 if($file_status){
@@ -45,7 +45,7 @@ if( $name_status &&
                             date_completion,
                             step_rate)
         VALUES (?,?,?,?,?,?,?,?,?,?);";
-        $check_category_id_query = replace_in_query($select_check_category_id,$con,$id = [$_POST['category']]);
+        $check_category_id_query = replace_in_query($select_check_category_id,$con,$passed_variables = [$_POST['category']]);
         $category_id = mysqli_fetch_assoc($check_category_id_query)['id'];  
         $add_pos_query = replace_in_query($insert_add_pos,$con,[
                             date("Y-m-d H:i:s"),

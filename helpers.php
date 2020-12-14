@@ -154,12 +154,12 @@ function diff_time($time){
 }
 
 //обработка запроса
-function replace_in_query($string_query_sql,$msqli,$passed_variables=[],$types_variables =""){
+function replace_in_query($sql_query,$msqli,$passed_variables=[],$types_variables =""){
     $types = $types_variables ?: str_repeat("s",count($passed_variables));
-    $stmt = $msqli->prepare($string_query_sql);
+    $stmt = $msqli->prepare($sql_query);
     $stmt->bind_param($types, ...$passed_variables);
     $stmt->execute();
-    return $string_query_sql = $stmt->get_result();
+    return $sql_query = $stmt->get_result();
 }
 
 //показ ошибки 404
@@ -243,7 +243,7 @@ function isCorrectImg($img,$mb_limit = 5, $expansions = ['jpeg','jpg','png']){
         }else{        
             $type_file = pathinfo(trim(strip_tags($img['name'])), PATHINFO_EXTENSION);
             if(in_array($type_file,$expansions) == false){
-                print("Файл может иметь формат: ".implode(",",$expansions).", а не ".$type_file);
+                print("Файл может иметь формат(ы): ".implode(",",$expansions).", а не ".$type_file);
                 return false;
             }else{
                 return true;
