@@ -33,13 +33,12 @@ if( $name_status &&
     $step_status && 
     $date_status&&
     $file_status){
-        $check_category_id_query=
+        $select_check_category_id=
         "SELECT categories.id
         FROM categories
-        WHERE categories.category = '".$_POST['category']."'
+        WHERE categories.category = ?
         ";
-        $category_id = mysqli_fetch_assoc(mysqli_query($con,$check_category_id_query))['id'];
-        $add_pos_query=
+        $insert_add_pos=
         "INSERT INTO lots  (date_create,
                             name,
                             description,
@@ -50,19 +49,22 @@ if( $name_status &&
                             start_price,
                             date_completion,
                             step_rate)
-        VALUES (NOW(),
-                '".$_POST['lot-name']."',
-                '".$_POST['message']."',
-                0,
-                0,
-                '".$category_id."',
-                '".$file_url."',
-                '".$_POST['lot-rate']."',
-                '".$_POST['lot-date']."',
-                '".$_POST['lot-step']."');
-        ";
-        $con ->query($add_pos_query);
-        $con_add_status = true;
+        VALUES (?,?,?,?,?,?,?,?,?,?);";
+        $check_category_id_query = replace_in_query($select_check_category_id,$con,$_POST['category']);
+        $category_id = mysqli_fetch_assoc($check_category_id_query)['id'];  
+        $add_pos_query = replace_in_query($insert_add_pos,$con,[date("Y-m-d H:i:s"),
+                                                                $_POST['lot-name'],
+                                                                $_POST['message'],
+                                                                0,
+                                                                0,
+                                                                $category_id,
+                                                                $file_url,
+                                                                $_POST['lot-rate'],
+                                                                $_POST['lot-date'],
+                                                                $_POST['lot-step']]);
+  
+        print($add_pos_query);
+#        $con_add_status = true;
         $lot_link = mysqli_insert_id($con);
     }
 $title_name = "Добавление файл";

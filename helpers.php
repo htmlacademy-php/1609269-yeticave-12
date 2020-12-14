@@ -154,9 +154,10 @@ function diff_time($time){
 }
 
 //обработка запроса
-function replace_in_query($string_query_sql,$con,$id){
+function replace_in_query($string_query_sql,$con,$id,$types =""){
+    $types = $types ?: str_repeat("s",count($id));
     $stmt = $con->prepare($string_query_sql);
-    $stmt->bind_param("i", $id);
+    if(is_array($id)){$stmt->bind_param($types, ...$id);}else{$stmt->bind_param($types, $id);}
     $stmt->execute();
     return $string_query_sql = $stmt->get_result();
 }
