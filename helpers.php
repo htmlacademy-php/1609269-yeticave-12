@@ -191,10 +191,10 @@ function show_page($title_name,$tempates_name,$categorys,$is_auth,$user_name,$co
 
 //Проверка длины 
 function isCorrectLength($string, $min, $max) {
+    $error = "";
     $len = strlen($string);
     if ($len < $min or $len > $max) {
-        print("Длина ".$string." не входит в рамки [".$min.":".$max."]");
-        return FALSE;
+        return $error = "Длина ".$string." не входит в рамки [".$min.":".$max."]";
     }else{
         return true;
     }
@@ -203,8 +203,7 @@ function isCorrectLength($string, $min, $max) {
 //Проверка на int
 function isInt($num){
     if(!is_numeric($num)){
-        print($num." не имеет тип int");
-        return FALSE;
+        return $num." не имеет тип int" and FALSE; 
     }else{
         return true;
     }
@@ -213,14 +212,12 @@ function isInt($num){
 function isCorrectDate($date,$date_type = "d-m-y",$separator = "-",$condition = "+ 1 days"){
     $date_array = explode($separator,$date); 
     if(checkdate($date_array[1],$date_array[2],$date_array[0]) == false){
-        print($date." имеет неверный формат даты");
-        return FALSE;
+        return $date." имеет неверный формат даты";
     }
     $tomorrow = date($date_type,strtotime($condition)); 
     $date_by_user = date($date_type,strtotime($date));
     if($date_by_user<$tomorrow){
-        print("Дата должна подходить под условие ".$condition);
-        return false;
+        return "Дата должна подходить под условие ".$condition and FALSE;
     }else{
         return true;
     }
@@ -233,18 +230,15 @@ function getPostVal($name) {
 
 //Проверка файла
 function isCorrectImg($img,$mb_limit = 5, $expansions = ['jpeg','jpg','png']){
-    if(empty($img['tmp_name'])){
-        print($img.": ошибка получения пути файла");
-        return false;
+    if(isset($img)){
+        return "Файл не был добавлен" and FALSE;
     }else{
         if($img['size'] > 1048576*100*$mb_limit){
-            print($img['name']." не должен превышать ".$mb_limit." мб");
-            return false;
+            return $img['name']." не должен превышать ".$mb_limit." мб" and FALSE;
         }else{        
             $type_file = pathinfo(trim(strip_tags($img['name'])), PATHINFO_EXTENSION);
             if(in_array($type_file,$expansions) == false){
-                print("Файл может иметь формат(ы): ".implode(",",$expansions).", а не ".$type_file);
-                return false;
+                return "Файл может иметь формат(ы): ".implode(",",$expansions).", а не ".$type_file and FALSE;
             }else{
                 return true;
             }
