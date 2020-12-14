@@ -190,10 +190,8 @@ function show_page($title_name,$tempates_name,$categorys,$is_auth,$user_name,$co
 }
 
 //Проверка длины 
-function isCorrectLength($name, $min, $max) {
-    $len = strlen($_POST[$name]);
-    $name = $_POST[$name];
-    $key = array_search($name, $_POST);
+function isCorrectLength($string, $min, $max) {
+    $len = strlen($string);
     if ($len < $min or $len > $max) {
         return FALSE;
     }else{
@@ -202,20 +200,18 @@ function isCorrectLength($name, $min, $max) {
 }
 
 //Проверка на int
-function isInt($name){
-    $num = $_POST[$name];
-    if(is_numeric($num)){
-        return true;
-    }else{
+function isInt($num){
+    if(!is_numeric($num)){
         return FALSE;
+    }else{
+        return true;
     }
 }
 //Проверка даты 
-function isCorrectDate($name){
-    if(empty($_POST[$name])){
+function isCorrectDate($date){
+    if(empty($date)){
         return FALSE;
     }else{
-        $date = $_POST[$name];
         $date_array = explode('-',$date); 
         if(checkdate($date_array[1],$date_array[2],$date_array[0]) == false){
             return FALSE;

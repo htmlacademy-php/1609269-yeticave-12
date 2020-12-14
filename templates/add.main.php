@@ -1,13 +1,6 @@
-<?php $form = false;?>
 <main>
   <?php print($lot_link);?>
-    <form class="form form--add-lot container <?=($name_status && 
-                                                  $message_status && 
-                                                  $rate_status && 
-                                                  $step_status && 
-                                                  $date_status&&
-                                                  $file_status) ? $form = true and 
-                                                                  "":"form--invalid"?>" action="/add.php" method="post" enctype="multipart/form-data"> <!-- form--invalid -->
+    <form class="form form--add-lot container <?=($form) ? "":"form--invalid"?>" action="/add.php" method="post" enctype="multipart/form-data"> <!-- form--invalid -->
       <h2>Добавление лота</h2>
       <div class="form__container-two <?=($name_status) ? "" : "form__item--invalid"?>">
         <div class="form__item"> <!-- form__item--invalid -->

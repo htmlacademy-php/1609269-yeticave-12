@@ -1,22 +1,20 @@
 <?php
 include(__DIR__."/bootstrap.php");
 $name_status = false;
-$message_status = false;
+$message_status= false;
 $rate_status = false;
-$step_status  = false;
-$date_status = false;
-$con_add_status = false;
+$step_status = false;
+$date_statu = false;
+$file_status = false;
 $lot_link = false;
+$form = false;
 //Проверить, что отправлена форма.
 if(!empty($_POST)){   
-    foreach($_POST as $key => $value){
-        //Убедиться, что заполнены все поля.
-        if($key == "lot-name"){ $name_status = (isCorrectLength("lot-name",5,20)) ? true : false;} 
-        if($key == "message"){$message_status =  (isCorrectLength("message",5,3000)) ? true : false;}
-        if($key == "lot-rate"){$rate_status = (isInt('lot-rate') and isCorrectLength("lot-rate",1,9)and $value>0) ? true : false;};
-        if($key == "lot-step"){$step_status = (isInt('lot-step') and isCorrectLength("lot-step",1,9) and $value>0) ? true : false;};
-        if($key == "lot-date"){$date_status = (isCorrectDate('lot-date')) ? true : false;};
-    }
+    if(!empty($_POST["lot-name"])){$name_status = (isCorrectLength($_POST["lot-name"],5,20)) ?: false;} 
+    if(!empty($_POST["message"])){$message_status=(isCorrectLength($_POST["message"],5,3000)) ?: false;}
+    if(!empty($_POST["lot-rate"])){$rate_status = (isInt($_POST['lot-rate']) and isCorrectLength($_POST["lot-rate"],1,9)and $_POST["lot-rate"]>0) ?: false;};
+    if(!empty($_POST["lot-step"])){$step_status = (isInt($_POST['lot-step']) and isCorrectLength($_POST["lot-step"],1,9) and $_POST["lot-rate"]>0) ?: false;};
+    if(!empty($_POST["lot-date"])){$date_status = (isCorrectDate($_POST['lot-date'])) ?: false;};
 }
 $file_status = isCorrectImg("lot-img");
 
@@ -31,8 +29,9 @@ if( $name_status &&
     $message_status && 
     $rate_status && 
     $step_status && 
-    $date_status&&
+    $date_status &&
     $file_status){
+        $form = true;
         $select_check_category_id=
         "SELECT categories.id
         FROM categories
@@ -62,20 +61,12 @@ if( $name_status &&
                                                                 $_POST['lot-rate'],
                                                                 $_POST['lot-date'],
                                                                 $_POST['lot-step']]);
-  
-        print($add_pos_query);
-#        $con_add_status = true;
         $lot_link = mysqli_insert_id($con);
     }
 $title_name = "Добавление файл";
 $tempates_name = 'add.main.php';
 show_page($title_name,$tempates_name,$categorys,$is_auth,$user_name, $content_array = [
+                                                                                    'categorys' => $categorys,
                                                                                     'lot_link' => $lot_link,
-                                                                                    'categorys' => $categorys, 
-                                                                                    'file_status' => $file_status,
-                                                                                    "name_status" => $name_status,
-                                                                                    "message_status" => $message_status,
-                                                                                    'rate_status' => $rate_status,
-                                                                                    'step_status' => $step_status,
-                                                                                    'date_status' =>$date_status
+                                                                                    'form' => $form
                                                                                     ]);
