@@ -44,13 +44,16 @@ if(empty(array_filter(array_values($_POST)))) {
         }
         //Если поле "Категория" заполнено - начинает его проверку 
         if(!empty($_POST["category"])){
-            if(!in_array($_POST["category"],$categorys['category'])){
-                $errors['category'] = 'Неправильно выбрана категория';
-                $status['category'] = false;
-            }else{
-                $errors['category'] = true;
-            }          
-        }       
+            foreach($categorys as $category){
+                if($_POST["category"] !=  $category["category"]){
+                    $errors['category'] = 'Неправильно выбрана категория';
+                    $status['category'] = false;
+                }else{
+                    $errors['category'] = true;
+                    break;
+                } 
+            }         
+        }  
         //Если поле "Начальная цена" заполнено - начинает его проверку 
         if(!empty($_POST["lot-rate"])){
             $reuslt[0] = isCorrectLength($_POST['lot-rate'],1,9);    //проверка длины 
