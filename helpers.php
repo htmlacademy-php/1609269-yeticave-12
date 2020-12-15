@@ -230,8 +230,8 @@ function getPostVal($name) {
 
 //Проверка файла
 function isCorrectImg($img,$mb_limit = 5, $expansions = ['jpeg','jpg','png']){
-    if(empty($img)){
-        return ['status' => false, 'error' => "Файл не был добавлен"];
+    if(empty($img['name'])){
+        return ['status' => false, 'error' => "Файл не найден"];
     }else{
         if($img['size'] > 1048576*100*$mb_limit){
             return ['status' => false, 'error' => $img['name']." не должен превышать ".$mb_limit." мб"];

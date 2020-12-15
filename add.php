@@ -1,6 +1,6 @@
 <?php
 include(__DIR__."/bootstrap.php");
-//Если аккаунт авторизован
+//Проверка авторизации
 if($is_auth == 1){
     //Создание переменных
     $title_name = "Добавление файл";
@@ -23,8 +23,8 @@ if($is_auth == 1){
                 'date' => $date_status = true, 
                 'file' => $file_status = true, 
                 'form' => $form = true];
-    //Проверка POST на элементы, если он пустой, то форма равнa true
-    if(empty(array_filter(array_values($_POST)))) {
+    //Проверка POST и FILES на элементы, если они пустые, то форма равнa true
+    if(empty(array_filter(array_values($_POST))) and empty(array_filter(array_values($_FILES)))) {
             $status['form'] = true;
     }else{
             //Так как 1 и более полей заполнено, меняет переменным статус на false и начинает проверку
@@ -36,13 +36,17 @@ if($is_auth == 1){
                 $reuslt = isCorrectLength($_POST["lot-name"],5,20);  //проверка длины 
                 if($reuslt ['status']){$status['name'] = true;}
                                 else{$status['name'] = false;$errors['name'] = $reuslt['error'];}              
-            } 
+            }else{
+                 $status['name'] = true;
+            }
             //Если поле "Описание" заполнено - начинает его проверку                                                                                       
             if(!empty($_POST["message"])){
-                $reuslt = isCorrectLength($_POST["message"],5,20); //проверка длины 
+                $reuslt = isCorrectLength($_POST["message"],5,3000); //проверка длины 
                 if($reuslt['status']){$status['message'] = true;}
                                 else{$status['message'] = false;$errors['message'] = $reuslt['error'];}              
-            }
+            }else{
+                $status['message'] = true;
+           }
             //Если поле "Категория" заполнено - начинает его проверку 
             if(!empty($_POST["category"])){
                 foreach($categorys as $category){
@@ -54,7 +58,9 @@ if($is_auth == 1){
                         break;
                     } 
                 }         
-            }  
+            }else{
+                $status['category'] = true;
+           }  
             //Если поле "Начальная цена" заполнено - начинает его проверку 
             if(!empty($_POST["lot-rate"])){
                 $reuslt[0] = isCorrectLength($_POST['lot-rate'],1,9);    //проверка длины 
@@ -70,7 +76,9 @@ if($is_auth == 1){
                                     else{$status[2]['rate'] = false;
                                         $errors['rate'] = $errors['rate'].$reuslt[2]['error']."<br>";}
                 $status['rate'] = ($status[0]['rate'] && $status[1]['rate'] && $status[2]['rate']) ? true: false;
-            }
+            }else{
+                $status['rate'] = true;
+           }  
             //Если поле "Шаг ставки" заполнено - начинает его проверку 
             if(!empty($_POST["lot-step"])){
                 $reuslt[0] = isCorrectLength($_POST['lot-step'],1,9);    //проверка длины 
@@ -86,19 +94,25 @@ if($is_auth == 1){
                                     else{$status[2]['step'] = false;
                                         $errors['step'] = $errors['step'].$reuslt[2]['error']."<br>";}
                 $status['step'] = ($status[0]['step'] && $status[1]['step'] && $status[2]['step']) ? true: false;
-            }
+            }else{
+                $status['step'] = true;
+           }  
             //Если поле "Дата окончания торгов " заполнено - начинает его проверку 
             if(!empty($_POST["lot-date"])){
                 $reuslt = isCorrectDate($date = $_POST['lot-date'],$condition = "+ 1 days");  //проверка даты: подходит ли под условие
                 if($reuslt['status']){$status['date'] = true;}
                                 else{$status['date'] = false;$errors['date'] = $reuslt['error'];}           
-            }
+            }else{
+                $status['date'] = true;
+           }  
             //Если поле "Изображение" заполнено - начинает его проверку 
             if(!empty($_FILES["lot-img"])){                               
                 $reuslt = isCorrectImg($_FILES["lot-img"],5,['jpeg','jpg','png']);            //проверка файла: подходит ли под условие
                 if($reuslt['status']){$status['file'] = true;}
                                 else{$status['file'] = false;$errors['file'] = $reuslt['error'];}      
-            }
+            }else{
+                $status['file'] = true;
+           }
             //Если поле "Изображение" прошло проверку на true: перемещает файл в необходимый каталог
             if($status['file']){
                 $file_name = $_FILES['lot-img']['name'];
@@ -113,7 +127,14 @@ if($is_auth == 1){
                 $status['rate'] && 
                 $status['step'] && 
                 $status['date'] &&
-                $status['file']){
+                $status['file'] &&
+                !empty($_POST['lot-name']) &&
+                !empty($_POST['category']) &&
+                !empty($_POST['message']) && 
+                !empty($_POST['lot-rate']) && 
+                !empty($_POST['lot-step']) && 
+                !empty($_POST['lot-date']) &&
+                !empty($_FILES['lot-file'])){
                     $status['form'] = true;
                     $select_check_category_id=
                     "SELECT categories.id

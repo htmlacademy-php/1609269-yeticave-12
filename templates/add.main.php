@@ -24,13 +24,14 @@
         <textarea id="message" name="message" placeholder="Напишите описание лота"></textarea>
         <span class="form__error"><?=($status['message']) ? "" : $errors['message']?></span> 
       </div>
-      <div class="form__item form__item--file <?=($status['file']) ? "" : "form__item--invalid" ?>"> <!-- Поппытался добавить ошибку здесь -->
+      <div class="form__item form__item--file <?=($status['file']) ? "" : "form__item--invalid" ?>"> <!-- Попытался добавить ошибку здесь -->
         <label>Изображение <sup>*</sup></label>
-        <div class="form__input-file <?=($status['file']) ? "" : "form__item--invalid" ?>"> <!-- Поппытался добавить ошибку здесь -->
+        <div class="form__input-file">
           <input name= 'lot-img'class="visually-hidden" type="file" id="lot-img" value="">
           <label for="lot-img">
             Добавить
           </label>
+          <span class="form__error"><?=($status['file']) ? "" : $errors['file']?></span>
         </div>
       </div>
       <div class="form__container-three">
