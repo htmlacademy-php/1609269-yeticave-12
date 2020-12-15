@@ -120,56 +120,103 @@ if($is_auth == 1){
                 $file_url = '/uploads/' . $file_name;
                 move_uploaded_file($_FILES['lot-img']['tmp_name'], $file_path . $file_name);
             }
+
+            //Если хотя бы 1 поле заполнено и если есть хотя бы 1 ошибка все поля, крое не пустых, получают статус false и ошибку 'Обязательное поле!'
+            if( !empty($_POST['lot-name']) ||
+                !empty($_POST['category']) ||
+                !empty($_POST['message']) ||
+                !empty($_POST['lot-rate']) || 
+                !empty($_POST['lot-step']) ||
+                !empty($_POST['lot-date']) ||
+                !empty($_FILES['lot-img'])){
+                    if( $status['name'] ||
+                        $status['category'] ||
+                        $status['message'] ||
+                        $status['rate'] || 
+                        $status['step'] || 
+                        $status['date'] ||
+                        $status['file']){
+                            $status['form'] = false;
+                            if(empty($_POST['lot-name'])){
+                                $status['name'] = false;
+                                $errors['name'] = 'Обязательное поле!';
+                            }
+                            if(empty($_POST['category'])){
+                                $status['category'] = false;
+                                $errors['category'] = 'Обязательное поле!';
+                            }
+                            if(empty($_POST['message'])){
+                                $status['message'] = false;
+                                $errors['message'] = 'Обязательное поле!';
+                            }
+                            if(empty($_POST['lot-rate'])){
+                                $status['rate'] = false;
+                                $errors['rate'] = 'Обязательное поле!';
+                            }
+                            if(empty($_POST['lot-step'])){
+                                $status['step'] = false;
+                                $errors['step'] = 'Обязательное поле!';
+                            }
+                            if(empty($_POST['lot-date'])){
+                                $status['date'] = false;
+                                $errors['date'] = 'Обязательное поле!';
+                            }
+                            if(empty($_FILES['lot-img']['name'])){
+                                $status['file'] = false;
+                                $errors['file'] = 'Обязательное поле!';
+                            }
+                    }
+                }
+
             //Если все поля заполнены и равны true, форма тоже равна true и создается новый lot на sql
-            if( $status['name'] &&
-                $status['category'] &&
-                $status['message'] && 
-                $status['rate'] && 
-                $status['step'] && 
-                $status['date'] &&
-                $status['file'] &&
-                !empty($_POST['lot-name']) &&
+            if( !empty($_POST['lot-name']) &&
                 !empty($_POST['category']) &&
                 !empty($_POST['message']) && 
                 !empty($_POST['lot-rate']) && 
                 !empty($_POST['lot-step']) && 
                 !empty($_POST['lot-date']) &&
                 !empty($_FILES['lot-img'])){
-                    $status['form'] = true;
-                    $select_check_category_id=
-                    "SELECT categories.id
-                    FROM categories
-                    WHERE categories.category = ?
-                    ";
-                    $insert_add_pos=
-                    "INSERT INTO lots  (date_create,
-                                        name,
-                                        description,
-                                        user_id,
-                                        winner_id,
-                                        category_id,
-                                        img_link,
-                                        start_price,
-                                        date_completion,
-                                        step_rate)
-                    VALUES (?,?,?,?,?,?,?,?,?,?);";
-                    $check_category_id_query = replace_in_query($select_check_category_id,$con,$passed_variables = [$_POST['category']]);
-                    $category_id = mysqli_fetch_assoc($check_category_id_query)['id'];  
-                    $add_pos_query = replace_in_query($insert_add_pos,$con,$passed_variables = [
-                                        date("Y-m-d H:i:s"),
-                                        $_POST['lot-name'],
-                                        $_POST['message'],
-                                        0,
-                                        0,
-                                        $category_id,
-                                        $file_url,
-                                        $_POST['lot-rate'],
-                                        $_POST['lot-date'],
-                                        $_POST['lot-step']]);
-                    $lot_link = mysqli_insert_id($con);
-        }else{
-            $status['form'] = false;
-        }
+                    if( $status['name'] &&
+                        $status['category'] &&
+                        $status['message'] && 
+                        $status['rate'] && 
+                        $status['step'] && 
+                        $status['date'] &&
+                        $status['file']){
+                            $status['form'] = true;
+                            $select_check_category_id=
+                            "SELECT categories.id
+                            FROM categories
+                            WHERE categories.category = ?
+                            ";
+                            $insert_add_pos=
+                            "INSERT INTO lots  (date_create,
+                                                name,
+                                                description,
+                                                user_id,
+                                                winner_id,
+                                                category_id,
+                                                img_link,
+                                                start_price,
+                                                date_completion,
+                                                step_rate)
+                            VALUES (?,?,?,?,?,?,?,?,?,?);";
+                            $check_category_id_query = replace_in_query($select_check_category_id,$con,$passed_variables = [$_POST['category']]);
+                            $category_id = mysqli_fetch_assoc($check_category_id_query)['id'];  
+                            $add_pos_query = replace_in_query($insert_add_pos,$con,$passed_variables = [
+                                                date("Y-m-d H:i:s"),
+                                                $_POST['lot-name'],
+                                                $_POST['message'],
+                                                0,
+                                                0,
+                                                $category_id,
+                                                $file_url,
+                                                $_POST['lot-rate'],
+                                                $_POST['lot-date'],
+                                                $_POST['lot-step']]);
+                            $lot_link = mysqli_insert_id($con);
+                            }
+                }
     }
     //Открытие страницы
     $tempates_name = 'add.main.php';
