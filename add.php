@@ -1,6 +1,8 @@
 <?php
 include(__DIR__."/bootstrap.php");
 
+//Создание переменных
+$title_name = "Добавление файл";
 $reuslt = [];
 $lot_link = 0;
 $error = '';
@@ -18,28 +20,31 @@ $status =  ['name' => $name_status = true,
             'date' => $date_status = true, 
             'file' => $file_status = true, 
             'form' => $form = true];
+//Проверка POST на элементы, если он пустой, то форма равнa true
 if(empty(array_filter(array_values($_POST)))) {
         $status['form'] = true;
 }else{
+        //Так как 1 и более полей заполнено, меняет переменным статус на false и начинает проверку
         for($i=0;$i++;count($status)){
             $status[$i] = false;
         }
-
+        //Если поле "Наименование" заполнено - начинает его проверку 
         if(!empty($_POST["lot-name"])){
             $reuslt = isCorrectLength($_POST["lot-name"],5,20);
             if($reuslt ['status']){$status['name'] = true;}
                               else{$status['name'] = false;$errors['name'] = $reuslt['error'];}              
-        }                                                                                       
+        } 
+        //Если поле "Описание" заполнено - начинает его проверку                                                                                       
         if(!empty($_POST["message"])){
-            $reuslt = isCorrectLength($_POST["message"],5,20);
+            $reuslt = isCorrectLength($_POST["message"],5,20); //проверка длины 
             if($reuslt['status']){$status['message'] = true;}
                              else{$status['message'] = false;$errors['message'] = $reuslt['error'];}              
         }     
-
+        //Если поле "Начальная цена" заполнено - начинает его проверку 
         if(!empty($_POST["lot-rate"])){
-            $reuslt[0] = isCorrectLength($_POST['lot-rate'],1,9);
-            $reuslt[1] = isInt($_POST['lot-rate']);
-            $reuslt[2] = check_condition($_POST['lot-rate'],'>',0);
+            $reuslt[0] = isCorrectLength($_POST['lot-rate'],1,9);    //проверка длины 
+            $reuslt[1] = isInt($_POST['lot-rate']);                  //проверка типа
+            $reuslt[2] = check_condition($_POST['lot-rate'],'>',0);  //проверка: подходит ли под условие
             if($reuslt[0]['status']){$status[0]['rate'] = true;}
                                 else{$status[0]['rate'] = false;
                                      $errors['rate'] = $errors['rate'].$reuslt[0]['error']."<br>";}
@@ -51,10 +56,11 @@ if(empty(array_filter(array_values($_POST)))) {
                                      $errors['rate'] = $errors['rate'].$reuslt[2]['error']."<br>";}
             $status['rate'] = ($status[0]['rate'] && $status[1]['rate'] && $status[2]['rate']) ? true: false;
         }
+        //Если поле "Шаг ставки" заполнено - начинает его проверку 
         if(!empty($_POST["lot-step"])){
-            $reuslt[0] = isCorrectLength($_POST['lot-step'],1,9);
-            $reuslt[1] = isInt($_POST['lot-step']);
-            $reuslt[2] = check_condition($_POST['lot-step'],'>',0);
+            $reuslt[0] = isCorrectLength($_POST['lot-step'],1,9);    //проверка длины 
+            $reuslt[1] = isInt($_POST['lot-step']);                  //проверка типа
+            $reuslt[2] = check_condition($_POST['lot-step'],'>',0);  //проверка: подходит ли под условие
             if($reuslt[0]['status']){$status[0]['step'] = true;}
                                 else{$status[0]['step'] = false;
                                      $errors['step'] = $errors['step'].$reuslt[0]['error']."<br>";}
@@ -66,22 +72,26 @@ if(empty(array_filter(array_values($_POST)))) {
                                      $errors['step'] = $errors['step'].$reuslt[2]['error']."<br>";}
             $status['step'] = ($status[0]['step'] && $status[1]['step'] && $status[2]['step']) ? true: false;
         }
+        //Если поле "Дата окончания торгов " заполнено - начинает его проверку 
         if(!empty($_POST["lot-date"])){
-            $reuslt = isCorrectDate($date = $_POST['lot-date'],$condition = "+ 1 days");
+            $reuslt = isCorrectDate($date = $_POST['lot-date'],$condition = "+ 1 days");  //проверка даты: подходит ли под условие
             if($reuslt['status']){$status['date'] = true;}
                              else{$status['date'] = false;$errors['date'] = $reuslt['error'];}           
         }
-        if(!empty($_FILES["lot-img"])){
-            $reuslt = isCorrectImg($_FILES["lot-img"],5,['jpeg','jpg','png']);
+        //Если поле "Изображение" заполнено - начинает его проверку 
+        if(!empty($_FILES["lot-img"])){                               
+            $reuslt = isCorrectImg($_FILES["lot-img"],5,['jpeg','jpg','png']);            //проверка файла: подходит ли под условие
             if($reuslt['status']){$status['file'] = true;}
                              else{$status['file'] = false;$errors['file'] = $reuslt['error'];}      
         }
+        //Если поле "Изображение" прошло проверку на true: перемещает файл в необходимый каталог
         if($status['file']){
             $file_name = $_FILES['lot-img']['name'];
             $file_path = __DIR__ . '/uploads/';
             $file_url = '/uploads/' . $file_name;
             move_uploaded_file($_FILES['lot-img']['tmp_name'], $file_path . $file_name);
         }
+        //Если все поля заполнены и равны true, форма тоже равна true и создается новый lot на sql
         if( $status['name'] && 
             $status['message'] && 
             $status['rate'] && 
@@ -122,7 +132,7 @@ if(empty(array_filter(array_values($_POST)))) {
                 $lot_link = mysqli_insert_id($con);
     }
 }
-$title_name = "Добавление файл";
+//Открытие страницы
 $tempates_name = 'add.main.php';
 show_page($title_name,$tempates_name,$categorys,$is_auth,$user_name, $content_array = [
                                                                                     'errors' => $errors,
