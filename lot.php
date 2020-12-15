@@ -18,7 +18,7 @@ $select_lots =
     ON lots.id = bids.lot_id
 
     LEFT JOIN categories
-    ON lots.id = categories.id
+    ON lots.category_id = categories.id
 
     WHERE lots.id = ?
     GROUP BY lots.id

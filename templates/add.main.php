@@ -24,7 +24,7 @@
         <textarea id="message" name="message" placeholder="Напишите описание лота"></textarea>
         <span class="form__error"><?=($status['message']) ? "" : $errors['message']?></span> 
       </div>
-      <div class="form__item form__item--file <?=($status['file']) ? "" : "form__item--invalid" ?>"> <!-- Попытался добавить ошибку здесь -->
+      <div class="form__item form__item--file <?=($status['file']) ? "" : "form__item--invalid"?>"> <!-- Попытался добавить ошибку здесь -->
         <label>Изображение <sup>*</sup></label>
         <div class="form__input-file">
           <input name= 'lot-img'class="visually-hidden" type="file" id="lot-img" value="">

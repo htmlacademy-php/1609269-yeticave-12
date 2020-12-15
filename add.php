@@ -54,7 +54,7 @@ if($is_auth == 1){
                         $errors['category'] = 'Неправильно выбрана категория';
                         $status['category'] = false;
                     }else{
-                        $errors['category'] = true;
+                        $status['category'] = true;
                         break;
                     } 
                 }         
@@ -106,7 +106,7 @@ if($is_auth == 1){
                 $status['date'] = true;
            }  
             //Если поле "Изображение" заполнено - начинает его проверку 
-            if(!empty($_FILES["lot-img"])){                               
+            if(!empty($_FILES["lot-img"]['name'])){                               
                 $reuslt = isCorrectImg($_FILES["lot-img"],5,['jpeg','jpg','png']);            //проверка файла: подходит ли под условие
                 if($reuslt['status']){$status['file'] = true;}
                                 else{$status['file'] = false;$errors['file'] = $reuslt['error'];}      
@@ -134,7 +134,7 @@ if($is_auth == 1){
                 !empty($_POST['lot-rate']) && 
                 !empty($_POST['lot-step']) && 
                 !empty($_POST['lot-date']) &&
-                !empty($_FILES['lot-file'])){
+                !empty($_FILES['lot-img'])){
                     $status['form'] = true;
                     $select_check_category_id=
                     "SELECT categories.id
@@ -167,6 +167,8 @@ if($is_auth == 1){
                                         $_POST['lot-date'],
                                         $_POST['lot-step']]);
                     $lot_link = mysqli_insert_id($con);
+        }else{
+            $status['form'] = false;
         }
     }
     //Открытие страницы
