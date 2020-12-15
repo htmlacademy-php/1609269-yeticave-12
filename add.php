@@ -2,7 +2,7 @@
 include(__DIR__."/bootstrap.php");
 
 $reuslt = [];
-$lot_link = true;
+$lot_link = 0;
 $error = '';
 $errors =  ['name' => "",
             'message' => '',
@@ -72,10 +72,9 @@ if(empty(array_filter(array_values($_POST)))) {
                              else{$status['date'] = false;$errors['date'] = $reuslt['error'];}           
         }
         if(!empty($_FILES["lot-img"])){
-            $reuslt = isCorrectImg($_FILES["lot-img"]);
+            $reuslt = isCorrectImg($_FILES["lot-img"],5,['jpeg','jpg','png']);
             if($reuslt['status']){$status['file'] = true;}
-                             else{$status['file'] = false;$errors['file'] = $reuslt['error'];}
-            print($status['file']);        
+                             else{$status['file'] = false;$errors['file'] = $reuslt['error'];}      
         }
         if($status['file']){
             $file_name = $_FILES['lot-img']['name'];

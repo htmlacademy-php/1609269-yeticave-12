@@ -51,6 +51,7 @@
         </div>
       </div>
       <span class="form__error form__error--bottom">Пожалуйста, исправьте ошибки в форме.</span>
-      <button type="submit" class="button">Добавить лот</button>
+      <button type="submit" class="button"><?php if($lot_link != 0){
+                                                    header("Location: /lot.php?id=".$lot_link);}?>Добавить лот</button>
     </form>
 </main>
