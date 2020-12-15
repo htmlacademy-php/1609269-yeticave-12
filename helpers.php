@@ -250,7 +250,7 @@ function check_array_for_the_same($array = [],$tag,$value,$num){
     $the_same = true;
     for($i = 0; $i++;$i == $num){
         print($i.$array[$i][$tag]);
-        if($array[$i][$tag] != $value){
+        if($array[$i] != $value){
             $the_same = false;
             break;
         } 
