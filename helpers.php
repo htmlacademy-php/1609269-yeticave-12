@@ -193,7 +193,7 @@ function show_page($title_name,$tempates_name,$categorys,$is_auth,$user_name,$co
 function isCorrectLength($string, $min, $max) {
     $len = strlen($string);
     if ($len < $min or $len > $max) {
-        $error = "Наименование  должно быть от ".$min." до ".$max." символов";
+        $error = "Поле должно быть от ".$min." до ".$max." символов!";
         return ['status' => false, 'error' => $error];
     }else{
         return ['status' => true];
@@ -203,7 +203,7 @@ function isCorrectLength($string, $min, $max) {
 //Проверка на int
 function isInt($num){
     if(!is_numeric($num)){
-        return ['status' => false, 'error' => "Начальная цена может быть только цифрой!"]; 
+        return ['status' => false, 'error' => "Поле должно содержать цифры!"]; 
     }else{
         return ['status' => true];
     }
@@ -246,9 +246,10 @@ function isCorrectImg($img,$mb_limit = 5, $expansions = ['jpeg','jpg','png']){
     }
 }
 
-function check_array_for_the_same($array = [],$tag,$value){
+function check_array_for_the_same($array = [],$tag,$value,$num){
     $the_same = true;
-    for($i = 0; $i < count($array); $i++){
+    for($i = 0; $i++;$i == $num){
+        print($i.$array[$i][$tag]);
         if($array[$i][$tag] != $value){
             $the_same = false;
             break;
@@ -261,7 +262,7 @@ function check_condition($item_to_compare,$condition = '=',$compare_with = 0){
     if(num_cond($item_to_compare,$condition,$compare_with)){
         return['status' => true];
     }else{
-        return['status' => false,'error' => "Начальная цена должна быть больше 0!"];
+        return['status' => false,'error' => "Поле должно быть больше 0!"];
     }
 }
 

@@ -24,7 +24,7 @@
         <textarea id="message" name="message" placeholder="Напишите описание лота"></textarea>
         <span class="form__error"><?=($status['message']) ? "" : $errors['message']?></span> 
       </div>
-      <div class="form__item form__item--file <?=($status['file']) ? "" : "form__item--invalid" ?>">
+      <div class="form__item form__item--file">
         <label>Изображение <sup>*</sup></label>
         <div class="form__input-file">
           <input name= 'lot-img'class="visually-hidden" type="file" id="lot-img" value="">
@@ -37,17 +37,17 @@
         <div class="form__item form__item--small <?=($status['rate']) ? "" : "form__item--invalid" ?>">
           <label for="lot-rate">Начальная цена <sup>*</sup></label>
           <input id="lot-rate" type="text" name="lot-rate" placeholder="0"  value=<?=getPostVal("lot-rate")?>>
-          <span class="form__error"><?=($status['rate']) ? "" : $errors['lot-rate']?></span>
+          <span class="form__error"><?=($status['rate']) ? "" : $errors['rate']?></span>
         </div>
         <div class="form__item form__item--small <?=($status['step']) ? "" : "form__item--invalid" ?>">
           <label for="lot-step">Шаг ставки <sup>*</sup></label>
           <input id="lot-step" type="text" name="lot-step" placeholder="0" value=<?=getPostVal("lot-step")?>>
-          <span class="form__error">Введите шаг ставки</span>
+          <span class="form__error"><?=($status['step']) ? "" : $errors['step']?></span>
         </div>
         <div class="form__item <?=($status['date']) ? "" : "form__item--invalid" ?>">
           <label for="lot-date">Дата окончания торгов <sup>*</sup></label>
           <input class="form__input-date" id="lot-date" type="text" name="lot-date" placeholder="Введите дату в формате ГГГГ-ММ-ДД" value=<?=getPostVal("lot-date")?>>
-          <span class="form__error">Введите дату завершения торгов</span>
+          <span class="form__error"><?=($status['date']) ? "" : $errors['date']?></span>
         </div>
       </div>
       <span class="form__error form__error--bottom">Пожалуйста, исправьте ошибки в форме.</span>

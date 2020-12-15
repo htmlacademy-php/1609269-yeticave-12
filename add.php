@@ -40,16 +40,43 @@ if(empty(array_filter(array_values($_POST)))) {
             $reuslt[0] = isCorrectLength($_POST['lot-rate'],1,9);
             $reuslt[1] = isInt($_POST['lot-rate']);
             $reuslt[2] = check_condition($_POST['lot-rate'],'>',0);
-            for($i = 0; $i < count($reuslt); $i++){
-                if($reuslt[$i]['status']){$status[$i]['lot-rate'] = true;}
-                                    else{$status[$i]['lot-rate'] = false;$errors['lot-rate'][$i] = $reuslt[$i]['error'];}
-            }
-            $errors['lot-rate'] = implode('<br>',$errors['lot-rate']);
-            $status['lot-rate'] = check_array_for_the_same($status,'status',true);
+            if($reuslt[0]['status']){$status[0]['rate'] = true;}
+                                else{$status[0]['rate'] = false;
+                                     $errors['rate'] = $errors['rate'].$reuslt[0]['error']."<br>";}
+            if($reuslt[1]['status']){$status[1]['rate'] = true;}
+                                else{$status[1]['rate'] = false;
+                                     $errors['rate'] = $errors['rate'].$reuslt[1]['error']."<br>";}
+            if($reuslt[2]['status']){$status[2]['rate'] = true;}
+                                else{$status[2]['rate'] = false;
+                                     $errors['rate'] = $errors['rate'].$reuslt[2]['error']."<br>";}
+            $status['rate'] = ($status[0]['rate'] && $status[1]['rate'] && $status[2]['rate']) ? true: false;
         }
-        if(!empty($_POST["lot-step"])){$status['step'] = (isInt($_POST['lot-step']) and isCorrectLength($_POST["lot-step"],1,9,$error) and $_POST["lot-step"]>0) ?: false;};
-        if(!empty($_POST["lot-date"])){$status['date'] = (isCorrectDate($date = $_POST['lot-date'],$condition = "+ 1 days")) ?: false;};
-        if(!empty($_FILES["lot-img"])){$status['file'] = isCorrectImg($_FILES["lot-img"]);}
+        if(!empty($_POST["lot-step"])){
+            $reuslt[0] = isCorrectLength($_POST['lot-step'],1,9);
+            $reuslt[1] = isInt($_POST['lot-step']);
+            $reuslt[2] = check_condition($_POST['lot-step'],'>',0);
+            if($reuslt[0]['status']){$status[0]['step'] = true;}
+                                else{$status[0]['step'] = false;
+                                     $errors['step'] = $errors['step'].$reuslt[0]['error']."<br>";}
+            if($reuslt[1]['status']){$status[1]['step'] = true;}
+                                else{$status[1]['step'] = false;
+                                     $errors['step'] = $errors['step'].$reuslt[1]['error']."<br>";}
+            if($reuslt[2]['status']){$status[2]['step'] = true;}
+                                else{$status[2]['step'] = false;
+                                     $errors['step'] = $errors['step'].$reuslt[2]['error']."<br>";}
+            $status['step'] = ($status[0]['step'] && $status[1]['step'] && $status[2]['step']) ? true: false;
+        }
+        if(!empty($_POST["lot-date"])){
+            $reuslt = isCorrectDate($date = $_POST['lot-date'],$condition = "+ 1 days");
+            if($reuslt['status']){$status['date'] = true;}
+                             else{$status['date'] = false;$errors['date'] = $reuslt['error'];}           
+        }
+        if(!empty($_FILES["lot-img"])){
+            $reuslt = isCorrectImg($_FILES["lot-img"]);
+            if($reuslt['status']){$status['file'] = true;}
+                             else{$status['file'] = false;$errors['file'] = $reuslt['error'];}
+            print($status['file']);        
+        }
         if($status['file']){
             $file_name = $_FILES['lot-img']['name'];
             $file_path = __DIR__ . '/uploads/';
@@ -96,7 +123,6 @@ if(empty(array_filter(array_values($_POST)))) {
                 $lot_link = mysqli_insert_id($con);
     }
 }
-print($status['name']);
 $title_name = "Добавление файл";
 $tempates_name = 'add.main.php';
 show_page($title_name,$tempates_name,$categorys,$is_auth,$user_name, $content_array = [
