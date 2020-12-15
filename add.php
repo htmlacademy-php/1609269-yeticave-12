@@ -7,6 +7,7 @@ $reuslt = [];
 $lot_link = 0;
 $error = '';
 $errors =  ['name' => "",
+            'category' => '',
             'message' => '',
             'rate' => '',
             'step' => '',
@@ -14,6 +15,7 @@ $errors =  ['name' => "",
             'file' => '',
             'form' => ''];
 $status =  ['name' => $name_status = true,
+            'category' => $category_status = true,
             'message' => $message_status = true, 
             'rate' => $rate_status = true, 
             'step' => $step_status = true, 
@@ -30,7 +32,7 @@ if(empty(array_filter(array_values($_POST)))) {
         }
         //Если поле "Наименование" заполнено - начинает его проверку 
         if(!empty($_POST["lot-name"])){
-            $reuslt = isCorrectLength($_POST["lot-name"],5,20);
+            $reuslt = isCorrectLength($_POST["lot-name"],5,20);  //проверка длины 
             if($reuslt ['status']){$status['name'] = true;}
                               else{$status['name'] = false;$errors['name'] = $reuslt['error'];}              
         } 
@@ -39,7 +41,16 @@ if(empty(array_filter(array_values($_POST)))) {
             $reuslt = isCorrectLength($_POST["message"],5,20); //проверка длины 
             if($reuslt['status']){$status['message'] = true;}
                              else{$status['message'] = false;$errors['message'] = $reuslt['error'];}              
-        }     
+        }
+        //Если поле "Категория" заполнено - начинает его проверку 
+        if(!empty($_POST["category"])){
+            if(!in_array($_POST["category"],$categorys['category'])){
+                $errors['category'] = 'Неправильно выбрана категория';
+                $status['category'] = false;
+            }else{
+                $errors['category'] = true;
+            }          
+        }       
         //Если поле "Начальная цена" заполнено - начинает его проверку 
         if(!empty($_POST["lot-rate"])){
             $reuslt[0] = isCorrectLength($_POST['lot-rate'],1,9);    //проверка длины 
@@ -92,7 +103,8 @@ if(empty(array_filter(array_values($_POST)))) {
             move_uploaded_file($_FILES['lot-img']['tmp_name'], $file_path . $file_name);
         }
         //Если все поля заполнены и равны true, форма тоже равна true и создается новый lot на sql
-        if( $status['name'] && 
+        if( $status['name'] &&
+            $status['category'] &&
             $status['message'] && 
             $status['rate'] && 
             $status['step'] && 
