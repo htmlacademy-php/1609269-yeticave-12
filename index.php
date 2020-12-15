@@ -11,7 +11,7 @@ $select_lots =
     ON lots.id = bids.lot_id
 
     LEFT JOIN categories
-    ON lots.category_id = categories.id
+    ON lots.id = categories.id
 
     WHERE lots.date_completion >= NOW()
     GROUP BY lots.id

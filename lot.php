@@ -6,6 +6,7 @@ if(empty($_GET['id'])){
 }else{
     $id = $_GET['id'];
 }
+
 $select_lots = 
     "SELECT lots.id ,name,start_price,img_link,
     MAX(COALESCE(bids.price,lots.start_price)) AS price, 
@@ -17,7 +18,7 @@ $select_lots =
     ON lots.id = bids.lot_id
 
     LEFT JOIN categories
-    ON lots.category_id = categories.id
+    ON lots.id = categories.id
 
     WHERE lots.id = ?
     GROUP BY lots.id
