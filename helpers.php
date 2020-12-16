@@ -246,18 +246,27 @@ function isCorrectImg($img,$mb_limit = 5, $expansions = ['jpeg','jpg','png']){
     }
 }
 
-function check_array_for_the_same($array = [],$tag,$value,$num){
-    $the_same = true;
-    for($i = 0; $i++;$i == $num){
-        print($i.$array[$i][$tag]);
-        if($array[$i] != $value){
+function check_array_by_condition($array = [],$value,$condition = '&&'){
+    $i = 0;
+    if($condition == '&&' or $condition == 'and'){
+        $the_same = true;
+        while($i < count($array)){
+            if(array_values($array)[$i] != $value){
+                $the_same = false;
+                break;
+            }
+        $i++;
+        }
+    }
+    if($condition == '||' or $condition == 'or'){
+        $the_same = true;
+        if(!in_array($value,array_values($array))){
             $the_same = false;
-            break;
-        } 
+        }
+        $i++;
     }
     return $the_same;
 }
-
 function check_condition($item_to_compare,$condition = '=',$compare_with = 0){
     if(num_cond($item_to_compare,$condition,$compare_with)){
         return['status' => true];
