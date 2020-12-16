@@ -193,8 +193,7 @@ function show_page($title_name,$tempates_name,$categorys,$is_auth,$user_name,$co
 function isCorrectLength($string, $min, $max) {
     $len = strlen($string);
     if ($len < $min or $len > $max) {
-        $error = "Поле должно быть от ".$min." до ".$max." символов!";
-        return ['status' => false, 'error' => $error];
+        return ['status' => false, 'error' => "Поле должно быть от ".$min." до ".$max." символов!"];
     }else{
         return ['status' => true];
     }
@@ -267,23 +266,45 @@ function check_array_by_condition($array = [],$value,$condition = '&&'){
     }
     return $the_same;
 }
-function check_condition($item_to_compare,$condition = '=',$compare_with = 0){
-    if(num_cond($item_to_compare,$condition,$compare_with)){
-        return['status' => true];
-    }else{
-        return['status' => false,'error' => "Поле должно быть больше 0!"];
-    }
+
+function move_file($file_name,$fime_tmp,$folder){
+    $file_path = __DIR__ . '/'.$folder.'/';
+    move_uploaded_file($fime_tmp, $file_path . $file_name);
 }
 
-function num_cond ($var1, $op, $var2) {
-
-    switch ($op) {
-        case "=":  return $var1 == $var2;
-        case "!=": return $var1 != $var2;
-        case ">=": return $var1 >= $var2;
-        case "<=": return $var1 <= $var2;
-        case ">":  return $var1 >  $var2;
-        case "<":  return $var1 <  $var2;
-    default:       return true;
-    }   
+function check_on_empty_post_and_files($array =[],$condition = 'all'){
+    $answer = true;
+    $i = 0;
+    while($i != count($array)){
+        if($condition == 'all'){
+            if(in_array($array[$i],array_keys($_POST))){
+                print('Нашел '.$array[$i]." в post");
+                if(empty($_POST[$array[$i]])){
+                    print('Пустая '.$array[$i]);
+                    $answer = false;
+                }
+            }else{
+            }
+            if(in_array($array[$i],array_keys($_FILES))){
+                if(empty($_POST[$array[$i]])){
+                    $answer = false;
+                }
+            }
+        }
+        if($condition == '!0'){
+            if(in_array($array[$i],array_keys($_POST))){
+                if(empty($_POST[$array[$i]])){
+                    $answer = $answer."false";
+                }
+            }
+            if(in_array($array[$i],array_keys($_FILES))){
+                if(empty($_POST[$array[$i]])){
+                    $answer = $answer."false";
+                }
+            }
+        }
+        $answer = (!$answer) ? :false;
+        $i++;
+    }
+    return $answer;
 }
