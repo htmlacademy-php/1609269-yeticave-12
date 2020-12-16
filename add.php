@@ -14,6 +14,7 @@ $errors =  ['lot-name' => 0,
             'lot-date' => 0,
             'lot-img' => 0];
 $form = 0;
+
 //Проверка POST и FILES на элементы
 if($_SERVER['REQUEST_METHOD'] != 'POST') {
     $no_empty_fields = true;
@@ -26,7 +27,7 @@ if($_SERVER['REQUEST_METHOD'] != 'POST') {
 }
 
 //Именно эта переменная проверяет все поля
-if (check_on_empty_post_and_files(array_keys($errors))){ 
+if (check_on_empty_post_and_files(array_keys($errors),['lot-img'])){ 
     $all_fields_filled = true;
 }else{
     $all_fields_filled = false;

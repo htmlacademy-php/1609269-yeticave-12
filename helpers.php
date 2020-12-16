@@ -272,7 +272,7 @@ function move_file($file_name,$fime_tmp,$folder){
     move_uploaded_file($fime_tmp, $file_path . $file_name);
 }
 
-function check_on_empty_post_and_files($array =[]){
+function check_on_empty_post_and_files($array =[],$array2=[]){
     $answer = true;
     $i = 0;
     while($i < (count($array) - 1)){
@@ -282,7 +282,10 @@ function check_on_empty_post_and_files($array =[]){
             }
         }else{
             $answer = false;}
-        if(in_array('lot-img',array_keys($_FILES))){
+        $i++;
+    }
+    while($i < (count($array2) - 1)){
+        if(in_array($array2[$i],array_keys($_FILES))){
             if(isset($_FIELS['lot-img']['name'])){
                 $answer = false;
             }
