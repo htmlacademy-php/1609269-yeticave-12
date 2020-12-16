@@ -1,8 +1,5 @@
 <?php
 include(__DIR__."/bootstrap.php");
-//Проверка авторизации
-
-$is_auth_status = ($is_auth);
     
 //Создание переменных
 $no_empty_fields = false;
@@ -18,7 +15,7 @@ $errors =  ['lot-name' => 0,
             'lot-img' => 0];
 $form = 0;
 //Проверка POST и FILES на элементы
-if(empty(array_filter(array_values($_POST))) and empty(array_filter(array_values($_FILES)))) {
+if($_SERVER['REQUEST_METHOD'] != 'POST') {
     $no_empty_fields = true;
 }else{
     $no_empty_fields = false;
@@ -29,26 +26,24 @@ if(empty(array_filter(array_values($_POST))) and empty(array_filter(array_values
 }
 
 //Именно эта переменная проверяет все поля
-if (check_on_empty_post_and_files(array_keys($errors),'all')){ 
-    $all_fields_filled = false;
+if (check_on_empty_post_and_files(array_keys($errors))){ 
+    $all_fields_filled = true;
 }else{
     $all_fields_filled = false;
 }
-
-print($all_fields_filled);
 
 //Если поле "Наименование" заполнено - начинает его проверку 
 if(!empty($_POST["lot-name"])){
     $result[0] = isCorrectLength($_POST["lot-name"],5,20);     //проверка длины 
     $errors['lot-name'] = ($result[0]['status']) ?false: $result[0]['error'];      
-}else{$errors['lot-name'] = false;}
+}
 
 
 //Если поле "Описание" заполнено - начинает его проверку           
 if(!empty($_POST["message"])){
     $result[0] = isCorrectLength($_POST["message"],5,3000);     //проверка длины 
     $errors['message'] = ($result[0]['status']) ?false: $result[0]['error'];      
-}else{$errors['message'] = false;}                                                                            
+}                                                                       
 
 //Если поле "Категория" заполнено - начинает его проверку 
 if(!empty($_POST["category"])){
@@ -60,7 +55,7 @@ if(!empty($_POST["category"])){
             break;
         } 
     }         
-}else{$errors['category'] = false;}       
+}    
 
 //Если поле "Начальная цена" заполнено - начинает его проверку 
 if(!empty($_POST["lot-rate"])){
@@ -72,7 +67,7 @@ if(!empty($_POST["lot-rate"])){
         $errors['lot-rate'] = ($result[$i]['status']) ?false: $errors['lot-rate'].$result [$i]['error']."<br>"; 
         $i++;
     }
-}else{$errors['lot-rate'] = false;}    
+} 
 
 //Если поле "Шаг ставки" заполнено - начинает его проверку 
 if(!empty($_POST["lot-step"])){
@@ -85,14 +80,14 @@ if(!empty($_POST["lot-step"])){
         $errors['lot-step'] = ($result [$i]['status']) ?false: $errors['lot-step'].$result [$i]['error']."<br>"; 
         $i++;
     }
-}else{$errors['lot-step'] = false;}  
+}
 
 //Если поле "Дата окончания торгов " заполнено - начинает его проверку 
 if(!empty($_POST["lot-date"])){
     $empty_status['lot-date'] = false;
     $result[0] = isCorrectDate($date = $_POST['lot-date'],$condition = "+ 1 days");  //проверка даты: подходит ли под условие
     $errors['lot-date'] = ($result[0]['status']) ?false: $result[0]['error'];           
-}else{$errors['lot-date'] = false;}  
+}
 
 //Если поле "Изображение" заполнено - начинает его проверку 
 if(!empty($_FILES["lot-img"]['name'])){     
@@ -101,7 +96,7 @@ if(!empty($_FILES["lot-img"]['name'])){
     $errors['lot-img'] = ($result[0]['status']) ?false: $result[0]['error'];
     if($result[0]['status']){move_file($_FILES['lot-img']['name'],$_FILES['lot-img']['tmp_name'],'uploads'); //Если поле "Изображение" прошло проверку на true: перемещает файл в необходимый каталог
                             $file_url = '/uploads/'.$_FILES['lot-img']['name'];}    
-}else{$errors['lot-img'] = false;}  
+}
 
 //Если хотя бы 1 поле заполнено и если есть хотя бы 1 ошибка все поля, кроме не пустых, получают статус false и ошибку 'Обязательное поле!'
 if($no_empty_fields==false and
@@ -151,7 +146,7 @@ if($all_fields_filled and
 }
 
 //Открытие страницы
-if($is_auth_status){
+if($is_auth){
     $tempates_name = 'add.main.php';
     show_page($title_name,$tempates_name,$categorys,$is_auth,$user_name, $content_array = [
                                                                                         'errors' => $errors,

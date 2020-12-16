@@ -272,38 +272,22 @@ function move_file($file_name,$fime_tmp,$folder){
     move_uploaded_file($fime_tmp, $file_path . $file_name);
 }
 
-function check_on_empty_post_and_files($array =[],$condition = 'all'){
+function check_on_empty_post_and_files($array =[]){
     $answer = true;
     $i = 0;
-    while($i != count($array)){
-        if($condition == 'all'){
-            if(in_array($array[$i],array_keys($_POST))){
-                print('Нашел '.$array[$i]." в post");
-                if(empty($_POST[$array[$i]])){
-                    print('Пустая '.$array[$i]);
-                    $answer = false;
-                }
-            }else{
+    while($i < (count($array) - 1)){
+        if(in_array($array[$i],array_keys($_POST))){
+            if(empty($_POST[$array[$i]])){
+                $answer = false;
             }
-            if(in_array($array[$i],array_keys($_FILES))){
-                if(empty($_POST[$array[$i]])){
-                    $answer = false;
-                }
+        }else{
+            $answer = false;}
+        if(in_array('lot-img',array_keys($_FILES))){
+            if(isset($_FIELS['lot-img']['name'])){
+                $answer = false;
             }
-        }
-        if($condition == '!0'){
-            if(in_array($array[$i],array_keys($_POST))){
-                if(empty($_POST[$array[$i]])){
-                    $answer = $answer."false";
-                }
-            }
-            if(in_array($array[$i],array_keys($_FILES))){
-                if(empty($_POST[$array[$i]])){
-                    $answer = $answer."false";
-                }
-            }
-        }
-        $answer = (!$answer) ? :false;
+        }else{
+            $answer = false;}
         $i++;
     }
     return $answer;
