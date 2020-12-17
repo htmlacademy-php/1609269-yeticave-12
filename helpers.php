@@ -193,32 +193,36 @@ function show_page($title_name,$tempates_name,$categorys,$is_auth,$user_name,$co
 function isCorrectLength($string, $min, $max) {
     $len = strlen($string);
     if ($len < $min or $len > $max) {
-        return ['status' => false, 'error' => "Поле должно быть от ".$min." до ".$max." символов!"];
+        return "Поле должно быть от ".$min." до ".$max." символов!";
     }else{
-        return ['status' => true];
+        return true;
     }
 }
 
 //Проверка на int
-function isInt($num){
+function checkInt($num,$min,$max){
     if(!is_numeric($num)){
-        return ['status' => false, 'error' => "Поле должно содержать цифры!"]; 
+        return "Поле должно содержать цифры!"; 
     }else{
-        return ['status' => true];
+        if($num< $min or $num > $max or $num == 0) {
+            return "Поле может быть в дипазоне от ".$min." до ".$max;
+        }else{
+            true;
+        }
     }
 }
 //Проверка даты 
 function isCorrectDate($date,$date_type = "d-m-y",$separator = "-",$condition = "+ 1 days"){
     $date_array = explode($separator,$date); 
     if(checkdate($date_array[1],$date_array[2],$date_array[0]) == false){
-        return ['status' => false, 'error' => $date." имеет неверный формат даты"];
+        return $date." имеет неверный формат даты";
     }
     $tomorrow = date($date_type,strtotime($condition)); 
     $date_by_user = date($date_type,strtotime($date));
     if($date_by_user<$tomorrow){
-        return ['status' => false, 'error' => "Дата должна подходить под условие ".$condition];
+        return "Дата должна подходить под условие ".$condition;
     }else{
-        return ['status' => true];
+        return true;
     }
 }
 
@@ -230,41 +234,19 @@ function getPostVal($name) {
 //Проверка файла
 function isCorrectImg($img,$mb_limit = 5, $expansions = ['jpeg','jpg','png']){
     if(empty($img['name'])){
-        return ['status' => false, 'error' => "Файл не найден"];
+        return "Файл не найден";
     }else{
-        if($img['size'] > 1048576*100*$mb_limit){
-            return ['status' => false, 'error' => $img['name']." не должен превышать ".$mb_limit." мб"];
+        if($img['size'] > 1048576*$mb_limit){
+            return "Файл не должен превышать ".$mb_limit." мб";
         }else{        
             $type_file = pathinfo(trim(strip_tags($img['name'])), PATHINFO_EXTENSION);
             if(in_array($type_file,$expansions) == false){
-                return ['status' => false, 'error' => "Файл может иметь формат(ы): ".implode(",",$expansions).", а не ".$type_file];
+                return "Файл может иметь формат(ы): ".implode(",",$expansions).", а не ".$type_file;
             }else{
-                return ['status' => true];
+                return true;
             }
         }
     }
-}
-
-function check_array_by_condition($array = [],$value,$condition = '&&'){
-    $i = 0;
-    if($condition == '&&' or $condition == 'and'){
-        $the_same = true;
-        while($i < count($array)){
-            if(array_values($array)[$i] != $value){
-                $the_same = false;
-                break;
-            }
-        $i++;
-        }
-    }
-    if($condition == '||' or $condition == 'or'){
-        $the_same = true;
-        if(!in_array($value,array_values($array))){
-            $the_same = false;
-        }
-        $i++;
-    }
-    return $the_same;
 }
 
 function move_file($file_name,$fime_tmp,$folder){
@@ -272,12 +254,12 @@ function move_file($file_name,$fime_tmp,$folder){
     move_uploaded_file($fime_tmp, $file_path . $file_name);
 }
 
-function check_on_empty_post_and_files($array_keys_post =[],$array_keys_files=[]){
+function check_no_empty_post_and_files($array_keys_post =[],$array_keys_files=[]){
     $answer = true;
     $i = 0;
     while($i < (count($array_keys_post ) - 1)){
         if(in_array($array_keys_post [$i],array_keys($_POST))){
-            if(empty($_POST[$array_keys_post [$i]])){
+            if(empty($_POST[$array_keys_post[$i]])){
                 $answer = false;
             }
         }else{
@@ -286,7 +268,7 @@ function check_on_empty_post_and_files($array_keys_post =[],$array_keys_files=[]
     }
     while($i < (count($array_keys_files))){
         if(in_array($array_keys_files[$i],array_keys($_FILES))){
-            if(isset($_FIELS['lot-img']['name'])){
+            if(isset($_FIELS[($array_keys_files)][$i]['name'])){
                 $answer = false;
             }
         }else{

@@ -1,6 +1,10 @@
 <?php
 include(__DIR__."/bootstrap.php");
     
+if(!$is_auth){
+    page_404($is_auth,$categorys,$user_name);
+}
+
 //Создание переменных
 $no_empty_fields = false;
 $title_name = "Добавление файл";
@@ -13,7 +17,7 @@ $errors =  ['lot-name' => 0,
             'lot-step' => 0,
             'lot-date' => 0,
             'lot-img' => 0];
-$form = 0;
+$form = true;
 
 //Проверка POST и FILES на элементы
 if($_SERVER['REQUEST_METHOD'] != 'POST') {
@@ -27,23 +31,21 @@ if($_SERVER['REQUEST_METHOD'] != 'POST') {
 }
 
 //Именно эта переменная проверяет все поля
-if (check_on_empty_post_and_files(array_keys($errors),['lot-img'])){ 
+if (check_no_empty_post_and_files(array_keys($errors),['lot-img'])){ 
     $all_fields_filled = true;
 }else{
     $all_fields_filled = false;
 }
 
 //Если поле "Наименование" заполнено - начинает его проверку 
-if(!empty($_POST["lot-name"])){
-    $result[0] = isCorrectLength($_POST["lot-name"],5,20);     //проверка длины 
-    $errors['lot-name'] = ($result[0]['status']) ?false: $result[0]['error'];      
+if(!empty($_POST["lot-name"])){   
+    $errors['lot-name'] = isCorrectLength($_POST['lot-name'],5,20);  
 }
 
 
 //Если поле "Описание" заполнено - начинает его проверку           
-if(!empty($_POST["message"])){
-    $result[0] = isCorrectLength($_POST["message"],5,3000);     //проверка длины 
-    $errors['message'] = ($result[0]['status']) ?false: $result[0]['error'];      
+if(!empty($_POST["message"])){ 
+    $errors['message'] = isCorrectLength($_POST['message'],5,3000);       
 }                                                                       
 
 //Если поле "Категория" заполнено - начинает его проверку 
@@ -56,47 +58,30 @@ if(!empty($_POST["category"])){
             break;
         } 
     }         
-}    
+} 
 
 //Если поле "Начальная цена" заполнено - начинает его проверку 
 if(!empty($_POST["lot-rate"])){
-    $result [0] = isCorrectLength($_POST['lot-rate'],1,9);    //проверка длины 
-    $result [1] = isInt($_POST['lot-rate']);                  //проверка типа
-    $result [2] = ($_POST['lot-rate']);                       //проверка: больше 0
-    $i = 0;
-    while($i < (count($result) - 1)){
-        $errors['lot-rate'] = ($result[$i]['status']) ?false: $errors['lot-rate'].$result [$i]['error']."<br>"; 
-        $i++;
-    }
+    $errors['lot-rate'] = checkInt($_POST['lot-rate'],1,1000000);
 } 
 
 //Если поле "Шаг ставки" заполнено - начинает его проверку 
 if(!empty($_POST["lot-step"])){
-    $empty_status['lot-step'] = false;
-    $result [0] = isCorrectLength($_POST['lot-step'],1,9);    //проверка длины 
-    $result [1] = isInt($_POST['lot-step']);                  //проверка типа
-    $result [2] = ($_POST['lot-step']);                       //проверка: больше 0
-    $i = 0;
-    while($i < (count($result) - 1)){
-        $errors['lot-step'] = ($result [$i]['status']) ?false: $errors['lot-step'].$result [$i]['error']."<br>"; 
-        $i++;
-    }
-}
+    $errors['lot-step'] = checkInt($_POST['lot-step'],1,1000000);
+} 
 
 //Если поле "Дата окончания торгов " заполнено - начинает его проверку 
 if(!empty($_POST["lot-date"])){
-    $empty_status['lot-date'] = false;
-    $result[0] = isCorrectDate($date = $_POST['lot-date'],$condition = "+ 1 days");  //проверка даты: подходит ли под условие
-    $errors['lot-date'] = ($result[0]['status']) ?false: $result[0]['error'];           
+    $errors['lot-date'] = isCorrectDate($date = $_POST['lot-date'],$condition = "+ 1 days");    
 }
 
 //Если поле "Изображение" заполнено - начинает его проверку 
 if(!empty($_FILES["lot-img"]['name'])){     
-    $empty_status['lot-img'] = false;                          
-    $result[0] = isCorrectImg($_FILES["lot-img"],5,['jpeg','jpg','png']);            //проверка файла: подходит ли под условие   
-    $errors['lot-img'] = ($result[0]['status']) ?false: $result[0]['error'];
-    if($result[0]['status']){move_file($_FILES['lot-img']['name'],$_FILES['lot-img']['tmp_name'],'uploads'); //Если поле "Изображение" прошло проверку на true: перемещает файл в необходимый каталог
-                            $file_url = '/uploads/'.$_FILES['lot-img']['name'];}    
+    $errors['lot-img'] = isCorrectImg($_FILES["lot-img"],10,['jpeg','jpg','png']);
+    if(!is_string($errors['lot-img'])){
+        move_file($_FILES['lot-img']['name'],$_FILES['lot-img']['tmp_name'],'uploads');
+        $file_url = '/uploads/'.$_FILES['lot-img']['name'];
+    }
 }
 
 //Если хотя бы 1 поле заполнено и если есть хотя бы 1 ошибка все поля, кроме не пустых, получают статус false и ошибку 'Обязательное поле!'
@@ -106,7 +91,7 @@ if($no_empty_fields==false and
             $errors[$key] = (!empty($_POST[$key])) ? $errors[$key] :'Обязательное поле!';
         }
         $errors['lot-img'] = (!empty($_FILES['lot-img']['name'])) ? $errors['lot-img']: 'Обязательное поле!'; 
-        $form = 0;
+        $form = false;
 }
 
 //Если все поля заполнены и равны true, форма тоже равна true и создается новый lot на sql
@@ -147,12 +132,12 @@ if($all_fields_filled and
 }
 
 //Открытие страницы
-if($is_auth){
-    $tempates_name = 'add.main.php';
-    show_page($title_name,$tempates_name,$categorys,$is_auth,$user_name, $content_array = [
-                                                                                        'errors' => $errors,
-                                                                                        'categorys' => $categorys,
-                                                                                        'lot_link' => $lot_link,
-                                                                                        ]);
-}else{
-    page_404($is_auth,$categorys,$user_name);}
+if($lot_link != 0){
+    header("Location: /lot.php?id=".$lot_link);}
+$tempates_name = 'add.main.php';
+show_page($title_name,$tempates_name,$categorys,$is_auth,$user_name, $content_array = [
+                                                                                    'form' => $form,
+                                                                                    'errors' => $errors,
+                                                                                    'categorys' => $categorys,
+                                                                                    'lot_link' => $lot_link,
+                                                                                    ]);
