@@ -11,9 +11,9 @@
           <label for="category">Категория <sup>*</sup></label>
           <select id="category" name="category">
 
-          <?php foreach($categorys as $category):?>
-            <option><?=$category['category']?></option>
-          <?php endforeach;?>
+          <?php for($i = 1;$i <= count($categories_arr);$i++):?>
+            <option><?=$categories_arr[$i]?></option>
+          <?php endfor;?>
 
           </select>
           <span class="form__error"><?=(!is_string($errors['category'])) ? "" : $errors['category'] ?></span>

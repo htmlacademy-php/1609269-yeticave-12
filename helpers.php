@@ -176,13 +176,13 @@ function page_404($is_auth,$categorys,$user_name){
 }
 
 //показ страницы
-function show_page($title_name,$tempates_name,$categorys,$is_auth,$user_name,$content_array = []){
+function show_page($title_name,$tempates_name,$categories_arr,$is_auth,$user_name,$content_array = []){
 
     $title_name = $title_name;
 
     $content = include_template($tempates_name,$content_array);
     $page = include_template("layout.php",['content' => $content,
-                                            'categorys' => $categorys,
+                                            'categories_arr' => $categories_arr,
                                             'is_auth' => $is_auth,
                                             'title_name' => $title_name,
                                             'user_name' => $user_name]);

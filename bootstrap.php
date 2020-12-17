@@ -12,7 +12,15 @@ $is_auth = 1; //Временно rand(0, 1);
 $user_name = 'Дмитрий';
 
 $select_categories = 
-    "SELECT categories.* 
+    "SELECT categories.*
     FROM categories";
 
 $categorys = mysqli_fetch_all(mysqli_query($con,$select_categories),MYSQLI_ASSOC);
+
+$id= '';
+$value = '';
+for($i = 0;$i < count($categorys);$i++){
+    $id = $categorys[$i]['id'];
+    $value = $categorys[$i]['category'];
+    $categories_arr[$id] = $value; 
+}

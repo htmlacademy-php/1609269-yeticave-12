@@ -24,7 +24,6 @@ if($_SERVER['REQUEST_METHOD'] != 'POST') {
     $no_empty_fields = true;
 }else{
     $no_empty_fields = false;
-    $form = true;
     foreach($errors as $key => $value){ //Так как 1 и более полей заполнено, меняет переменным статус всех ошибок полей = true
         $errors[$key] = true;
     }
@@ -50,16 +49,24 @@ if(!empty($_POST["message"])){
 
 //Если поле "Категория" заполнено - начинает его проверку 
 if(!empty($_POST["category"])){
-    $errors['category'] = true;
-    foreach($categorys as $category){
-        if($_POST["category"] !=  $category["category"]){
-            $errors['category'] = 'Неправильно выбрана категория';
-        }else{
-            $errors['category'] = true;
-            break;
-        } 
-    }     
-} 
+    if(in_array($_POST["category"],$categories_arr)){
+        $errors['category'] = true;
+    }else{
+        $errors['category'] = 'Неправильно выбрана категория';
+    }
+}
+
+#if(!empty($_POST["category"])){
+#    $errors['category'] = true;
+#    foreach($categorys as $category){
+#        if($_POST["category"] !=  $category["category"]){
+#            $errors['category'] = 'Неправильно выбрана категория';
+#        }else{
+#            $errors['category'] = true;
+#            break;
+#        } 
+#    }     
+#} 
 
 //Если поле "Начальная цена" заполнено - начинает его проверку 
 if(!empty($_POST["lot-rate"])){
@@ -136,9 +143,9 @@ if($all_fields_filled and
 if($lot_link != 0){
     header("Location: /lot.php?id=".$lot_link);}
 $tempates_name = 'add.main.php';
-show_page($title_name,$tempates_name,$categorys,$is_auth,$user_name, $content_array = [
+show_page($title_name,$tempates_name,$categories_arr,$is_auth,$user_name, $content_array = [
                                                                                     'form' => $form,
                                                                                     'errors' => $errors,
-                                                                                    'categorys' => $categorys,
+                                                                                    'categories_arr' => $categories_arr,
                                                                                     'lot_link' => $lot_link,
                                                                                     ]);
