@@ -7,7 +7,7 @@
           <input id="lot-name" type="text" name="lot-name" placeholder="Введите наименование лота" value=<?=getPostVal("lot-name")?>>
           <span class="form__error" ><?=(!is_string($errors['lot-name'])) ? "" : $errors['lot-name'] ?></span>
         </div>
-        <div class="form__item <?=(!$errors['lot-category']) ? "":"form--invalid"?>">
+        <div class="form__item <?=(!is_string($errors['category'])) ? "" : "form__item--invalid" ?>">
           <label for="category">Категория <sup>*</sup></label>
           <select id="category" name="category">
 
@@ -16,7 +16,7 @@
           <?php endforeach;?>
 
           </select>
-          <span class="form__error"><?=(!$errors['category']) ? "" : $errors['category'] ?></span>
+          <span class="form__error"><?=(!is_string($errors['category'])) ? "" : $errors['category'] ?></span>
         </div>
       </div>
       <div class="form__item form__item--wide <?=(!is_string($errors['message'])) ? "" : "form__item--invalid" ?>">

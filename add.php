@@ -50,14 +50,15 @@ if(!empty($_POST["message"])){
 
 //Если поле "Категория" заполнено - начинает его проверку 
 if(!empty($_POST["category"])){
+    $errors['category'] = true;
     foreach($categorys as $category){
         if($_POST["category"] !=  $category["category"]){
             $errors['category'] = 'Неправильно выбрана категория';
         }else{
-            $errors['category'] = false;
+            $errors['category'] = true;
             break;
         } 
-    }         
+    }     
 } 
 
 //Если поле "Начальная цена" заполнено - начинает его проверку 
