@@ -49,19 +49,9 @@ if(!empty($_POST["message"])){
 
 //Если поле "Категория" заполнено - начинает его проверку 
 if(!empty($_POST["category"])){
-    if(in_array($_POST["category"],$categorys)){
-        $errors['category'] = true;
-    }else{
-        $errors['category'] = 'Неправильно выбрана категория';
-    }
-}
-
-if(!empty($_POST["category"])){
     if(empty($categorys[$_POST["category"]])){
         $errors['category'] = 'Неправильно выбрана категория';
-    }else{
-        $errors['category'] = true;
-    }     
+    }   
 } 
 
 //Если поле "Начальная цена" заполнено - начинает его проверку 
