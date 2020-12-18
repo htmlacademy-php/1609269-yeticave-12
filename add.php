@@ -26,12 +26,16 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     //Если поле "Наименование" заполнено - начинает его проверку 
     if(!empty($_POST["lot-name"])){   
-    $errors['lot-name'] = isCorrectLength($_POST['lot-name'],5,20);  
+        $errors['lot-name'] = isCorrectLength($_POST['lot-name'],5,20);  
+    }else{
+        $errors['lot-name'] = "Обязательное поле!";
     }
 
     //Если поле "Описание" заполнено - начинает его проверку           
     if(!empty($_POST["message"])){ 
-    $errors['message'] = isCorrectLength($_POST['message'],5,3000);       
+      $errors['message'] = isCorrectLength($_POST['message'],5,3000);       
+    }else{
+        $errors['message'] = "Обязательное поле!";
     }  
 
     //Если поле "Категория" заполнено - начинает его проверку 
@@ -41,22 +45,30 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         }else{
             $errors['category'] = false;
         }   
-    } 
+    }else{
+        $errors['category'] = "Обязательное поле!";
+    }
 
     //Если поле "Начальная цена" заполнено - начинает его проверку 
     if(!empty($_POST["lot-rate"])){
-    $errors['lot-rate'] = checkInt($_POST['lot-rate'],1,1000000);
-    } 
+        $errors['lot-rate'] = checkInt($_POST['lot-rate'],1,1000000);
+    }else{
+        $errors['lot-rate'] = "Обязательное поле!";
+    }
 
     //Если поле "Шаг ставки" заполнено - начинает его проверку 
     if(!empty($_POST["lot-step"])){
-    $errors['lot-step'] = checkInt($_POST['lot-step'],1,1000000);
+        $errors['lot-step'] = checkInt($_POST['lot-step'],1,1000000);
+    }else{
+        $errors['lot-step'] = "Обязательное поле!";
     } 
 
     //Если поле "Дата окончания торгов " заполнено - начинает его проверку 
     if(!empty($_POST["lot-date"])){
-    $errors['lot-date'] = isCorrectDate($date = $_POST['lot-date'],$condition = "+ 1 days");    
-    }
+        $errors['lot-date'] = isCorrectDate($date = $_POST['lot-date'],$condition = "+ 1 days");    
+    }else{
+        $errors['lot-date'] = "Обязательное поле!";
+    } 
 
     //Если поле "Изображение" заполнено - начинает его проверку 
     if(!empty($_FILES["lot-img"]['name'])){     
@@ -65,61 +77,47 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             move_file($_FILES['lot-img']['name'],$_FILES['lot-img']['tmp_name'],'uploads');
             $file_url = '/uploads/'.$_FILES['lot-img']['name'];
         }
-    }
-
-    //Именно эта переменная проверяет все поля
-    if (check_no_empty_post_and_files(array_keys($errors),['lot-img'])){ 
-        $all_fields_filled = true;
     }else{
-        $all_fields_filled = false;
+        $errors["lot-img"] = "Обязательное поле!";
     }
-
-    //Если хотя бы 1 поле заполнено и если есть хотя бы 1 ошибка все поля, кроме не пустых, получают статус false и ошибку 'Обязательное поле!'
-    if(array_filter($errors)){
-        foreach($_POST as $key => $value){
-            $errors[$key] = (!empty($_POST[$key])) ? $errors[$key] :'Обязательное поле!';
-        }
-        $errors['lot-img'] = (!empty($_FILES['lot-img']['name'])) ? $errors['lot-img']: 'Обязательное поле!'; 
-        $form = false;
-    }else{
+    
     //Если все поля заполнены и равны true, форма тоже равна true и создается новый lot на sql
-        if($all_fields_filled){
-            $form = true;
-            $select_check_category_id=
-            "SELECT categories.id
-            FROM categories
-            WHERE categories.category = ?
-            ";
-            $insert_add_pos=
-            "INSERT INTO lots  (date_create,
-                                name,
-                                description,
-                                user_id,
-                                winner_id,
-                                category_id,
-                                img_link,
-                                start_price,
-                                date_completion,
-                                step_rate)
-            VALUES (?,?,?,?,?,?,?,?,?,?);";
-            $check_category_id_query = replace_in_query($select_check_category_id,$con,$passed_variables = [$_POST['category']]);
-            $category_id = mysqli_fetch_assoc($check_category_id_query)['id'];  
-            $add_pos_query = replace_in_query($insert_add_pos,$con,$passed_variables = [
-                                date("Y-m-d H:i:s"),
-                                $_POST['lot-name'],
-                                $_POST['message'],
-                                0,
-                                0,
-                                $_POST['category'],
-                                $file_url,
-                                $_POST['lot-rate'],
-                                $_POST['lot-date'],
-                                $_POST['lot-step']]);
-            $lot_link = mysqli_insert_id($con);
-            header("Location: /lot.php?id=".$lot_link);
-        }
-    }                                                                       
-}
+    if(!array_filter($errors)){
+        $form = true;
+        $select_check_category_id=
+        "SELECT categories.id
+        FROM categories
+        WHERE categories.category = ?
+        ";
+        $insert_add_pos=
+        "INSERT INTO lots  (date_create,
+                            name,
+                            description,
+                            user_id,
+                            winner_id,
+                            category_id,
+                            img_link,
+                            start_price,
+                            date_completion,
+                            step_rate)
+        VALUES (?,?,?,?,?,?,?,?,?,?);";
+        $check_category_id_query = replace_in_query($select_check_category_id,$con,$passed_variables = [$_POST['category']]);
+        $category_id = mysqli_fetch_assoc($check_category_id_query)['id'];  
+        $add_pos_query = replace_in_query($insert_add_pos,$con,$passed_variables = [
+                            date("Y-m-d H:i:s"),
+                            $_POST['lot-name'],
+                            $_POST['message'],
+                            0,
+                            0,
+                            $_POST['category'],
+                            $file_url,
+                            $_POST['lot-rate'],
+                            $_POST['lot-date'],
+                            $_POST['lot-step']]);
+        $lot_link = mysqli_insert_id($con);
+        header("Location: /lot.php?id=".$lot_link);
+    }
+}                                                                       
 $title_name = "Добавление файл";
 $tempates_name = 'add.main.php';
 show_page($title_name,$tempates_name,$categorys,$is_auth,$user_name, $content_array = [
