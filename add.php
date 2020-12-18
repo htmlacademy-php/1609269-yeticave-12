@@ -9,31 +9,29 @@ if(!$is_auth){
 $no_empty_fields = false;
 $result = [];
 $lot_link = 0;
-$errors =  ['lot-name' => 1,
-            'category' => 1,
-            'message' => 1,
-            'lot-rate' => 1,
-            'lot-step' => 1,
-            'lot-date' => 1,
-            'lot-img' => 1];
+$errors =  ['lot-name' => true,
+            'category' => true,
+            'message' => true,
+            'lot-rate' => true,
+            'lot-step' => true,
+            'lot-date' => true,
+            'lot-img' => true];
 $form = true;
 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
-    foreach($errors as $key => $error){
-        $error = false;
-    }
+
     $form = false;
 
     //Если поле "Наименование" заполнено - начинает его проверку 
     if(!empty($_POST["lot-name"])){   
-        $errors['lot-name'] = isCorrectLength($_POST['lot-name'],5,20);  
+        $errors['lot-name'] = (isCorrectLength($_POST['lot-name'],5,20))?false:"Поле должно быть от ".$min." до ".$max." символов!";  
     }else{
         $errors['lot-name'] = "Обязательное поле!";
     }
 
     //Если поле "Описание" заполнено - начинает его проверку           
     if(!empty($_POST["message"])){ 
-      $errors['message'] = isCorrectLength($_POST['message'],5,3000);       
+        $errors['lot-name'] = (isCorrectLength($_POST['lot-name'],5,3000))?false:"Поле должно быть от ".$min." до ".$max." символов!";  
     }else{
         $errors['message'] = "Обязательное поле!";
     }  
@@ -80,7 +78,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     }else{
         $errors["lot-img"] = "Обязательное поле!";
     }
-    
+
     //Если все поля заполнены и равны true, форма тоже равна true и создается новый lot на sql
     if(!array_filter($errors)){
         $form = true;

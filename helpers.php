@@ -202,11 +202,9 @@ function isCorrectLength($string, $min, $max) {
 //Проверка на int
 function checkInt($num,$min,$max){
     if(!is_numeric($num)){
-        print("Поле должно содержать цифры!");
         return "Поле должно содержать цифры!"; 
     }else{
         if($num< $min or $num > $max or $num == 0) {
-            print("Поле может быть в дипазоне от ".$min." до ".$max);
             return "Поле может быть в дипазоне от ".$min." до ".$max;
         }else{
             return false;
@@ -214,7 +212,7 @@ function checkInt($num,$min,$max){
     }
 }
 //Проверка даты 
-function isCorrectDate($date,$date_type = "d-m-y",$separator = "-",$condition = "+ 1 days"){
+function isCorrectDate($date,$date_type = "y-m-d",$separator = "-",$condition = "+ 1 days"){
     $date_array = explode($separator,$date); 
     if(checkdate($date_array[1],$date_array[2],$date_array[0]) == false){
         return $date." имеет неверный формат даты";
@@ -231,7 +229,7 @@ function isCorrectDate($date,$date_type = "d-m-y",$separator = "-",$condition = 
 //сохранить значения полей формы после валидации
 function getPostVal($name) {
     return $_POST[$name] ?? "";
-}
+} 
 
 //Проверка файла
 function isCorrectImg($img,$mb_limit = 5, $expansions = ['jpeg','jpg','png']){
