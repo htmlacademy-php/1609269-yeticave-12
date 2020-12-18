@@ -10,13 +10,13 @@ $no_empty_fields = false;
 $title_name = "Добавление файл";
 $result = [];
 $lot_link = 0;
-$errors =  ['lot-name' => 0,
-            'category' => 0,
-            'message' => 0,
-            'lot-rate' => 0,
-            'lot-step' => 0,
-            'lot-date' => 0,
-            'lot-img' => 0];
+$errors =  ['lot-name' => 1,
+            'category' => 1,
+            'message' => 1,
+            'lot-rate' => 1,
+            'lot-step' => 1,
+            'lot-date' => 1,
+            'lot-img' => 1];
 $form = true;
 
 //Проверка POST и FILES на элементы
@@ -25,7 +25,7 @@ if($_SERVER['REQUEST_METHOD'] != 'POST') {
 }else{
     $no_empty_fields = false;
     foreach($errors as $key => $value){ //Так как 1 и более полей заполнено, меняет переменным статус всех ошибок полей = true
-        $errors[$key] = true;
+        $errors[$key] = false;
     }
 }
 
@@ -79,7 +79,7 @@ if(!empty($_FILES["lot-img"]['name'])){
 }
 
 //Если хотя бы 1 поле заполнено и если есть хотя бы 1 ошибка все поля, кроме не пустых, получают статус false и ошибку 'Обязательное поле!'
-if($no_empty_fields==false and
+if(!$no_empty_fields and
    array_filter($errors)){
         foreach($_POST as $key => $value){
             $errors[$key] = (!empty($_POST[$key])) ? $errors[$key] :'Обязательное поле!';
@@ -90,7 +90,7 @@ if($no_empty_fields==false and
 
 //Если все поля заполнены и равны true, форма тоже равна true и создается новый lot на sql
 if($all_fields_filled and
-   array_filter($errors) == false){
+    !array_filter($errors)){
         $form = true;
         $select_check_category_id=
         "SELECT categories.id
@@ -117,7 +117,7 @@ if($all_fields_filled and
                             $_POST['message'],
                             0,
                             0,
-                            $category_id,
+                            $_POST['category'],
                             $file_url,
                             $_POST['lot-rate'],
                             $_POST['lot-date'],

@@ -195,19 +195,21 @@ function isCorrectLength($string, $min, $max) {
     if ($len < $min or $len > $max) {
         return "Поле должно быть от ".$min." до ".$max." символов!";
     }else{
-        return true;
+        return false;
     }
 }
 
 //Проверка на int
 function checkInt($num,$min,$max){
     if(!is_numeric($num)){
+        print("Поле должно содержать цифры!");
         return "Поле должно содержать цифры!"; 
     }else{
         if($num< $min or $num > $max or $num == 0) {
+            print("Поле может быть в дипазоне от ".$min." до ".$max);
             return "Поле может быть в дипазоне от ".$min." до ".$max;
         }else{
-            true;
+            return false;
         }
     }
 }
@@ -222,7 +224,7 @@ function isCorrectDate($date,$date_type = "d-m-y",$separator = "-",$condition = 
     if($date_by_user<$tomorrow){
         return "Дата должна подходить под условие ".$condition;
     }else{
-        return true;
+        return false;
     }
 }
 
@@ -243,7 +245,7 @@ function isCorrectImg($img,$mb_limit = 5, $expansions = ['jpeg','jpg','png']){
             if(in_array($type_file,$expansions) == false){
                 return "Файл может иметь формат(ы): ".implode(",",$expansions).", а не ".$type_file;
             }else{
-                return true;
+                return false;
             }
         }
     }
