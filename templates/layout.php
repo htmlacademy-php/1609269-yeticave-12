@@ -48,9 +48,9 @@
 <main>
     <nav class="nav">
       <ul class="nav__list container">
-      <?php for($i = 1;$i <= count($categories_arr);$i++):?>
+      <?php for($i = array_keys($categorys)[0];$i <= count($categorys);$i++):?>
         <li class="nav__item">
-          <a href="all-lots.html"><?=$categories_arr[$i]?></a>
+          <a href="all-lots.html"><?=htmlspecialchars($categorys[$i])?></a>
         </li>
         <?php endfor;?>
       </ul>
@@ -63,9 +63,9 @@
 <footer class="main-footer">
     <nav class="nav">
       <ul class="nav__list container">
-        <?php for($i = 1;$i <= count($categories_arr);$i++):?>
+        <?php for($i = array_keys($categorys)[0];$i <= count($categorys);$i++):?>
         <li class="nav__item">
-          <a href="all-lots.html"><?=$categories_arr[$i]?></a>
+          <a href="all-lots.html"><?=htmlspecialchars($categorys[$i])?></a>
         </li>
         <?php endfor;?>
       </ul>

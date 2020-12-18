@@ -11,8 +11,8 @@
           <label for="category">Категория <sup>*</sup></label>
           <select id="category" name="category">
 
-          <?php for($i = 1;$i <= count($categories_arr);$i++):?>
-            <option><?=$categories_arr[$i]?></option>
+          <?php for($i = array_keys($categorys)[0];$i <= count($categorys);$i++):?>
+            <option value="<?=array_keys($categorys)[$i-1]?>"><?=$categorys[$i]?></option>
           <?php endfor;?>
 
           </select>

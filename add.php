@@ -49,24 +49,20 @@ if(!empty($_POST["message"])){
 
 //Если поле "Категория" заполнено - начинает его проверку 
 if(!empty($_POST["category"])){
-    if(in_array($_POST["category"],$categories_arr)){
+    if(in_array($_POST["category"],$categorys)){
         $errors['category'] = true;
     }else{
         $errors['category'] = 'Неправильно выбрана категория';
     }
 }
 
-#if(!empty($_POST["category"])){
-#    $errors['category'] = true;
-#    foreach($categorys as $category){
-#        if($_POST["category"] !=  $category["category"]){
-#            $errors['category'] = 'Неправильно выбрана категория';
-#        }else{
-#            $errors['category'] = true;
-#            break;
-#        } 
-#    }     
-#} 
+if(!empty($_POST["category"])){
+    if(empty($categorys[$_POST["category"]])){
+        $errors['category'] = 'Неправильно выбрана категория';
+    }else{
+        $errors['category'] = true;
+    }     
+} 
 
 //Если поле "Начальная цена" заполнено - начинает его проверку 
 if(!empty($_POST["lot-rate"])){
@@ -143,9 +139,9 @@ if($all_fields_filled and
 if($lot_link != 0){
     header("Location: /lot.php?id=".$lot_link);}
 $tempates_name = 'add.main.php';
-show_page($title_name,$tempates_name,$categories_arr,$is_auth,$user_name, $content_array = [
+show_page($title_name,$tempates_name,$categorys,$is_auth,$user_name, $content_array = [
                                                                                     'form' => $form,
                                                                                     'errors' => $errors,
-                                                                                    'categories_arr' => $categories_arr,
+                                                                                    'categorys' => $categorys,
                                                                                     'lot_link' => $lot_link,
                                                                                     ]);
