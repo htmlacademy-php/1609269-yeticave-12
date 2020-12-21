@@ -154,7 +154,7 @@ function diff_time($time){
 }
 
 //обработка запроса
-function replace_in_query($sql_query,$msqli,$passed_variables=[],$types_variables =""){
+function prepared_query($sql_query,$msqli,$passed_variables=[],$types_variables =""){
     $types = $types_variables ?: str_repeat("s",count($passed_variables));
     $stmt = $msqli->prepare($sql_query);
     $stmt->bind_param($types, ...$passed_variables);
@@ -256,7 +256,7 @@ function check_no_empty_post_and_files($array_keys_post =[],$array_keys_files=[]
     return $answer;
 }
 
-function check_field($field_info,$field_type,$min = 1,$max = 20,$input = INPUT_POST){
+function check_input($field_info,$field_type,$min = 1,$max = 20,$input = INPUT_POST){
     if($field_type == 'str'){
         $string = filter_input($input,$field_info);
         $len = strlen($string);

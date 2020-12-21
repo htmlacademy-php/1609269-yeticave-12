@@ -24,14 +24,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     //Если поле "Наименование" заполнено - начинает его проверку 
     if(!empty($_POST["lot-name"])){   
-        $errors['lot-name'] = check_field('lot-name','str',5,20);
+        $errors['lot-name'] = check_input('lot-name','str',5,20);
     }else{
         $errors['lot-name'] = "Обязательное поле!";
     }
 
     //Если поле "Описание" заполнено - начинает его проверку           
     if(!empty($_POST["message"])){ 
-        $errors['message'] = check_field('message','str',5,3000);
+        $errors['message'] = check_input('message','str',5,3000);
     }else{
         $errors['message'] = "Обязательное поле!";
     }  
@@ -49,14 +49,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     //Если поле "Начальная цена" заполнено - начинает его проверку 
     if(!empty($_POST["lot-rate"])){
-        $errors['lot-rate'] = check_field('lot-rate','int',1,1000000);
+        $errors['lot-rate'] = check_input('lot-rate','int',1,1000000);
     }else{
         $errors['lot-rate'] = "Обязательное поле!";
     }
 
     //Если поле "Шаг ставки" заполнено - начинает его проверку 
     if(!empty($_POST["lot-step"])){
-        $errors['lot-step'] =  check_field('lot-step','int',1,1000000);
+        $errors['lot-step'] =  check_input('lot-step','int',1,1000000);
     }else{
         $errors['lot-step'] = "Обязательное поле!";
     } 
@@ -99,9 +99,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                             date_completion,
                             step_rate)
         VALUES (?,?,?,?,?,?,?,?,?,?);";
-        $check_category_id_query = replace_in_query($select_check_category_id,$con,$passed_variables = [$_POST['category']]);
+        $check_category_id_query = prepared_query($select_check_category_id,$con,$passed_variables = [$_POST['category']]);
         $category_id = mysqli_fetch_assoc($check_category_id_query)['id'];  
-        $add_pos_query = replace_in_query($insert_add_pos,$con,$passed_variables = [
+        $add_pos_query = prepared_query($insert_add_pos,$con,$passed_variables = [
                             date("Y-m-d H:i:s"),
                             $_POST['lot-name'],
                             $_POST['message'],
