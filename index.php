@@ -19,12 +19,4 @@ $select_lots =
 
 $products = mysqli_fetch_all(mysqli_query($con,$select_lots),MYSQLI_ASSOC);
 
-$title_name = "Главная";
-
-$content = include_template("main.php",['categorys' => $categorys , 'products' =>$products]);
-$page = include_template("layout.php",['content' => $content,
-                                       'categorys' => $categorys,
-                                       'title_name' => 'Главная',
-                                       'is_auth' => $is_auth,
-                                       'user_name' => $user_name]);
-print $page;
+show_page("main.php","Главная",['products' =>$products,'categorys' => $categorys],$categorys);

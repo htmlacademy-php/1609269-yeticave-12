@@ -176,10 +176,7 @@ function page_404($is_auth,$categorys,$user_name){
 }
 
 //показ страницы
-function show_page($title_name,$tempates_name,$categorys,$is_auth,$user_name,$content_array = []){
-
-    $title_name = $title_name;
-
+function show_page($tempates_name,$title_name,$content_array = [],$categorys,$is_auth = 1, $user_name = 'Дмитрий'){
     $content = include_template($tempates_name,$content_array);
     $page = include_template("layout.php",['content' => $content,
                                             'categorys' => $categorys,
@@ -190,17 +187,20 @@ function show_page($title_name,$tempates_name,$categorys,$is_auth,$user_name,$co
 }
 
 //Проверка даты 
-function isCorrectDate($date,$date_type = "y-m-d",$separator = "-",$condition = "+ 1 days"){
-    $date_array = explode($separator,$date); 
-    if(checkdate($date_array[1],$date_array[2],$date_array[0]) == false){
-        return $date." имеет неверный формат даты";
+function checkCorrectDate($date,$date_type = "y-m-d",$separator = "-",$condition = "+ 1 days"){
+    if(!$date){ 
+        return "Обязательное поле"; 
     }
-    $tomorrow = date($date_type,strtotime($condition)); 
-    $date_by_user = date($date_type,strtotime($date));
-    if($date_by_user<$tomorrow){
-        return "Дата должна подходить под условие ".$condition;
-    }else{
-        return false;
+    else{
+        $date_array = explode($separator,$date); 
+        if(checkdate($date_array[1],$date_array[2],$date_array[0]) == false){
+            return $date." имеет неверный формат даты";
+        }
+        $tomorrow = date($date_type,strtotime($condition)); 
+        $date_by_user = date($date_type,strtotime($date));
+        if($date_by_user<$tomorrow){
+            return "Дата должна подходить под условие ".$condition;
+        }
     }
 }
 
@@ -210,9 +210,9 @@ function getPostVal($name) {
 } 
 
 //Проверка файла
-function isCorrectImg($img,$mb_limit = 5, $expansions = ['jpeg','jpg','png']){
+function checkCorrectImg($img,$mb_limit = 5, $expansions = ['jpeg','jpg','png']){
     if(empty($img['name'])){
-        return "Файл не найден";
+        return "Обязательное поле";
     }else{
         if($img['size'] > 1048576*$mb_limit){
             return "Файл не должен превышать ".$mb_limit." мб";
@@ -220,8 +220,6 @@ function isCorrectImg($img,$mb_limit = 5, $expansions = ['jpeg','jpg','png']){
             $type_file = pathinfo(trim(strip_tags($img['name'])), PATHINFO_EXTENSION);
             if(in_array($type_file,$expansions) == false){
                 return "Файл может иметь формат(ы): ".implode(",",$expansions).", а не ".$type_file;
-            }else{
-                return false;
             }
         }
     }
@@ -235,11 +233,23 @@ function move_file($file_name,$fime_tmp,$folder){
 function check_input($field_info,$field_type,$min = 1,$max = 20,$input = INPUT_POST){
     if($field_type == 'str'){
         $string = filter_input($input,$field_info);
+        if(!$string){ return "Обязательное поле"; }
         $len = strlen($string);
         if($len<$min or $len >$max){ return "Необходимо ввести от $min до $max символов";}
     }
-    if($field_type == 'int'){
+        if($field_type == 'int'){
         $int = filter_input($input,$field_info,FILTER_VALIDATE_INT);
+        if(!$int){ return "Обязательное поле"; }
         if($int<$min or $int >$max){ return "Необходимо ввести чило от $min до $max";}
+    }
+}
+
+function checkCorrectCategory($category,$categorys){
+    if(!empty($category)){
+        if(empty($categorys[$category])){
+            return 'Неправильно выбрана категория';
+        }
+    }else{
+        return "Обязательное поле!";
     }
 }
