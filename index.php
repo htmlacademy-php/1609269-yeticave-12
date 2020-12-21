@@ -19,4 +19,4 @@ $select_lots =
 
 $products = mysqli_fetch_all(mysqli_query($con,$select_lots),MYSQLI_ASSOC);
 
-show_page("main.php","Главная",['products' =>$products,'categorys' => $categorys],$categorys);
+show_page("main.php","Главная",['products' =>$products],$categorys);

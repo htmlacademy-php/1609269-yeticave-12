@@ -1,39 +1,22 @@
 <?php
 include(__DIR__."/bootstrap.php");
-
-//Создание переменных
-$errors =  ['lot-name' => true,
-            'category' => true,
-            'message' => true,
-            'lot-rate' => true,
-            'lot-step' => true,
-            'lot-date' => true,
-            'lot-img' => true,
-            'form' => true];
-
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
-
-    $errors['form'] = false;
-    $errors['lot-name'] = check_input('lot-name','str',5,20);  
-    $errors['message'] = check_input('message','str',5,3000);   
-    $errors['category'] = checkCorrectCategory($_POST['category'],$categorys);
-    $errors['lot-rate'] = check_input('lot-rate','int',1,1000000); 
-    $errors['lot-step'] =  check_input('lot-step','int',1,1000000); 
-    $errors['lot-date'] = checkCorrectDate($_POST['lot-date'],$condition = "+ 1 days"); 
-    $errors['lot-img'] = checkCorrectImg($_FILES["lot-img"],10,['jpeg','jpg','png']);
-
+    $errors['form'] = true;
+    $errors['lot-name'] = check_input('lot-name',5,20);  
+    $errors['message'] = check_input('message',5,3000);   
+    $errors['category'] = check_input_category('category',$categorys);
+    $errors['lot-rate'] = check_input('lot-rate',1,1000000,FILTER_VALIDATE_INT); 
+    $errors['lot-step'] =  check_input('lot-step',1,1000000,FILTER_VALIDATE_INT); 
+    $errors['lot-date'] = check_input_date('lot-date',$condition = "+ 1 days"); 
+    $errors['lot-img'] = (!empty($_FILES['lot-img']['name']) ? check_correct_img($_FILES['lot-img'],10,['jpeg','jpg','png']) : "Обязательное поле"); 
     if(!is_string($errors['lot-img'])){
         move_file($_FILES['lot-img']['name'],$_FILES['lot-img']['tmp_name'],'uploads');
         $file_url = '/uploads/'.$_FILES['lot-img']['name'];
     }
+    $errors = array_filter($errors);
     //Если все поля заполнены и равны true, форма тоже равна true и создается новый lot на sql
     if(!array_filter($errors)){
-        $errors['form'] = true;
-        $select_check_category_id=
-        "SELECT categories.id
-        FROM categories
-        WHERE categories.category = ?
-        ";
+        $errors['form'] = false;
         $insert_add_pos=
         "INSERT INTO lots  (date_create,
                             name,
@@ -60,5 +43,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         header("Location: /lot.php?id=".mysqli_insert_id($con));
         die("Нет доступа к лоту");
     }
-}                                                        
-show_page('add.main.php',"Добавление лота",['errors' => $errors,'categorys' => $categorys],$categorys);
+}          
+if(!empty($errors)){$errors = array_filter($errors);}else{$errors = [];}
+show_page('add.main.php',"Добавление лота",['errors' => $errors],$categorys);                                            
