@@ -232,30 +232,6 @@ function move_file($file_name,$fime_tmp,$folder){
     move_uploaded_file($fime_tmp, $file_path . $file_name);
 }
 
-function check_no_empty_post_and_files($array_keys_post =[],$array_keys_files=[]){
-    $answer = true;
-    $i = 0;
-    while($i < (count($array_keys_post ) - 1)){
-        if(in_array($array_keys_post [$i],array_keys($_POST))){
-            if(empty($_POST[$array_keys_post[$i]])){
-                $answer = false;
-            }
-        }else{
-            $answer = false;}
-        $i++;
-    }
-    while($i < (count($array_keys_files))){
-        if(in_array($array_keys_files[$i],array_keys($_FILES))){
-            if(isset($_FIELS[($array_keys_files)][$i]['name'])){
-                $answer = false;
-            }
-        }else{
-            $answer = false;}
-        $i++;
-    }
-    return $answer;
-}
-
 function check_input($field_info,$field_type,$min = 1,$max = 20,$input = INPUT_POST){
     if($field_type == 'str'){
         $string = filter_input($input,$field_info);

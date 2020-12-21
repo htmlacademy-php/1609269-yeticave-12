@@ -6,8 +6,6 @@ if(!$is_auth){
 }
 
 //Создание переменных
-$no_empty_fields = false;
-$result = [];
 $lot_link = 0;
 $errors =  ['lot-name' => true,
             'category' => true,
@@ -99,8 +97,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                             date_completion,
                             step_rate)
         VALUES (?,?,?,?,?,?,?,?,?,?);";
-        $check_category_id_query = prepared_query($select_check_category_id,$con,$passed_variables = [$_POST['category']]);
-        $category_id = mysqli_fetch_assoc($check_category_id_query)['id'];  
         $add_pos_query = prepared_query($insert_add_pos,$con,$passed_variables = [
                             date("Y-m-d H:i:s"),
                             $_POST['lot-name'],
