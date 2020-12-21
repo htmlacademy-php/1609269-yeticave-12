@@ -189,28 +189,6 @@ function show_page($title_name,$tempates_name,$categorys,$is_auth,$user_name,$co
     print($page);
 }
 
-//Проверка длины 
-function isCorrectLength($string, $min, $max) {
-    $len = strlen($string);
-    if ($len < $min or $len > $max) {
-        return "Поле должно быть от ".$min." до ".$max." символов!";
-    }else{
-        return false;
-    }
-}
-
-//Проверка на int
-function checkInt($num,$min,$max){
-    if(!is_numeric($num)){
-        return "Поле должно содержать цифры!"; 
-    }else{
-        if($num< $min or $num > $max or $num == 0) {
-            return "Поле может быть в дипазоне от ".$min." до ".$max;
-        }else{
-            return false;
-        }
-    }
-}
 //Проверка даты 
 function isCorrectDate($date,$date_type = "y-m-d",$separator = "-",$condition = "+ 1 days"){
     $date_array = explode($separator,$date); 
@@ -276,4 +254,16 @@ function check_no_empty_post_and_files($array_keys_post =[],$array_keys_files=[]
         $i++;
     }
     return $answer;
+}
+
+function check_field($field_info,$field_type,$min = 1,$max = 20,$input = INPUT_POST){
+    if($field_type == 'str'){
+        $string = filter_input($input,$field_info);
+        $len = strlen($string);
+        if($len<$min or $len >$max){ return "Необходимо ввести от $min до $max символов";}
+    }
+    if($field_type == 'int'){
+        $int = filter_input($input,$field_info,FILTER_VALIDATE_INT);
+        if($int<$min or $int >$max){ return "Необходимо ввести чило от $min до $max";}
+    }
 }

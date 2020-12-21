@@ -24,14 +24,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     //Если поле "Наименование" заполнено - начинает его проверку 
     if(!empty($_POST["lot-name"])){   
-        $errors['lot-name'] = (isCorrectLength($_POST['lot-name'],5,20))?false:"Поле должно быть от ".$min." до ".$max." символов!";  
+        $errors['lot-name'] = check_field('lot-name','str',5,20);
     }else{
         $errors['lot-name'] = "Обязательное поле!";
     }
 
     //Если поле "Описание" заполнено - начинает его проверку           
     if(!empty($_POST["message"])){ 
-        $errors['lot-name'] = (isCorrectLength($_POST['lot-name'],5,3000))?false:"Поле должно быть от ".$min." до ".$max." символов!";  
+        $errors['message'] = check_field('message','str',5,3000);
     }else{
         $errors['message'] = "Обязательное поле!";
     }  
@@ -49,14 +49,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     //Если поле "Начальная цена" заполнено - начинает его проверку 
     if(!empty($_POST["lot-rate"])){
-        $errors['lot-rate'] = checkInt($_POST['lot-rate'],1,1000000);
+        $errors['lot-rate'] = check_field('lot-rate','int',1,1000000);
     }else{
         $errors['lot-rate'] = "Обязательное поле!";
     }
 
     //Если поле "Шаг ставки" заполнено - начинает его проверку 
     if(!empty($_POST["lot-step"])){
-        $errors['lot-step'] = checkInt($_POST['lot-step'],1,1000000);
+        $errors['lot-step'] =  check_field('lot-step','int',1,1000000);
     }else{
         $errors['lot-step'] = "Обязательное поле!";
     } 
