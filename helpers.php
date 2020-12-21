@@ -190,12 +190,12 @@ function show_page($tempates_name,$title_name,$content_array = [],$categorys,$is
 function check_input_date($date,$date_type = "y-m-d",$separator = "-",$condition = "+ 1 days",$input = INPUT_POST){
     if(!filter_input($input,$date)){ return "Обязательное поле";}
     else{
-        $date_array = explode($separator,$date); 
+        $date_array = explode($separator,$_POST[$date]); 
         if(checkdate($date_array[1],$date_array[2],$date_array[0]) == false){
-            return $date." имеет неверный формат даты";
+            return $_POST[$date]." имеет неверный формат даты";
         }
         $tomorrow = date($date_type,strtotime($condition)); 
-        $date_by_user = date($date_type,strtotime($date));
+        $date_by_user = date($date_type,strtotime($_POST[$date]));
         if($date_by_user<$tomorrow){
             return "Дата должна подходить под условие ".$condition;
         }

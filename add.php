@@ -1,7 +1,7 @@
 <?php
 include(__DIR__."/bootstrap.php");
+$errors = [];
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
-    $errors['form'] = true;
     $errors['lot-name'] = check_input('lot-name',5,20);  
     $errors['message'] = check_input('message',5,3000);   
     $errors['category'] = check_input_category('category',$categorys);
@@ -13,9 +13,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         move_file($_FILES['lot-img']['name'],$_FILES['lot-img']['tmp_name'],'uploads');
         $file_url = '/uploads/'.$_FILES['lot-img']['name'];
     }
+    $errors['form'] = (array_filter($errors)) ?"Ошибка":false;
     $errors = array_filter($errors);
-    //Если все поля заполнены и равны true, форма тоже равна true и создается новый lot на sql
-    if(!array_filter($errors)){
+    if(!$errors){
         $errors['form'] = false;
         $insert_add_pos=
         "INSERT INTO lots  (date_create,
@@ -41,8 +41,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                             $_POST['lot-date'],
                             $_POST['lot-step']]);
         header("Location: /lot.php?id=".mysqli_insert_id($con));
-        die("Нет доступа к лоту");
+        die();
     }
 }          
-if(!empty($errors)){$errors = array_filter($errors);}else{$errors = [];}
 show_page('add.main.php',"Добавление лота",['errors' => $errors],$categorys);                                            
