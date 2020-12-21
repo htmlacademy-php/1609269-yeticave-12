@@ -1,5 +1,5 @@
 <main>
-    <form class="form form--add-lot container <?=(!is_string($errors['form'])) ? "":"form--invalid"?>" action="/add.php" method="post" enctype="multipart/form-data"> <!-- form--invalid -->
+    <form class="form form--add-lot container <?=($errors) ?"form--invalid":""?>" action="/add.php" method="post" enctype="multipart/form-data"> <!-- form--invalid -->
       <h2>Добавление лота</h2>
       <div class="form__container-two">
         <div class="form__item <?=(!is_string($errors['lot-name'])) ? "" : "form__item--invalid" ?>"> <!-- form__item--invalid -->

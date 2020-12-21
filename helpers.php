@@ -187,17 +187,23 @@ function show_page($tempates_name,$title_name,$content_array = [],$categorys,$is
 }
 
 //Проверка даты 
-function check_input_date($date,$date_type = "y-m-d",$separator = "-",$condition = "+ 1 days",$input = INPUT_POST){
+function check_input_date($date,$min = 1,$max = 365,$input = INPUT_POST){
     if(!filter_input($input,$date)){ return "Обязательное поле";}
     else{
-        $date_array = explode($separator,$_POST[$date]); 
+        $date = date("y-m-d",strtotime($_POST[$date]));
+        $date_array = explode('-',$_POST[$date]);
+
         if(checkdate($date_array[1],$date_array[2],$date_array[0]) == false){
             return $_POST[$date]." имеет неверный формат даты";
         }
-        $tomorrow = date($date_type,strtotime($condition)); 
-        $date_by_user = date($date_type,strtotime($_POST[$date]));
-        if($date_by_user<$tomorrow){
-            return "Дата должна подходить под условие ".$condition;
+        $min_date = date("y-m-d",strtotime("+$min days")); 
+        $max_date = date("y-m-d",strtotime("+$max days")); 
+        $date_by_user = date("y-m-d",strtotime($_POST[$date]));
+        if($date_by_user <= $min_date){
+            return "Дата должна быть после ".date("d.m.y",strtotime("+$min days"));
+        }
+        if($date_by_user >= $max_date){
+            return "Дата должна быть до ".date("d.m.y",strtotime("+$max days"));
         }
     }
 }

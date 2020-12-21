@@ -7,13 +7,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $errors['category'] = check_input_category('category',$categorys);
     $errors['lot-rate'] = check_input('lot-rate',1,1000000,FILTER_VALIDATE_INT); 
     $errors['lot-step'] =  check_input('lot-step',1,1000000,FILTER_VALIDATE_INT); 
-    $errors['lot-date'] = check_input_date('lot-date',$condition = "+ 1 days"); 
+    $errors['lot-date'] = check_input_date('lot-date',1,365); 
     $errors['lot-img'] = (!empty($_FILES['lot-img']['name']) ? check_correct_img($_FILES['lot-img'],10,['jpeg','jpg','png']) : "Обязательное поле"); 
     if(!is_string($errors['lot-img'])){
         move_file($_FILES['lot-img']['name'],$_FILES['lot-img']['tmp_name'],'uploads');
         $file_url = '/uploads/'.$_FILES['lot-img']['name'];
     }
-    $errors['form'] = (array_filter($errors)) ?"Ошибка":false;
     $errors = array_filter($errors);
     if(!$errors){
         $errors['form'] = false;
