@@ -10,6 +10,7 @@
         <div class="form__item <?=(!is_string($errors['category'])) ? "" : "form__item--invalid" ?>">
           <label for="category">Категория <sup>*</sup></label>
           <select id="category" name="category">
+            <option value="">Выберите категорию</option>
 
           <?php foreach($categorys as $category):?>
             <option value="<?=htmlspecialchars($category['id'])?>"><?=htmlspecialchars($category['category'])?></option>

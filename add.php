@@ -11,7 +11,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $errors['lot-img'] = check_correct_img('lot-img',10,['jpeg','jpg','png']);
     $errors = array_filter($errors);
     if(!$errors){
-        $errors['form'] = false;
         $insert_add_pos=
         "INSERT INTO lots  (date_create,
                             name,
@@ -24,7 +23,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                             date_completion,
                             step_rate)
         VALUES (?,?,?,?,?,?,?,?,?,?);";
-        $add_pos_query = prepared_query($insert_add_pos,$con,$passed_variables = [
+        prepared_query($insert_add_pos,$con,$passed_variables = [
                             date("Y-m-d H:i:s"),
                             $_POST['lot-name'],
                             $_POST['message'],
@@ -36,14 +35,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                             $_POST['lot-date'],
                             $_POST['lot-step']]);            
         $id =  mysqli_insert_id($con);
-        $file_name = $id.".ext.".pathinfo(trim($_FILES['lot-img']['name']), PATHINFO_EXTENSION);
+        $file_name = $id.".".pathinfo(trim($_FILES['lot-img']['name']), PATHINFO_EXTENSION);
         move_file($file_name,$_FILES['lot-img']['tmp_name'],'uploads');
         $file_url = '/uploads/'.$file_name;
         $update_file_link=
-        "UPDATE lots
-        SET lots.img_link = ?
-        WHERE lots.id = ?";
-        $add_pos_query = prepared_query($update_file_link,$con,$passed_variables =[$file_url,mysqli_insert_id($con)]);
+            "UPDATE lots
+            SET lots.img_link = ?
+            WHERE lots.id = ?";
+        prepared_query($update_file_link,$con,$passed_variables =[$file_url,mysqli_insert_id($con)]);
         header("Location: /lot.php?id=".$id);
         die();
     }

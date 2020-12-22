@@ -196,14 +196,14 @@ function check_input_date($date,$min = 1,$max = 365,$input = INPUT_POST){
         if(checkdate($date_array[1],$date_array[2],$date_array[0]) == false){
             return $_POST[$date]." имеет неверный формат даты";
         }
-        $min_date = date("y-m-d",strtotime("+$min days")); 
-        $max_date = date("y-m-d",strtotime("+$max days")); 
-        $date_by_user = date("y-m-d",strtotime($date));
+        $min_date = date("Y-m-d",strtotime("+$min days")); 
+        $max_date = date("Y-m-d",strtotime("+$max days")); 
+        $date_by_user = date("Y-m-d",strtotime($date));
         if($date_by_user <= $min_date){
-            return "Дата должна быть после ".date("d.m.y",strtotime("+$min days"));
+            return "Дата должна быть после ".date("Y-m-d",strtotime("+$min days"));
         }
         if($date_by_user >= $max_date){
-            return "Дата должна быть до ".date("d.m.y",strtotime("+$max days"));
+            return "Дата должна быть до ".date("Y-m-d",strtotime("+$max days"));
         }
     }
 }
@@ -214,7 +214,7 @@ function getPostVal($name) {
 } 
 
 //Проверка файла
-function check_correct_img($img,$mb_limit = 5, $expansions = ['jpeg','jpg','png'],$input = INPUT_POST){
+function check_correct_img($img,$mb_limit = 5, $extansions = ['jpeg','jpg','png'],$input = INPUT_POST){
     if(empty($_FILES[$img]['name'])){
         return "Обязательное поле";
     }else{
@@ -222,13 +222,13 @@ function check_correct_img($img,$mb_limit = 5, $expansions = ['jpeg','jpg','png'
             return "Файл не должен превышать ".$mb_limit." мб";
         }else{        
             $type_file = pathinfo(trim($_FILES[$img]['name']), PATHINFO_EXTENSION);
-            if(!in_array($type_file,$expansions)){
-                return "Файл может иметь формат(ы): ".implode(",",$expansions).", а не ".$type_file;
+            if(!in_array($type_file,$extansions)){
+                return "Файл может иметь формат(ы): ".implode(",",$extansions).", а не ".$type_file;
             }
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
             $file_type = finfo_file($finfo, $_FILES[$img]['tmp_name']);
             if (!in_array($file_type,["image/jpeg","image/png","image/jpg"])){
-                return "Файл может иметь формат(ы): ".implode(",",$expansions).", а не ".$file_type;
+                return "Файл может иметь формат(ы): ".implode(",",$extansions).", а не ".$file_type;
             }
         }
     }
