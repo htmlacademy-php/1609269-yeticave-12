@@ -249,5 +249,5 @@ function check_input($field_info,$min,$max,$filter = FILTER_DEFAULT,$input = INP
 
 function check_input_category($category,$categorys,$input = INPUT_POST){
     if(!filter_input($input,$category)){ return "Обязательное поле";}
-    if(empty($categorys[$_POST[$category]])){ return 'Неправильно выбрана категория'; }
+    if(!in_array($_POST[$category],array_keys($categorys))){ return 'Неправильно выбрана категория'; }
 }
