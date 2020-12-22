@@ -17,7 +17,8 @@ $select_categories =
 
 $result = $con->query($select_categories);
 $categorys = [];
-
+$i = 0;
 while ($row = $result -> fetch_assoc()){
-    $categorys[$row['id']] = $row['category'];
+    $categorys[$i] = $row;
+    $i++;
 }

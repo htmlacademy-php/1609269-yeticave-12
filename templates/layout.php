@@ -48,11 +48,11 @@
 <main>
     <nav class="nav">
       <ul class="nav__list container">
-      <?php for($i = array_keys($categorys)[0];$i <= count($categorys);$i++):?>
+      <?php foreach($categorys as $category):?>
         <li class="nav__item">
-          <a href="all-lots.html"><?=htmlspecialchars($categorys[$i])?></a>
+          <a href="all-lots.html"><?=htmlspecialchars($category['category'])?></a>
         </li>
-        <?php endfor;?>
+        <?php endforeach;?>
       </ul>
     </nav>
 <?php endif;?>
@@ -63,11 +63,11 @@
 <footer class="main-footer">
     <nav class="nav">
       <ul class="nav__list container">
-        <?php for($i = array_keys($categorys)[0];$i <= count($categorys);$i++):?>
+      <?php foreach($categorys as $category):?>
         <li class="nav__item">
-          <a href="all-lots.html"><?=htmlspecialchars($categorys[$i])?></a>
+          <a href="all-lots.html"><?=htmlspecialchars($category['category'])?></a>
         </li>
-        <?php endfor;?>
+        <?php endforeach;?>
       </ul>
     </nav>
     <div class="main-footer__bottom container">
