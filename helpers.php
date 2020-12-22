@@ -191,14 +191,14 @@ function check_input_date($date,$min = 1,$max = 365,$input = INPUT_POST){
     if(!filter_input($input,$date)){ return "Обязательное поле";}
     else{
         $date = date("y-m-d",strtotime($_POST[$date]));
-        $date_array = explode('-',$_POST[$date]);
+        $date_array = explode('-',$date);
 
         if(checkdate($date_array[1],$date_array[2],$date_array[0]) == false){
             return $_POST[$date]." имеет неверный формат даты";
         }
         $min_date = date("y-m-d",strtotime("+$min days")); 
         $max_date = date("y-m-d",strtotime("+$max days")); 
-        $date_by_user = date("y-m-d",strtotime($_POST[$date]));
+        $date_by_user = date("y-m-d",strtotime($date));
         if($date_by_user <= $min_date){
             return "Дата должна быть после ".date("d.m.y",strtotime("+$min days"));
         }
@@ -221,7 +221,7 @@ function check_correct_img($img,$mb_limit = 5, $expansions = ['jpeg','jpg','png'
         if($_FILES[$img]['size'] > 1048576*$mb_limit){
             return "Файл не должен превышать ".$mb_limit." мб";
         }else{        
-            $type_file = pathinfo(trim(strip_tags($_FILES[$img]['name'])), PATHINFO_EXTENSION);
+            $type_file = pathinfo(trim($_FILES[$img]['name']), PATHINFO_EXTENSION);
             if(!in_array($type_file,$expansions)){
                 return "Файл может иметь формат(ы): ".implode(",",$expansions).", а не ".$type_file;
             }
@@ -249,5 +249,5 @@ function check_input($field_info,$min,$max,$filter = FILTER_DEFAULT,$input = INP
 
 function check_input_category($category,$categorys,$input = INPUT_POST){
     if(!filter_input($input,$category)){ return "Обязательное поле";}
-    if(!in_array($_POST[$category],array_keys($categorys))){ return 'Неправильно выбрана категория'; }
+    if(!isset($categorys[$_POST[$category]])){ return 'Неправильно выбрана категория'; }
 }

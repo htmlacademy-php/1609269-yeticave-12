@@ -9,10 +9,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $errors['lot-step'] =  check_input('lot-step',1,1000000,FILTER_VALIDATE_INT); 
     $errors['lot-date'] = check_input_date('lot-date',1,365); 
     $errors['lot-img'] = check_correct_img('lot-img',10,['jpeg','jpg','png']);
-    if(!is_string($errors['lot-img'])){
-        move_file($_FILES['lot-img']['name'],$_FILES['lot-img']['tmp_name'],'uploads');
-        $file_url = '/uploads/'.$_FILES['lot-img']['name'];
-    }
     $errors = array_filter($errors);
     if(!$errors){
         $errors['form'] = false;
@@ -35,11 +31,20 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                             0,
                             0,
                             $_POST['category'],
-                            $file_url,
+                            'None',
                             $_POST['lot-rate'],
                             $_POST['lot-date'],
-                            $_POST['lot-step']]);
-        header("Location: /lot.php?id=".mysqli_insert_id($con));
+                            $_POST['lot-step']]);            
+        $id =  mysqli_insert_id($con);
+        $file_name = $id.".ext.".pathinfo(trim($_FILES['lot-img']['name']), PATHINFO_EXTENSION);
+        move_file($file_name,$_FILES['lot-img']['tmp_name'],'uploads');
+        $file_url = '/uploads/'.$file_name;
+        $update_file_link=
+        "UPDATE lots
+        SET lots.img_link = ?
+        WHERE lots.id = ?";
+        $add_pos_query = prepared_query($update_file_link,$con,$passed_variables =[$file_url,mysqli_insert_id($con)]);
+        header("Location: /lot.php?id=".$id);
         die();
     }
 }          
