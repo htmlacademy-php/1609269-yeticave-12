@@ -8,7 +8,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $errors['lot-rate'] = check_input('lot-rate',1,1000000,FILTER_VALIDATE_INT); 
     $errors['lot-step'] =  check_input('lot-step',1,1000000,FILTER_VALIDATE_INT); 
     $errors['lot-date'] = check_input_date('lot-date',1,365); 
-    $errors['lot-img'] = (!empty($_FILES['lot-img']['name']) ? check_correct_img($_FILES['lot-img'],10,['jpeg','jpg','png']) : "Обязательное поле"); 
+    $errors['lot-img'] = check_correct_img('lot-img',10,['jpeg','jpg','png']);
     if(!is_string($errors['lot-img'])){
         move_file($_FILES['lot-img']['name'],$_FILES['lot-img']['tmp_name'],'uploads');
         $file_url = '/uploads/'.$_FILES['lot-img']['name'];

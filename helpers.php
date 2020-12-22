@@ -215,12 +215,21 @@ function getPostVal($name) {
 
 //Проверка файла
 function check_correct_img($img,$mb_limit = 5, $expansions = ['jpeg','jpg','png'],$input = INPUT_POST){
-    if($img['size'] > 1048576*$mb_limit){
-        return "Файл не должен превышать ".$mb_limit." мб";
-    }else{        
-        $type_file = pathinfo(trim(strip_tags($img['name'])), PATHINFO_EXTENSION);
-        if(in_array($type_file,$expansions) == false){
-            return "Файл может иметь формат(ы): ".implode(",",$expansions).", а не ".$type_file;
+    if(empty($_FILES[$img]['name'])){
+        return "Обязательное поле";
+    }else{
+        if($_FILES[$img]['size'] > 1048576*$mb_limit){
+            return "Файл не должен превышать ".$mb_limit." мб";
+        }else{        
+#            $type_file = pathinfo(trim(strip_tags($_FILES[$img]['name'])), PATHINFO_EXTENSION);
+#            if(!in_array($type_file,$expansions)){
+#                return "Файл может иметь формат(ы): ".implode(",",$expansions).", а не ".$type_file;
+#            }
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $file_type = finfo_file($finfo, $_FILES[$img]['tmp_name']);
+            if (!in_array($file_type,["image/jpeg","image/png","image/jpg"])){
+                return "Файл может иметь формат(ы): ".implode(",",$expansions).", а не ".$file_type;
+            }
         }
     }
 }
