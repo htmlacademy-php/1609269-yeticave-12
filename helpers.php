@@ -159,7 +159,7 @@ function prepared_query($sql_query,$msqli,$passed_variables=[],$types_variables 
     $stmt = $msqli->prepare($sql_query);
     $stmt->bind_param($types, ...$passed_variables);
     $stmt->execute();
-    return $sql_query = $stmt->get_result();
+    return $stmt->get_result();
 }
 
 //показ ошибки 404
