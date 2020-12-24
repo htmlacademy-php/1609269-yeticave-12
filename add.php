@@ -25,15 +25,15 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         VALUES (?,?,?,?,?,?,?,?,?,?);";
         prepared_query($insert_add_pos,$con,$passed_variables = [
                             date("Y-m-d H:i:s"),
-                            e($_POST['lot-name']),
-                            e($_POST['message']),
+                            $_POST['lot-name'],
+                            $_POST['message'],
                             0,
                             0,
-                            e($_POST['category']),
+                            $_POST['category'],
                             'None',
-                            e($_POST['lot-rate']),
-                            e($_POST['lot-date']),
-                            e($_POST['lot-step'])]);        
+                            $_POST['lot-rate'],
+                            $_POST['lot-date'],
+                            $_POST['lot-step']]);        
         $id =  mysqli_insert_id($con);
         $file_name = $id.".".pathinfo(trim($_FILES['lot-img']['name']), PATHINFO_EXTENSION);
         move_file($file_name,$_FILES['lot-img']['tmp_name'],'uploads');
@@ -42,7 +42,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             "UPDATE lots
             SET lots.img_link = ?
             WHERE lots.id = ?";
-        prepared_query($update_file_link,$con,$passed_variables =[e($file_url),mysqli_insert_id($con)]);
+        prepared_query($update_file_link,$con,$passed_variables =[$file_url,mysqli_insert_id($con)]);
         header("Location: /lot.php?id=".$id);
         die();
     }
