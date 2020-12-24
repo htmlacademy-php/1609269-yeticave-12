@@ -42,7 +42,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             "UPDATE lots
             SET lots.img_link = ?
             WHERE lots.id = ?";
-        prepared_query($update_file_link,$con,$passed_variables =[$file_url,mysqli_insert_id($con)]);
+        prepared_query($update_file_link,$con,[$file_url,$id]);
         header("Location: /lot.php?id=".$id);
         die();
     }
