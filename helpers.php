@@ -208,10 +208,9 @@ function check_input_date($date,$min = 1,$max = 365,$input = INPUT_POST){
     }
 }
 
-//сохранить значения полей формы после валидации
-function getPostVal($name) {
-    return $_POST[$name] ?? "";
-} 
+function e($conclusion){
+    return htmlspecialchars($conclusion,ENT_QUOTES);
+}
 
 //Проверка файла
 function check_correct_img($img,$mb_limit = 5, $extansions = ['jpeg','jpg','png'],$input = INPUT_POST){
