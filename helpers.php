@@ -159,7 +159,7 @@ function prepared_query($sql_query,$msqli,$passed_variables=[],$types_variables 
     $stmt = $msqli->prepare($sql_query);
     $stmt->bind_param($types, ...$passed_variables);
     $stmt->execute();
-    return $stmt->get_result();
+    return $stmt;
 }
 
 //показ ошибки 404
@@ -187,7 +187,7 @@ function show_page($tempates_name,$title_name,$content_array = [],$categorys,$is
 }
 
 //Проверка даты 
-function check_input_date($date,$min = 1,$max = 365,$input = INPUT_POST){
+function check_input_date($date,$min = null,$max = null,$input = INPUT_POST){
     if(!filter_input($input,$date)){ return "Обязательное поле";}
     else{
         $date = date("y-m-d",strtotime($_POST[$date]));
@@ -195,6 +195,9 @@ function check_input_date($date,$min = 1,$max = 365,$input = INPUT_POST){
 
         if(checkdate($date_array[1],$date_array[2],$date_array[0]) == false){
             return $_POST[$date]." имеет неверный формат даты";
+        }
+        if(empty($min) or empty($max)){
+            return true;
         }
         $min_date = date("Y-m-d",strtotime("+$min days")); 
         $max_date = date("Y-m-d",strtotime("+$max days")); 
@@ -205,6 +208,12 @@ function check_input_date($date,$min = 1,$max = 365,$input = INPUT_POST){
         if($date_by_user >= $max_date){
             return "Дата должна быть до ".date("Y-m-d",strtotime("+$max days"));
         }
+        $date = date("y-m-d",strtotime($_POST[$date]));
+        $date_array = explode('-',$date);
+
+        if(checkdate($date_array[1],$date_array[2],$date_array[0]) == false){
+            return $_POST[$date]." имеет неверный формат даты";
+        }
     }
 }
 
@@ -213,21 +222,21 @@ function e($conclusion){
 }
 
 //Проверка файла
-function check_correct_img($img,$mb_limit = 5, $extansions = ['jpeg','jpg','png'],$input = INPUT_POST){
+function check_input_file($img,$mb_limit = 5, $extensions = [],$mime = []){
     if(empty($_FILES[$img]['name'])){
         return "Обязательное поле";
     }else{
         if($_FILES[$img]['size'] > 1048576*$mb_limit){
             return "Файл не должен превышать ".$mb_limit." мб";
         }else{        
-            $type_file = pathinfo(trim($_FILES[$img]['name']), PATHINFO_EXTENSION);
-            if(!in_array($type_file,$extansions)){
-                return "Файл может иметь формат(ы): ".implode(",",$extansions).", а не ".$type_file;
+            $ext = pathinfo(trim($_FILES[$img]['name']), PATHINFO_EXTENSION);
+            if(!in_array($ext,$extensions)){
+                return "Файл может иметь формат(ы): ".implode(",",$extensions).", а не ".$ext;
             }
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $file_type = finfo_file($finfo, $_FILES[$img]['tmp_name']);
-            if (!in_array($file_type,["image/jpeg","image/png","image/jpg"])){
-                return "Файл может иметь формат(ы): ".implode(",",$extansions).", а не ".$file_type;
+            $mime_type = finfo_file($finfo, $_FILES[$img]['tmp_name']);
+            if (!in_array($mime_type,$mime)){
+                return "Файл может иметь тип(ы): ".implode(",",$extensions).", а не ".$mime_type;
             }
         }
     }

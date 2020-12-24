@@ -31,8 +31,8 @@ $select_bids =
     WHERE bids.lot_id = ?
     ORDER BY bids.date_create DESC;";
 
-$products_query = prepared_query($select_lots,$con,$passed_variables = [$id]);
-$bids_query = prepared_query($select_bids,$con,$passed_variables=[$id]);
+$products_query = prepared_query($select_lots,$con,$passed_variables = [$id])->get_result(); ;
+$bids_query = prepared_query($select_bids,$con,$passed_variables=[$id])->get_result(); ;
 
 $products = mysqli_fetch_assoc($products_query);
 $bids =  mysqli_fetch_all($bids_query,MYSQLI_ASSOC);
