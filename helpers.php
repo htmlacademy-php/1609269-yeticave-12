@@ -248,13 +248,21 @@ function move_file($file_name,$fime_tmp,$folder){
 }
 
 function check_input($field_info,$min,$max,$filter = FILTER_DEFAULT,$input = INPUT_POST){
-    if(!filter_input($input,$field_info)){ return "Обязательное поле";}
-    $string = filter_input($input,$field_info,$filter);
-    if(!$string){ return "Неверный формат"; }
-    $len = strlen($string);
-    if($len<$min or $len >$max){ return "Необходимо ввести от $min до $max символов";}
+    $value = filter_input($input,$field_info);
+    $length = strlen($value);
+    if($value !== false and !$length){
+        return "Обязательное поле!";
+    }
+    $value = filter_input($input,$field_info,$filter);
+    if($filter === FILTER_VALIDATE_INT){
+        if($value === false or $value<$min or $value>$max){ 
+            return "Необходимо ввести целое число от $min до $max"; 
+        }
+    }
+    elseif($value === false or strlen($value)<$min or strlen($value)>$max){ 
+        return "Необходимо ввести от $min до $max символов"; 
+    }
 }
-
 function check_input_category($category,$categorys,$input = INPUT_POST){
     if(!filter_input($input,$category)){ return "Обязательное поле";}
     if(!isset($categorys[$_POST[$category]])){ return 'Неправильно выбрана категория'; }
