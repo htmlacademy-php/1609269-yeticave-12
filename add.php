@@ -33,7 +33,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                             'None',
                             $_POST['lot-rate'],
                             $_POST['lot-date'],
-                            $_POST['lot-step']])->get_result();        
+                            $_POST['lot-step']]);   
         $id =  mysqli_insert_id($con);
         $file_name = $id.".".pathinfo(trim($_FILES['lot-img']['name']), PATHINFO_EXTENSION);
         move_file($file_name,$_FILES['lot-img']['tmp_name'],'uploads');
@@ -42,7 +42,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             "UPDATE lots
             SET lots.img_link = ?
             WHERE lots.id = ?";
-        prepared_query($update_file_link,$con,[$file_url,$id])->get_result();
+        prepared_query($update_file_link,$con,[$file_url,$id]);
         header("Location: /lot.php?id=".$id);
         die();
     }
