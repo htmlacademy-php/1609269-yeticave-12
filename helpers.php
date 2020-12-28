@@ -191,23 +191,23 @@ function check_input_date($date,$min = null,$max = null,$input = INPUT_POST){
     $date = filter_input($input,$date);
     if(!$date){ return "Обязательное поле";}
     else{
+        if(strtotime($date) === false){
+            return "Некоректная дата";
+        }
         $date = date("y-m-d",strtotime($date));
         $date_array = explode('-',$date);
 
         if(checkdate($date_array[1],$date_array[2],$date_array[0]) == false){
-            return $date." имеет неверный формат даты";
-        }
-        if(empty($min) and empty($max)){
-            return true;
+            return "Несуществующая дата!";
         }
         $min_date = date("Y-m-d",strtotime("+$min days")); 
         $max_date = date("Y-m-d",strtotime("+$max days")); 
         $date_by_user = date("Y-m-d",strtotime($date));
-        if($date_by_user <= $min_date){
-            return "Дата должна быть после ".date("Y-m-d",strtotime("+$min days"));
+        if($min !== null and $date_by_user <= $min_date){
+            return "Дата должна быть не меньше $min_date";
         }
-        if($date_by_user >= $max_date){
-            return "Дата должна быть до ".date("Y-m-d",strtotime("+$max days"));
+        if($max !== null and $date_by_user >= $max_date){
+            return "Дата должна быть не больше $max_date";
         }
     }
 }
