@@ -194,7 +194,7 @@ function check_input_date($date,$min = null,$max = null,$input = INPUT_POST){
         if(strtotime($date) === false){
             return "Некоректная дата";
         }
-        $date = date("y-m-d",strtotime($date));
+        $date = date("Y-m-d",strtotime($date));
         $date_array = explode('-',$date);
 
         if(checkdate($date_array[1],$date_array[2],$date_array[0]) == false){
@@ -202,11 +202,10 @@ function check_input_date($date,$min = null,$max = null,$input = INPUT_POST){
         }
         $min_date = date("Y-m-d",strtotime("+$min days")); 
         $max_date = date("Y-m-d",strtotime("+$max days")); 
-        $date_by_user = date("Y-m-d",strtotime($date));
-        if($min !== null and $date_by_user <= $min_date){
+        if($min !== null and $date <= $min_date){
             return "Дата должна быть не меньше $min_date";
         }
-        if($max !== null and $date_by_user >= $max_date){
+        if($max !== null and $date >= $max_date){
             return "Дата должна быть не больше $max_date";
         }
     }
