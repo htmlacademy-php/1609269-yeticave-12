@@ -176,7 +176,7 @@ function page_404($is_auth,$categorys,$user_name){
 }
 
 //показ страницы
-function show_page($tempates_name,$title_name,$content_array = [],$categorys,$is_auth = 0, $user_name = ""){
+function show_page($tempates_name,$title_name,$content_array = [],$categorys,$is_auth, $user_name){
     $content = include_template($tempates_name,array_merge(['categorys' => $categorys],$content_array));
     $page = include_template("layout.php",[ 'content' => $content,
                                             'categorys' => $categorys,
@@ -253,7 +253,7 @@ function check_input($field_info,$min,$max,$filter = FILTER_DEFAULT,$input = INP
             return "Необходимо ввести целое число от $min до $max"; 
         }
     }
-    elseif($value === false or strlen($value)<$min or strlen($value)>$max){ 
+    if($value === false or strlen($value)<$min or strlen($value)>$max){ 
         return "Необходимо ввести от $min до $max символов"; 
     }
 }
@@ -267,7 +267,7 @@ function check_input_category($category,$categorys,$input = INPUT_POST){
     }
 }
 
-function check_input_email($email,$input = INPUT_POST){
+function check_input_email($email,$sql_host,$db_users_name,$col_email_name,$ls,$input = INPUT_POST){
     $email = filter_input($input,$email);
     if(!$email){
         return "Обязательное поле!";
@@ -275,6 +275,22 @@ function check_input_email($email,$input = INPUT_POST){
     if(!filter_var($email,FILTER_VALIDATE_EMAIL)){
         return "Неверный email!";
     }
+    $mail_name = explode('@',$email)[0];
+    if(strlen($mail_name) < 5 or 31 < strlen($mail_name)){
+        return "Email может быть длиной от 5 до 31 символов.";
+    }
+    $check_mail =
+    "SELECT ".$db_users_name.".".$col_email_name."
+     FROM ".$db_users_name."
+     WHERE ".$db_users_name.".".$col_email_name." = ?";
+     $mail_query = prepared_query($check_mail,$sql_host,[$email])->get_result();
+     $mail = mysqli_fetch_assoc($mail_query);
+     if($mail and $ls == 'sign-up'){
+         return "Аккаунт с таким email уже существует";
+     }
+     if(!$mail and $ls == 'login'){
+            return "Аккаунта с таким email еще нет!";
+     }
 }
 function check_input_password($password,$input = INPUT_POST){
     $password = filter_input($input,$password);

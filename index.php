@@ -1,6 +1,5 @@
 <?php
 include(__DIR__.'/bootstrap.php');
-
 $select_lots = 
     "SELECT lots.id ,name,start_price,img_link,
     MAX(COALESCE(bids.price,lots.start_price)) AS price, 
@@ -19,4 +18,4 @@ $select_lots =
 
 $products = mysqli_fetch_all(mysqli_query($con,$select_lots),MYSQLI_ASSOC);
 
-show_page("main.php","Главная",['products' =>$products],$categorys,$is_auth,$user_name);
+show_page("main.php","Главная",['products' =>$products],$categorys,$is_auth,$_SESSION['user_name']);

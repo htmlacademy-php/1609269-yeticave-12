@@ -47,4 +47,4 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         die();
     }
 }          
-show_page('add.html.php',"Добавление лота",['errors' => $errors],$categorys,$is_auth,$user_name);                                            
+show_page('add.html.php',"Добавление лота",['errors' => $errors],$categorys,$is_auth,$_SESSION['user_name']);                                            
