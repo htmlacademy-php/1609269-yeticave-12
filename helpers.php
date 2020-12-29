@@ -176,9 +176,9 @@ function page_404($is_auth,$categorys,$user_name){
 }
 
 //показ страницы
-function show_page($tempates_name,$title_name,$content_array = [],$categorys,$is_auth = 1, $user_name = 'Дмитрий'){
+function show_page($tempates_name,$title_name,$content_array = [],$categorys,$is_auth = 0, $user_name = ""){
     $content = include_template($tempates_name,array_merge(['categorys' => $categorys],$content_array));
-    $page = include_template("layout.php",['content' => $content,
+    $page = include_template("layout.php",[ 'content' => $content,
                                             'categorys' => $categorys,
                                             'is_auth' => $is_auth,
                                             'title_name' => $title_name,
@@ -264,5 +264,21 @@ function check_input_category($category,$categorys,$input = INPUT_POST){
     }
     if(!isset($categorys[$category])){ 
         return 'Неправильно выбрана категория'; 
+    }
+}
+
+function check_input_email($email,$input = INPUT_POST){
+    $email = filter_input($input,$email);
+    if(!$email){
+        return "Обязательное поле!";
+    }
+    if(!filter_var($email,FILTER_VALIDATE_EMAIL)){
+        return "Неверный email!";
+    }
+}
+function check_input_password($password,$input = INPUT_POST){
+    $password = filter_input($input,$password);
+    if(!$password){
+        return "Обязательное поле!";
     }
 }

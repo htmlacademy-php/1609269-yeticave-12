@@ -23,7 +23,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                             date_completion,
                             step_rate)
         VALUES (?,?,?,?,?,?,?,?,?,?);";
-        prepared_query($insert_add_pos,$con,$passed_variables = [
+        prepared_query($insert_add_pos,$con,[
                             date("Y-m-d H:i:s"),
                             $_POST['lot-name'],
                             $_POST['message'],
@@ -47,4 +47,4 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         die();
     }
 }          
-show_page('add.main.php',"Добавление лота",['errors' => $errors],$categorys);                                            
+show_page('add.html.php',"Добавление лота",['errors' => $errors],$categorys,$is_auth,$user_name);                                            
