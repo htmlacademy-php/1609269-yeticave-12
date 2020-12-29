@@ -18,7 +18,7 @@ $select_lots =
     ON lots.id = bids.lot_id
 
     LEFT JOIN categories
-    ON lots.id = categories.id
+    ON lots.category_id = categories.id
 
     WHERE lots.id = ?
     GROUP BY lots.id
@@ -31,8 +31,8 @@ $select_bids =
     WHERE bids.lot_id = ?
     ORDER BY bids.date_create DESC;";
 
-$products_query = replace_in_query($select_lots,$con,$id);
-$bids_query = replace_in_query($select_bids,$con,$id);
+$products_query = prepared_query($select_lots,$con,$passed_variables = [$id])->get_result(); ;
+$bids_query = prepared_query($select_bids,$con,$passed_variables=[$id])->get_result(); ;
 
 $products = mysqli_fetch_assoc($products_query);
 $bids =  mysqli_fetch_all($bids_query,MYSQLI_ASSOC);
@@ -40,13 +40,5 @@ $bids =  mysqli_fetch_all($bids_query,MYSQLI_ASSOC);
 if(!$products){
     page_404($is_auth,$categorys,$user_name);
 }else{
-    $title_name = $products['name'];
-
-    $content = include_template("lot.main.php",['products' =>$products, 'bids' => $bids]);
-    $page = include_template("layout.php",['content' => $content,
-                                            'categorys' => $categorys,
-                                        'is_auth' => $is_auth,
-                                        'title_name' => $title_name,
-                                        'user_name' => $user_name]);
-    print($page);
+    show_page("lot.main.php",$products['name'],['products' =>$products,'bids' => $bids],$categorys);
 }

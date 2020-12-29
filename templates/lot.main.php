@@ -1,11 +1,11 @@
     <section class="lot-item container">
-      <h2><?=$products['name'];?></h2>
+      <h2><?=e($products['name'])?></h2>
       <div class="lot-item__content">
         <div class="lot-item__left">
           <div class="lot-item__image">
             <img src="<?=$products['img_link']?>" width="730" height="548" alt="Сноуборд">
           </div>
-          <p class="lot-item__category">Категория: <span><?=$products['category']?></span></p>
+          <p class="lot-item__category">Категория: <span><?=e($products['category'])?></span></p>
           <p class="lot-item__description"><?=$products['description']?></p>
         </div>
         <div class="lot-item__right">
@@ -13,15 +13,15 @@
         <?php $finishing = ($hours<1) ? "timer--finishing" : "" ?>
           <div class="lot-item__state">
               <div class="lot-item__timer timer <?=$finishing?>">
-                <?= $hours.":".$min?>
+                <?= e($hours.":".$min)?>
             </div>
             <div class="lot-item__cost-state">
               <div class="lot-item__rate">
                 <span class="lot-item__amount">Текущая цена</span>
-                <span class="lot-item__cost"><?=price_format($products["price"])?></span>
+                <span class="lot-item__cost"><?=e(price_format($products["price"]))?></span>
               </div>
               <div class="lot-item__min-cost">
-                Мин. ставка <span><?=price_format($products["min_bid"])?></span>
+                Мин. ставка <span><?=e(price_format($products["min_bid"]))?></span>
               </div>
             </div>
             <form class="lot-item__form" action="https://echo.htmlacademy.ru" method="post" autocomplete="off">
@@ -36,13 +36,13 @@
 
 <?php if(count($bids) != 0):?>
           <div class="history">
-            <h3>История ставок (<span><?=count($bids)?></span>)</h3>
+            <h3>История ставок (<span><?=e(count($bids))?></span>)</h3>
           <table class="history__list">
 <?php foreach($bids as $bid):?>
               <tr class="history__item">
-                <td class="history__name"><?=$bid['name']?></td>
-                <td class="history__price"><?=$bid['price']?></td>
-                <td class="history__time"><?=$bid['date_create']?></td>
+                <td class="history__name"><?=e($bid['name'])?></td>
+                <td class="history__price"><?=e($bid['price'])?></td>
+                <td class="history__time"><?=e($bid['date_create'])?></td>
               </tr>
 <?php endforeach?>
 

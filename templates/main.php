@@ -5,10 +5,10 @@
         <ul class="promo__list">
 
         <!-- Перебор простого массива -->
-            <?php foreach($categorys as $category => $tag_category):?>
+        <?php foreach($categorys as $category):?>
 
             <li class="promo__item promo__<?= $tag_category['code']?>">
-                <a class="promo__link" href="pages/all-lots.html"><?= htmlspecialchars($tag_category['category'])?></a>
+                <a class="promo__link" href="pages/all-lots.html"><?=htmlspecialchars($category['category'])?></a>
             </li>
             <?php endforeach;?>
         </ul>

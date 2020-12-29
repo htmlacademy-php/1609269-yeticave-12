@@ -5,14 +5,18 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 ini_set('display_errors',1);
 error_reporting(E_ALL);
 
-$con = mysqli_connect("$localhost","$name_host","$password_host","$base_name");
+$con = mysqli_connect($db_host,$db_name,$db_password,$db_database);
 mysqli_set_charset($con, "utf8mb4");
 
-$is_auth = rand(0, 1);
+$is_auth = 1; //Временно rand(0, 1);
 $user_name = 'Дмитрий';
 
-$select_categories = 
-    "SELECT categories.* 
+$select_categories =
+    "SELECT categories.*
     FROM categories";
 
-$categorys = mysqli_fetch_all(mysqli_query($con,$select_categories),MYSQLI_ASSOC);
+$result = $con->query($select_categories);
+$categorys = [];
+while ($row = $result -> fetch_assoc()){
+    $categorys[$row['id']] = $row;
+}
