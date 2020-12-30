@@ -1,5 +1,6 @@
 <?php
 include(__DIR__.'/bootstrap.php');
+un_login('lot.php','user_name');
 if(empty($_GET['id'])){
     page_404($is_auth,$categorys,$_SESSION['user_name']);
 }else{
@@ -35,8 +36,8 @@ $bids_query = prepared_query($select_bids,$con,[$id])->get_result();
 
 $products = mysqli_fetch_assoc($products_query);
 $bids =  mysqli_fetch_all($bids_query,MYSQLI_ASSOC);
-if(empty($_SESSION['user_name'])){
-    $_SESSION['user_name'] = 'user_name';
+if(!isset($_SESSION['user_name'])){
+    $_SESSION['user_name'] = null;
     $is_auth = 0;
 }
 if(!$products){

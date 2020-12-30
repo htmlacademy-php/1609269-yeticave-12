@@ -253,6 +253,12 @@ function check_input($field_info,$min,$max,$filter = FILTER_DEFAULT,$input = INP
             return "Необходимо ввести целое число от $min до $max"; 
         }
     }
+    if($filter === FILTER_VALIDATE_EMAIL){
+        $value = explode('@',$value)[0];
+        if($value === false or strlen($value)<$min or strlen($value>$max)){ 
+            return "Необходимо ввести верный email"; 
+        }
+    }
     if($value === false or strlen($value)<$min or strlen($value)>$max){ 
         return "Необходимо ввести от $min до $max символов"; 
     }
@@ -266,37 +272,13 @@ function check_input_category($category,$categorys,$input = INPUT_POST){
         return 'Неправильно выбрана категория'; 
     }
 }
-
-function check_input_email($email,$sql_host,$db_users_name,$col_email_name,$ls,$input = INPUT_POST){
-    $email = filter_input($input,$email);
-    if(!$email){
-        return "Обязательное поле!";
-    }
-    if(!filter_var($email,FILTER_VALIDATE_EMAIL)){
-        return "Неверный email!";
-    }
-    $mail_name = explode('@',$email)[0];
-    if(strlen($mail_name) < 5 or 31 < strlen($mail_name)){
-        return "Email может быть длиной от 5 до 31 символов.";
-    }
+function select_user_by_email($email,$sql_host){
     $check_mail =
-    "SELECT ".$db_users_name.".".$col_email_name."
-     FROM ".$db_users_name."
-     WHERE ".$db_users_name.".".$col_email_name." = ?";
+    "SELECT email
+     FROM users
+     WHERE email = ?";
      $mail_query = prepared_query($check_mail,$sql_host,[$email])->get_result();
-     $mail = mysqli_fetch_assoc($mail_query);
-     if($mail and $ls == 'sign-up'){
-         return "Аккаунт с таким email уже существует";
-     }
-     if(!$mail and $ls == 'login'){
-            return "Аккаунта с таким email еще нет!";
-     }
-}
-function check_input_password($password,$input = INPUT_POST){
-    $password = filter_input($input,$password);
-    if(!$password){
-        return "Обязательное поле!";
-    }
+     return mysqli_fetch_assoc($mail_query);
 }
 function un_login($link,$user_name){
     unset($_SESSION[$user_name]);
