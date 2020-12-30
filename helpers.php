@@ -298,3 +298,7 @@ function check_input_password($password,$input = INPUT_POST){
         return "Обязательное поле!";
     }
 }
+function un_login($link,$user_name){
+    unset($_SESSION[$user_name]);
+    header("Location: ".$link);
+}

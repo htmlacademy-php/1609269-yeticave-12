@@ -9,7 +9,7 @@ $con = mysqli_connect($db_host,$db_name,$db_password,$db_database);
 mysqli_set_charset($con, "utf8mb4");
 
 session_start();
-
+$is_auth = 1;
 $select_categories =
     "SELECT categories.*
     FROM categories";

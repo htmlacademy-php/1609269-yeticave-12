@@ -26,8 +26,8 @@
         <?php if($is_auth == 1):?>
         <div class="user-menu__logged">
         <p><?= $user_name?></p>
-        <a class="user-menu__bets" href="pages/my-bets.html">Мои ставки</a>
-        <a class="user-menu__logout" href="#">Выход</a>
+        <a class="user-menu__bets" href="#">Мои ставки</a>
+        <a class="user-menu__logout" href="?un_login">Выход</a>
        </div>
         <?php else:?>
             <ul class="user-menu__list">
@@ -111,7 +111,7 @@
     </div>
 </footer>
 
-<script src="flatpickr.js"></script>
+<!--<script src="flatpickr.js"></script> -->
 <script src="script.js"></script>
 </body>
 </html>

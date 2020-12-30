@@ -21,6 +21,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                                               $_POST['message']]);
         $is_auth = 1;
         $_SESSION['user_name'] = $_POST['name'];
+        header('Location: /index.php');
     }
+}
+if(empty($_SESSION['user_name'])){
+    $_SESSION['user_name'] = 'user_name';
+    $is_auth = 0;
 }
 show_page('sign-up.html.php','Регистрация нового аккаунта',['errors' => $errors],$categorys,$is_auth,$_SESSION['user_name']);

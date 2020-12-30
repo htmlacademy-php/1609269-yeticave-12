@@ -1,3 +1,4 @@
+<?=$_SESSION['user_name']?>
 <main>
     <form class="form container <?=(!$errors) ? "" : "form--invalid "?>" action="/login.php" method="post">
       <h2>Вход</h2>
