@@ -280,7 +280,3 @@ function select_user_by_email($email,$sql_host){
      $mail_query = prepared_query($check_mail,$sql_host,[$email])->get_result();
      return mysqli_fetch_assoc($mail_query);
 }
-function un_login($link,$user_name){
-    unset($_SESSION[$user_name]);
-    header("Location: ".$link);
-}

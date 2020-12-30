@@ -47,8 +47,4 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         die();
     }
 }          
-if(!isset($_SESSION['user_name'])){
-    $_SESSION['user_name'] = null;
-    $is_auth = 0;
-}
-show_page('add.html.php',"Добавление лота",['errors' => $errors],$categorys,$is_auth,$_SESSION['user_name']);                                            
+show_page('add.html.php',"Добавление лота",['errors' => $errors],$categorys,$is_auth,$user_name);                                            
