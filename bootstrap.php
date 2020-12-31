@@ -8,13 +8,12 @@ error_reporting(E_ALL);
 $con = mysqli_connect($db_host,$db_name,$db_password,$db_database);
 mysqli_set_charset($con, "utf8mb4");
 
-$is_auth = 1; //Временно rand(0, 1);
-$user_name = 'Дмитрий';
-
+session_start();
+$is_auth = 0;
+$user_name = "None";
 $select_categories =
     "SELECT categories.*
     FROM categories";
-
 $result = $con->query($select_categories);
 $categorys = [];
 while ($row = $result -> fetch_assoc()){
