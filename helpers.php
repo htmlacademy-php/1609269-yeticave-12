@@ -243,7 +243,7 @@ function move_file($file_name,$fime_tmp,$folder){
 
 function check_input($field_info,$min,$max,$filter = FILTER_DEFAULT,$input = INPUT_POST){
     $value = filter_input($input,$field_info);
-    $length = strlen($value);
+    $length = mb_strlen($value);
     if($value !== false and !$length){
         return "Обязательное поле!";
     }
@@ -253,13 +253,7 @@ function check_input($field_info,$min,$max,$filter = FILTER_DEFAULT,$input = INP
             return "Необходимо ввести целое число от $min до $max"; 
         }
     }
-    if($filter === FILTER_VALIDATE_EMAIL){
-        $value = explode('@',$value)[0];
-        if($value === false or strlen($value)<$min or strlen($value>$max)){ 
-            return "Необходимо ввести верный email"; 
-        }
-    }
-    if($value === false or strlen($value)<$min or strlen($value)>$max){ 
+    else if($value === false or mb_strlen($value)<$min or mb_strlen($value)>$max){ 
         return "Необходимо ввести от $min до $max символов"; 
     }
 }
