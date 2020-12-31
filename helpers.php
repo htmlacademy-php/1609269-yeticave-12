@@ -176,9 +176,9 @@ function page_404($is_auth,$categorys,$user_name){
 }
 
 //показ страницы
-function show_page($tempates_name,$title_name,$content_array = [],$categorys,$is_auth = 1, $user_name = 'Дмитрий'){
+function show_page($tempates_name,$title_name,$content_array = [],$categorys,$is_auth, $user_name){
     $content = include_template($tempates_name,array_merge(['categorys' => $categorys],$content_array));
-    $page = include_template("layout.php",['content' => $content,
+    $page = include_template("layout.php",[ 'content' => $content,
                                             'categorys' => $categorys,
                                             'is_auth' => $is_auth,
                                             'title_name' => $title_name,
@@ -243,7 +243,7 @@ function move_file($file_name,$fime_tmp,$folder){
 
 function check_input($field_info,$min,$max,$filter = FILTER_DEFAULT,$input = INPUT_POST){
     $value = filter_input($input,$field_info);
-    $length = strlen($value);
+    $length = mb_strlen($value);
     if($value !== false and !$length){
         return "Обязательное поле!";
     }
@@ -253,7 +253,7 @@ function check_input($field_info,$min,$max,$filter = FILTER_DEFAULT,$input = INP
             return "Необходимо ввести целое число от $min до $max"; 
         }
     }
-    elseif($value === false or strlen($value)<$min or strlen($value)>$max){ 
+    else if($value === false or mb_strlen($value)<$min or mb_strlen($value)>$max){ 
         return "Необходимо ввести от $min до $max символов"; 
     }
 }
@@ -265,4 +265,12 @@ function check_input_category($category,$categorys,$input = INPUT_POST){
     if(!isset($categorys[$category])){ 
         return 'Неправильно выбрана категория'; 
     }
+}
+function select_user_by_email($email,$sql_host){
+    $check_mail =
+    "SELECT email
+     FROM users
+     WHERE email = ?";
+     $mail_query = prepared_query($check_mail,$sql_host,[$email])->get_result();
+     return mysqli_fetch_assoc($mail_query);
 }
