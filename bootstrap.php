@@ -9,8 +9,16 @@ $con = mysqli_connect($db_host,$db_name,$db_password,$db_database);
 mysqli_set_charset($con, "utf8mb4");
 
 session_start();
-$is_auth = 0;
-$user_name = "None";
+print($_SESSION['user_name']);
+if(isset($_GET['un_login'])){
+    $_SESSION['user_name'] = null;
+    header("Location: /".$_SESSION['link']);
+    die();
+}
+print($_SESSION['user_name']);
+if(isset($_GET['un_login'])){print("<br>"."1");}
+$_SESSION['link'] = $_SERVER['REQUEST_URI'];
+$is_auth = 1;
 $select_categories =
     "SELECT categories.*
     FROM categories";
