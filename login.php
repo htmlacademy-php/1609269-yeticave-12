@@ -1,5 +1,7 @@
 <?php 
 include(__DIR__."/bootstrap.php");
+$_SESSION['user_name'] = null;
+$is_auth = 0;
 $errors = [];
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $errors['email'] = check_input('email',1,320,FILTER_VALIDATE_EMAIL);
@@ -17,14 +19,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         }else{
             $is_auth = 1;
             $_SESSION['user_name'] = $user['name'];
+            $_SESSION['id'] = $user['id'];
             header('Location: '.$_SESSION['link']);
             die();
         }
     }
-}
-if(!isset($_SESSION['user_name'])){
-    $is_auth = 0;
-}else{
-    page_403($is_auth,$categorys,$_SESSION['user_name']);
 }
 show_page('login.html.php','Вход',['errors' => $errors],$categorys,$is_auth,$_SESSION['user_name']);

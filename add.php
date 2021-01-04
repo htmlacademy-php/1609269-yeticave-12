@@ -27,7 +27,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                             date("Y-m-d H:i:s"),
                             $_POST['lot-name'],
                             $_POST['message'],
-                            0,
+                            $_SESSION['id'],
                             0,
                             $_POST['category'],
                             'None',
