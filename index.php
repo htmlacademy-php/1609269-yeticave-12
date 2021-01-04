@@ -19,7 +19,6 @@ $select_lots =
 $products = mysqli_fetch_all(mysqli_query($con,$select_lots),MYSQLI_ASSOC);
 
 if(!isset($_SESSION['user_name'])){
-    $_SESSION['user_name'] = null;
     $is_auth = 0;
 }
 show_page("main.php","Главная",['products' =>$products],$categorys,$is_auth,$_SESSION['user_name']);

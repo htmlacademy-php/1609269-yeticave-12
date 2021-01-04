@@ -37,11 +37,10 @@ $products = mysqli_fetch_assoc($products_query);
 $bids =  mysqli_fetch_all($bids_query,MYSQLI_ASSOC);
 
 if(!isset($_SESSION['user_name'])){
-    $_SESSION['user_name'] = null;
     $is_auth = 0;
 }
 if(!$products){
-    page_404($is_auth,$categorys,$user_name);
+    page_404($is_auth,$categorys,$_SESSION['user_name']);
 }else{
     show_page("lot.html.php",$products['name'],['products' =>$products,'bids' => $bids],$categorys,$is_auth,$_SESSION['user_name']);
 }

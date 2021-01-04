@@ -11,6 +11,7 @@
         <div class="lot-item__right">
         <?php list($hours,$min) = diff_time($products['date_completion'])?>
         <?php $finishing = ($hours<1) ? "timer--finishing" : "" ?>
+<?php if($is_auth):?>
           <div class="lot-item__state">
               <div class="lot-item__timer timer <?=$finishing?>">
                 <?= e($hours.":".$min)?>
@@ -33,7 +34,7 @@
               <button type="submit" class="button">Сделать ставку</button>
             </form>
           </div>
-
+<?php endif;?>
 <?php if(count($bids) != 0):?>
           <div class="history">
             <h3>История ставок (<span><?=e(count($bids))?></span>)</h3>

@@ -27,7 +27,7 @@
         <div class="user-menu__logged">
         <p><?= $user_name?></p>
         <a class="user-menu__bets" href="#">Мои ставки</a>
-        <a class="user-menu__logout" href="?un_login">Выход</a>
+        <a class="user-menu__logout" href="<?=$_SESSION['un_login']?>">Выход</a>
        </div>
         <?php else:?>
             <ul class="user-menu__list">

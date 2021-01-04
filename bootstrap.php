@@ -9,15 +9,13 @@ $con = mysqli_connect($db_host,$db_name,$db_password,$db_database);
 mysqli_set_charset($con, "utf8mb4");
 
 session_start();
-print($_SESSION['user_name']);
 if(isset($_GET['un_login'])){
     $_SESSION['user_name'] = null;
     header("Location: /".$_SESSION['link']);
     die();
 }
-print($_SESSION['user_name']);
-if(isset($_GET['un_login'])){print("<br>"."1");}
-$_SESSION['link'] = $_SERVER['REQUEST_URI'];
+$_SESSION['link'] =  ($_SERVER['REQUEST_URI'] == "/login.php" or $_SERVER['REQUEST_URI'] == "/sign-up.php") ?$_SESSION['link']:str_replace("/","",($_SERVER['REQUEST_URI']));
+$_SESSION['un_login'] = $_SESSION['link'].((stristr($_SESSION['link'],"?")) ? "&un_login":"?un_login");
 $is_auth = 1;
 $select_categories =
     "SELECT categories.*
