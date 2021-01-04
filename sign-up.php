@@ -22,6 +22,6 @@ if(!isset($_SESSION['user_name'])){
     $is_auth = 0;
 }
 else{
-    page_404($is_auth,$categorys,$_SESSION['user_name']);
+    page_403($is_auth,$categorys,$_SESSION['user_name']);
 }
 show_page('sign-up.html.php','Регистрация нового аккаунта',['errors' => $errors],$categorys,$is_auth,$_SESSION['user_name']);

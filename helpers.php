@@ -174,6 +174,18 @@ function page_404($is_auth,$categorys,$user_name){
                                         'user_name' => $user_name]);
     print($page);
 }
+function page_403($is_auth,$categorys,$user_name){
+    http_response_code(403);
+    $title_name = 'Файл не найден';
+    $content = include_template("403.php",[]);
+    $page = include_template("layout.php",['content' => $content,
+                                        'is_auth' => $is_auth,
+                                        'categorys' => $categorys,
+                                        'title_name' => $title_name,
+                                        'user_name' => $user_name]);
+    print($page);
+}
+
 
 //показ страницы
 function show_page($tempates_name,$title_name,$content_array = [],$categorys,$is_auth, $user_name){
