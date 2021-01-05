@@ -11,7 +11,7 @@ mysqli_set_charset($con, "utf8mb4");
 session_start();
 
 if(isset($_GET['un_login'])){
-    $_SESSION['user_name'] = null;
+    un_login(['auth_token','login'],['user_name','id',]);
     header("Location: /".$_SESSION['link']);
     die();
 }
@@ -19,22 +19,13 @@ $_SESSION['link'] = (!isset($_SESSION['link'])) ? "index.php" : $_SESSION['link'
 $_SESSION['link'] =  ($_SERVER['REQUEST_URI'] == "/login.php" or $_SERVER['REQUEST_URI'] == "/sign-up.php") ?$_SESSION['link']:str_replace("/","",($_SERVER['REQUEST_URI']));
 $_SESSION['un_login'] = $_SESSION['link'].((stristr($_SESSION['link'],"?")) ? "&un_login":"?un_login");
 
-if(!isset($_SESSION['user_name'])){
-    if(isset($_COOKIE['auth_token']) and isset($_COOKIE['login'])){
-        $select_users_by_token = 
-       "SELECT users.*
-        FROM users
-        WHERE email = ? 
-        AND auth_token = ?";
-        $user_query = prepared_query($select_users_by_token,$con,[$_COOKIE['login'],$_COOKIE['auth_token']])->get_result();
-        $user = mysqli_fetch_assoc($user_query);
-        if($user){
-            $_SESSION['user_name'] = $user['name'];
-            $_SESSION['id'] = $user['id'];
-        }
+if(!isset($_SESSION['user_name']) and isset($_COOKIE['login']) and isset($_COOKIE['auth_token'])){
+    $user = select_user_by_token($_COOKIE['login'],$_COOKIE['auth_token'],$con);
+    if($user){
+        $_SESSION['user_name'] = $user['name'];
+        $_SESSION['id'] = $user['id'];
     }
 }
-$is_auth = 1;
 $select_categories =
     "SELECT categories.*
     FROM categories";

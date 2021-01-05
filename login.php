@@ -1,7 +1,6 @@
 <?php 
 include(__DIR__."/bootstrap.php");
 $_SESSION['user_name'] = null;
-$is_auth = 0;
 $errors = [];
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $errors['email'] = check_input('email',1,320,FILTER_VALIDATE_EMAIL);
@@ -25,7 +24,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             prepared_query($update_token,$con,[$auth_token,$_POST['email']]);
             setcookie("login",$user['email'],strtotime('+1 years'),"/");
             setcookie("auth_token",$auth_token,strtotime('+1 years'),"/");
-            $is_auth = 1;
             $_SESSION['user_name'] = $user['name'];
             $_SESSION['id'] = $user['id'];
             header('Location: '.$_SESSION['link']);
@@ -33,4 +31,4 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         }
     }
 }
-show_page('login.html.php','Вход',['errors' => $errors],$categorys,$is_auth,$_SESSION['user_name']);
+show_page('login.html.php','Вход',['errors' => $errors],$categorys);

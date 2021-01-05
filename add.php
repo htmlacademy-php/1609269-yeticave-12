@@ -48,8 +48,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     }
 }    
 if(!isset($_SESSION['user_name'])){
-    $is_auth = 0;
     header("Location: /login.php");
     die();
 }     
-show_page('add.html.php',"Добавление лота",['errors' => $errors],$categorys,$is_auth,$_SESSION['user_name']);                                              
+show_page('add.html.php',"Добавление лота",['errors' => $errors],$categorys);                                              

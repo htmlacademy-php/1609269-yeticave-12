@@ -1,7 +1,7 @@
 <?php
 include(__DIR__.'/bootstrap.php');
 if(empty($_GET['id'])){
-    page_404($is_auth,$categorys,$_SESSION['user_name']);
+    page_404($categorys);
 }else{
     $id = $_GET['id'];
 }
@@ -36,11 +36,8 @@ $bids_query = prepared_query($select_bids,$con,[$id])->get_result();
 $products = mysqli_fetch_assoc($products_query);
 $bids =  mysqli_fetch_all($bids_query,MYSQLI_ASSOC);
 
-if(!isset($_SESSION['user_name'])){
-    $is_auth = 0;
-}
 if(!$products){
-    page_404($is_auth,$categorys,$_SESSION['user_name']);
+    page_404($categorys);
 }else{
-    show_page("lot.html.php",$products['name'],['products' =>$products,'bids' => $bids],$categorys,$is_auth,$_SESSION['user_name']);
+    show_page("lot.html.php",$products['name'],['products' =>$products,'bids' => $bids],$categorys);
 }

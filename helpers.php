@@ -163,38 +163,53 @@ function prepared_query($sql_query,$msqli,$passed_variables=[],$types_variables 
 }
 
 //показ ошибки 404
-function page_404($is_auth,$categorys,$user_name){
+function page_404($categorys){
     http_response_code(404);
-    $title_name = 'Файл не найден';
-    $content = include_template("404.php",[]);
-    $page = include_template("layout.php",['content' => $content,
-                                        'is_auth' => $is_auth,
-                                        'categorys' => $categorys,
-                                        'title_name' => $title_name,
-                                        'user_name' => $user_name]);
-    print($page);
-}
-function page_403($is_auth,$categorys,$user_name){
-    http_response_code(403);
+    $is_auth = 1;
+    if(!isset($_SESSION['user_name'])){
+        $is_auth = 0;
+        $_SESSION['user_name'] = null;
+    }
     $title_name = 'Файл не найден';
     $content = include_template("403.php",[]);
-    $page = include_template("layout.php",['content' => $content,
-                                        'is_auth' => $is_auth,
-                                        'categorys' => $categorys,
-                                        'title_name' => $title_name,
-                                        'user_name' => $user_name]);
+    $page = include_template("layout.php",[ 'content' => $content,
+                                            'is_auth' => $is_auth,
+                                            'categorys' => $categorys,
+                                            'title_name' => $title_name,
+                                            'user_name' => $_SESSION['user_name']]);
+    print($page);
+}
+function page_403($categorys){
+    http_response_code(403);
+    $is_auth = 1;
+    if(!isset($_SESSION['user_name'])){
+        $is_auth = 0;
+        $_SESSION['user_name'] = null;
+    }
+    $title_name = 'Файл не найден';
+    $content = include_template("403.php",[]);
+    $page = include_template("layout.php",[ 'content' => $content,
+                                            'is_auth' => $is_auth,
+                                            'categorys' => $categorys,
+                                            'title_name' => $title_name,
+                                            'user_name' => $_SESSION['user_name']]);
     print($page);
 }
 
 
 //показ страницы
-function show_page($tempates_name,$title_name,$content_array = [],$categorys,$is_auth, $user_name){
+function show_page($tempates_name,$title_name,$content_array = [],$categorys){
+    $is_auth = 1;
+    if(!isset($_SESSION['user_name'])){
+        $is_auth = 0;
+        $_SESSION['user_name'] = null;
+    }
     $content = include_template($tempates_name,array_merge(['categorys' => $categorys,'is_auth' => $is_auth],$content_array));
     $page = include_template("layout.php",[ 'content' => $content,
                                             'categorys' => $categorys,
                                             'is_auth' => $is_auth,
                                             'title_name' => $title_name,
-                                            'user_name' => $user_name]);
+                                            'user_name' => $_SESSION['user_name']]);
     print($page);
 }
 
@@ -280,13 +295,27 @@ function check_input_category($category,$categorys,$input = INPUT_POST){
 }
 function select_user_by_email($email,$sql_host){
     $check_mail =
-    "SELECT email
+    "SELECT users.*
      FROM users
      WHERE email = ?";
      $mail_query = prepared_query($check_mail,$sql_host,[$email])->get_result();
      return mysqli_fetch_assoc($mail_query);
 }
-function un_login($link,$user_name){
-    unset($_SESSION[$user_name]);
-    header("Location: ".$link);
+function select_user_by_token($email,$auth_token,$sql_host){
+    $select_user_by_token = 
+   "SELECT users.*
+    FROM users
+    WHERE email = ? 
+    AND auth_token = ?";
+    $user_query = prepared_query($select_user_by_token,$sql_host,[$email,$auth_token])->get_result();
+    return mysqli_fetch_assoc($user_query);
+}
+function un_login($cookies = [],$sessions = []){
+    foreach($cookies as $cookie){
+        unset($_COOKIE[$cookie]);
+        setcookie($cookie, null, -1, '/');
+    }
+    foreach($sessions as $session){
+        unset($_SESSION[$session]);
+    }
 }

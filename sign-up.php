@@ -18,10 +18,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         die();
     }
 }
-if(!isset($_SESSION['user_name'])){
-    $is_auth = 0;
+if(isset($_SESSION['user_name'])){
+    page_403($categorys);
 }
-else{
-    page_403($is_auth,$categorys,$_SESSION['user_name']);
-}
-show_page('sign-up.html.php','Регистрация нового аккаунта',['errors' => $errors],$categorys,$is_auth,$_SESSION['user_name']);
+show_page('sign-up.html.php','Регистрация нового аккаунта',['errors' => $errors],$categorys);
