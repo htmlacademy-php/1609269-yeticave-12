@@ -1,9 +1,8 @@
 <?php
 include(__DIR__."/bootstrap.php");
 if(!isset($_SESSION['user']['name'])){
-    header("Location: /login.php");
-    die();
-}    
+    page_403($categorys);
+}
 $errors = []; 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $errors['lot-name'] = check_input('lot-name',5,100);  
