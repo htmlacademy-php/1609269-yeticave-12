@@ -11,43 +11,18 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $errors['lot-img'] = check_input_file('lot-img',10,['jpeg','jpg','png'],['image/jpeg','image/png']);
     $errors = array_filter($errors);
     if(!$errors){
-        $insert_add_pos=
-        "INSERT INTO lots  (date_create,
-                            name,
-                            description,
-                            user_id,
-                            winner_id,
-                            category_id,
-                            img_link,
-                            start_price,
-                            date_completion,
-                            step_rate)
-        VALUES (?,?,?,?,?,?,?,?,?,?);";
-        prepared_query($insert_add_pos,$con,[
-                            date("Y-m-d H:i:s"),
-                            $_POST['lot-name'],
-                            $_POST['message'],
-                            $_SESSION['id'],
-                            0,
-                            $_POST['category'],
-                            'None',
-                            $_POST['lot-rate'],
-                            $_POST['lot-date'],
-                            $_POST['lot-step']]);   
+        insert_new_lot($con,date("Y-m-d H:i:s"),$_POST['lot-name'],$_POST['message'],$_SESSION['user']['id'],0,$_POST['category'],'None',$_POST['lot-rate'],
+                       $_POST['lot-date'],$_POST['lot-step']); 
         $id =  mysqli_insert_id($con);
         $file_name = $id.".".pathinfo(trim($_FILES['lot-img']['name']), PATHINFO_EXTENSION);
         move_file($file_name,$_FILES['lot-img']['tmp_name'],'uploads');
         $file_url = '/uploads/'.$file_name;
-        $update_file_link=
-            "UPDATE lots
-            SET lots.img_link = ?
-            WHERE lots.id = ?";
-        prepared_query($update_file_link,$con,[$file_url,$id]);
+        update_file_link($id,$file_url,$con);
         header("Location: /lot.php?id=".$id);
         die();
     }
 }    
-if(!isset($_SESSION['user_name'])){
+if(!isset($_SESSION['user']['name'])){
     header("Location: /login.php");
     die();
 }     

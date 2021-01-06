@@ -166,9 +166,9 @@ function prepared_query($sql_query,$msqli,$passed_variables=[],$types_variables 
 function page_404($categorys){
     http_response_code(404);
     $is_auth = 1;
-    if(!isset($_SESSION['user_name'])){
+    if(!isset($_SESSION['user']['name'])){
         $is_auth = 0;
-        $_SESSION['user_name'] = null;
+        $_SESSION['user']['name'] = null;
     }
     $title_name = 'Файл не найден';
     $content = include_template("403.php",[]);
@@ -176,15 +176,15 @@ function page_404($categorys){
                                             'is_auth' => $is_auth,
                                             'categorys' => $categorys,
                                             'title_name' => $title_name,
-                                            'user_name' => $_SESSION['user_name']]);
+                                            'user_name' => $_SESSION['user']['name']]);
     print($page);
 }
 function page_403($categorys){
     http_response_code(403);
     $is_auth = 1;
-    if(!isset($_SESSION['user_name'])){
+    if(!isset($_SESSION['user']['name'])){
         $is_auth = 0;
-        $_SESSION['user_name'] = null;
+        $_SESSION['user']['name'] = null;
     }
     $title_name = 'Файл не найден';
     $content = include_template("403.php",[]);
@@ -192,7 +192,7 @@ function page_403($categorys){
                                             'is_auth' => $is_auth,
                                             'categorys' => $categorys,
                                             'title_name' => $title_name,
-                                            'user_name' => $_SESSION['user_name']]);
+                                            'user_name' => $_SESSION['user']['name']]);
     print($page);
 }
 
@@ -200,16 +200,16 @@ function page_403($categorys){
 //показ страницы
 function show_page($tempates_name,$title_name,$content_array = [],$categorys){
     $is_auth = 1;
-    if(!isset($_SESSION['user_name'])){
+    if(!isset($_SESSION['user']['name'])){
         $is_auth = 0;
-        $_SESSION['user_name'] = null;
+        $_SESSION['user']['name'] = null;
     }
     $content = include_template($tempates_name,array_merge(['categorys' => $categorys,'is_auth' => $is_auth],$content_array));
     $page = include_template("layout.php",[ 'content' => $content,
                                             'categorys' => $categorys,
                                             'is_auth' => $is_auth,
                                             'title_name' => $title_name,
-                                            'user_name' => $_SESSION['user_name']]);
+                                            'user_name' => $_SESSION['user']['name']]);
     print($page);
 }
 
@@ -310,12 +310,100 @@ function select_user_by_token($email,$auth_token,$sql_host){
     $user_query = prepared_query($select_user_by_token,$sql_host,[$email,$auth_token])->get_result();
     return mysqli_fetch_assoc($user_query);
 }
+function select_lots_by_id($id,$sql_host){
+    $select_lots = 
+    "SELECT lots.id ,name,start_price,img_link,
+    MAX(COALESCE(bids.price,lots.start_price)) AS price, 
+    date_completion ,category,description, 
+    MAX(COALESCE(bids.price,lots.start_price)) + step_rate AS min_bid
+
+    FROM lots
+    LEFT JOIN bids
+    ON lots.id = bids.lot_id
+
+    LEFT JOIN categories
+    ON lots.category_id = categories.id
+
+    WHERE lots.id = ?
+    GROUP BY lots.id
+    ORDER BY lots.date_create DESC;";
+    $products_query = prepared_query($select_lots,$sql_host,[$id])->get_result();
+    return mysqli_fetch_assoc($products_query);
+}
+function select_lots($sql_host){
+    $select_lots = 
+    "SELECT lots.id ,name,start_price,img_link,
+    MAX(COALESCE(bids.price,lots.start_price)) AS price, 
+    date_completion ,category
+
+    FROM lots
+    LEFT JOIN bids
+    ON lots.id = bids.lot_id
+
+    LEFT JOIN categories
+    ON lots.category_id = categories.id
+
+    WHERE lots.date_completion >= NOW()
+    GROUP BY lots.id
+    ORDER BY lots.date_create DESC;";
+    return mysqli_fetch_all(mysqli_query($sql_host,$select_lots),MYSQLI_ASSOC);
+}
+function select_bids_by_id($id,$sql_host){
+    $select_bids = 
+    "SELECT bids.date_create, bids.price ,users.name
+    FROM bids
+    JOIN users
+    ON users.id = bids.user_id
+    WHERE bids.lot_id = ?
+    ORDER BY bids.date_create DESC;";
+    $bids_query = prepared_query($select_bids,$sql_host,[$id])->get_result();
+    return mysqli_fetch_all($bids_query,MYSQLI_ASSOC);;
+}
+function insert_new_lot($sql_host,$date,$name,$description,$user_id,$winner_id,$category_id,$img_link,$start_price,$date_completion,$step_rate){
+    $insert_add_pos=
+    "INSERT INTO lots  (date_create,
+                        name,
+                        description,
+                        user_id,
+                        winner_id,
+                        category_id,
+                        img_link,
+                        start_price,
+                        date_completion,
+                        step_rate)
+    VALUES (?,?,?,?,?,?,?,?,?,?);";
+    prepared_query($insert_add_pos,$sql_host,[
+                        $date,
+                        $name,
+                        $description,
+                        $user_id,
+                        $winner_id,
+                        $category_id,
+                        $img_link,
+                        $start_price,
+                        $date_completion,
+                        $step_rate]);   
+}
+function update_file_link($id,$file_url,$sql_host){
+    $update_file_link=
+    "UPDATE lots
+    SET img_link = ?
+    WHERE id = ?";
+    prepared_query($update_file_link,$sql_host,[$file_url,$id]);
+}
+function update_token($auth_token,$email,$sql_host){
+    $update_token = 
+    "UPDATE users
+     SET auth_token = ?
+     WHERE email = ?";
+     prepared_query($update_token,$sql_host,[$auth_token,$email]);
+}
 function un_login($cookies = [],$sessions = []){
     foreach($cookies as $cookie){
         unset($_COOKIE[$cookie]);
         setcookie($cookie, null, -1, '/');
     }
     foreach($sessions as $session){
-        unset($_SESSION[$session]);
+        unset($_SESSION['user'][$session]);
     }
 }

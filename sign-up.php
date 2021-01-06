@@ -13,12 +13,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         VALUES (?,?,?,?,?)";
         prepared_query($insert_new_user,$con,[date("Y-m-d H:i:s"),$_POST['email'],$_POST['name'],
                                               password_hash($_POST['password'],PASSWORD_DEFAULT), $_POST['message']]);
-        $_SESSION['user_name'] = $_POST['name'];
+        $_SESSION['user']['name'] = $_POST['name'];
         header('Location: /index.php');
         die();
     }
 }
-if(isset($_SESSION['user_name'])){
+if(isset($_SESSION['user']['name'])){
     page_403($categorys);
 }
 show_page('sign-up.html.php','Регистрация нового аккаунта',['errors' => $errors],$categorys);
