@@ -11,11 +11,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         if(!password_verify($_POST['password'],$user['password'])){
             $errors['password'] = "Неверный пароль!";
         }else{
-            $auth_token = bin2hex(random_bytes(30));
-            update_token($auth_token,$_POST['email'],$con);
-            setcookie("login",$user['email'],strtotime('+1 years'),"/");
-            setcookie("auth_token",$auth_token,strtotime('+1 years'),"/");
-            $_SESSION['user'] = $user;
+            update_token($_POST['email'],$con);
             header('Location: '.$_SESSION['link']);
             die();
         }

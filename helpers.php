@@ -384,6 +384,12 @@ function insert_new_lot($sql_host,$date,$name,$description,$user_id,$winner_id,$
                         $date_completion,
                         $step_rate]);   
 }
+function insert_new_user($sql_host,$date,$email,$name,$hash_password,$message){
+    $insert_new_user = 
+    "INSERT INTO users(date_create,email,name,password,сontact)  
+     VALUES (?,?,?,?,?)";
+     prepared_query($insert_new_user,$sql_host,[$date,$email,$name,$hash_password,$message]);
+}
 function update_file_link($id,$file_url,$sql_host){
     $update_file_link=
     "UPDATE lots
@@ -391,12 +397,15 @@ function update_file_link($id,$file_url,$sql_host){
     WHERE id = ?";
     prepared_query($update_file_link,$sql_host,[$file_url,$id]);
 }
-function update_token($auth_token,$email,$sql_host){
+function update_token($email,$sql_host,$len_token = 30){
+    $auth_token = bin2hex(random_bytes($len_token));
     $update_token = 
     "UPDATE users
      SET auth_token = ?
      WHERE email = ?";
      prepared_query($update_token,$sql_host,[$auth_token,$email]);
+     setcookie("login",$email,strtotime('+1 years'),"/");
+     setcookie("auth_token",$auth_token,strtotime('+1 years'),"/");
 }
 function un_login($cookies = [],$sessions = []){
     foreach($cookies as $cookie){

@@ -8,12 +8,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $errors['name'] = check_input('name',1,30);
     $errors['message'] = check_input('message',0,2000);
     if(!array_filter($errors)){
-        $insert_new_user = 
-       "INSERT INTO users(date_create,email,name,password,сontact)  
-        VALUES (?,?,?,?,?)";
-        prepared_query($insert_new_user,$con,[date("Y-m-d H:i:s"),$_POST['email'],$_POST['name'],
-                                              password_hash($_POST['password'],PASSWORD_DEFAULT), $_POST['message']]);
-        $_SESSION['user']['name'] = $_POST['name'];
+        insert_new_user($con,date("Y-m-d H:i:s"),$_POST['email'],$_POST['name'],password_hash($_POST['password'],PASSWORD_DEFAULT),$_POST['message']);
+        update_token($_POST['email'],$con);
         header('Location: /index.php');
         die();
     }
