@@ -310,7 +310,7 @@ function select_user_by_token($email,$auth_token,$sql_host){
     $user_query = prepared_query($select_user_by_token,$sql_host,[$email,$auth_token])->get_result();
     return mysqli_fetch_assoc($user_query);
 }
-function select_lots_by_id($id,$sql_host){
+function select_lot_by_id($id,$sql_host){
     $select_lots = 
     "SELECT lots.id ,name,start_price,img_link,
     MAX(COALESCE(bids.price,lots.start_price)) AS price, 
@@ -413,6 +413,6 @@ function un_login($cookies = [],$sessions = []){
         setcookie($cookie, null, -1, '/');
     }
     foreach($sessions as $session){
-        unset($_SESSION['user'][$session]);
+        unset($_SESSION[$session]);
     }
 }

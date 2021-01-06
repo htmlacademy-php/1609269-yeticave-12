@@ -6,9 +6,9 @@ if(empty($_GET['id'])){
     $id = $_GET['id'];
 }
 $bids = select_bids_by_id($id,$con);
-$products = select_lots_by_id($id,$con);
-if(!$products){
+$lot = select_lot_by_id($id,$con);
+if(!$lot){
     page_404($categorys);
 }else{
-    show_page("lot.html.php",$products['name'],['products' =>$products,'bids' => $bids],$categorys);
+    show_page("lot.html.php",$lot['name'],['lot' =>$lot,'bids' => $bids],$categorys);
 }

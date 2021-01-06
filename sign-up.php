@@ -1,5 +1,8 @@
 <?php
 include(__DIR__.'/bootstrap.php');
+if(isset($_SESSION['user']['name'])){
+    page_403($categorys);
+}
 $errors = [];
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $errors['email'] = check_input('email',1,320,FILTER_VALIDATE_EMAIL);
@@ -10,11 +13,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     if(!array_filter($errors)){
         insert_new_user($con,date("Y-m-d H:i:s"),$_POST['email'],$_POST['name'],password_hash($_POST['password'],PASSWORD_DEFAULT),$_POST['message']);
         update_token($_POST['email'],$con);
-        header('Location: /index.php');
+        header('Location: '.$_SESSION['link']);
         die();
     }
-}
-if(isset($_SESSION['user']['name'])){
-    page_403($categorys);
 }
 show_page('sign-up.html.php','Регистрация нового аккаунта',['errors' => $errors],$categorys);

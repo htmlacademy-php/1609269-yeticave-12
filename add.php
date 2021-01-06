@@ -1,6 +1,10 @@
 <?php
 include(__DIR__."/bootstrap.php");
-$errors = [];
+if(!isset($_SESSION['user']['name'])){
+    header("Location: /login.php");
+    die();
+}    
+$errors = []; 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $errors['lot-name'] = check_input('lot-name',5,100);  
     $errors['message'] = check_input('message',5,3000);   
@@ -22,8 +26,4 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         die();
     }
 }    
-if(!isset($_SESSION['user']['name'])){
-    header("Location: /login.php");
-    die();
-}     
 show_page('add.html.php',"Добавление лота",['errors' => $errors],$categorys);                                              
