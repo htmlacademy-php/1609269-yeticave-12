@@ -39,7 +39,8 @@ CREATE TABLE users
    email varchar(255) not null UNIQUE,
    name varchar(255) not null,
    password varchar(255) not null,
-   сontact varchar(255) not null
+   сontact varchar(255) not null,
+   auth_token varchar(255)
 )CHARACTER SET utf8mb4;
 
 CREATE INDEX lot_name ON lots(name);
