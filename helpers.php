@@ -181,7 +181,7 @@ function page_403($categorys,$text){
         $is_auth = 0;
         $_SESSION['user']['name'] = null;
     }
-    $title_name = 'Файл не найден';
+    $title_name = 'Страница недоступна';
     $content = include_template("403.php",['text' => $text]);
     $page = include_template("layout.php",[ 'content' => $content,
                                             'is_auth' => $is_auth,

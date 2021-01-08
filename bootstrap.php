@@ -1,8 +1,8 @@
 <?php
-include(__DIR__."/helpers.php");
-include(__DIR__."/form_validation.php");
-include(__DIR__."/sql_models.php");
-include(__DIR__."/config.php");
+require __DIR__."/helpers.php";
+require __DIR__."/form_validation.php";
+require __DIR__."/sql_models.php";
+require __DIR__."/config.php";
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 ini_set('display_errors',1);
 error_reporting(E_ALL);
@@ -12,10 +12,10 @@ mysqli_set_charset($con, "utf8mb4");
 
 session_start();
 $_SESSION['link'] = (!isset($_SESSION['link'])) ? "index.php" : $_SESSION['link'];
-$_SESSION['link'] =  ($_SERVER['REQUEST_URI'] == "/login.php" or $_SERVER['REQUEST_URI'] == "/sign-up.php") ? $_SESSION['link']:$_SERVER['REQUEST_URI'];
+$_SESSION['link'] = (in_array($_SERVER['REQUEST_URI'],["/login.php","/sign-up.php","/logout.php"]))? $_SESSION['link']:$_SERVER['REQUEST_URI'];
 if(!isset($_SESSION['user']['name']) and isset($_COOKIE['login']) and isset($_COOKIE['auth_token'])){
     $user = select_user_by_token($_COOKIE['login'],$_COOKIE['auth_token'],$con);
-    $_SESSION['user'] = ($user) ? $user:null;
+    $_SESSION['user'] = ($user !== null) ? $user:null;
 }
 $select_categories =
     "SELECT categories.*

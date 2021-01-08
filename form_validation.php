@@ -15,7 +15,7 @@ function check_input($field_info,$min,$max,$filter = FILTER_DEFAULT,$input = INP
         return "Обязательное поле!";
     }
     $value = filter_input($input,$field_info,$filter);
-    if(!$value){
+    if($value === false){
         return "Введите корректные данные!";
     }
     if($filter === FILTER_VALIDATE_INT){
