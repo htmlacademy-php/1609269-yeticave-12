@@ -1,7 +1,7 @@
 <?php
 include(__DIR__."/bootstrap.php");
 if(!isset($_SESSION['user']['name'])){
-    page_403($categorys);
+    page_403($categorys,'Для доступа к данному ресурсу необходимо авторизоваться');
 }
 $errors = []; 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
@@ -14,8 +14,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $errors['lot-img'] = check_input_file('lot-img',10,['jpeg','jpg','png'],['image/jpeg','image/png']);
     $errors = array_filter($errors);
     if(!$errors){
-        insert_new_lot($con,date("Y-m-d H:i:s"),$_POST['lot-name'],$_POST['message'],$_SESSION['user']['id'],0,$_POST['category'],'None',$_POST['lot-rate'],
-                       $_POST['lot-date'],$_POST['lot-step']); 
+        insert_new_lot($con); 
         $id =  mysqli_insert_id($con);
         $file_name = $id.".".pathinfo(trim($_FILES['lot-img']['name']), PATHINFO_EXTENSION);
         move_file($file_name,$_FILES['lot-img']['tmp_name'],'uploads');

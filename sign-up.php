@@ -1,7 +1,7 @@
 <?php
 include(__DIR__.'/bootstrap.php');
 if(isset($_SESSION['user']['name'])){
-    page_403($categorys);
+    page_403($categorys,"Для доступа к данному ресурсу необходимо выйти с аккаунта.");
 }
 $errors = [];
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
@@ -11,7 +11,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $errors['name'] = check_input('name',1,30);
     $errors['message'] = check_input('message',0,2000);
     if(!array_filter($errors)){
-        insert_new_user($con,date("Y-m-d H:i:s"),$_POST['email'],$_POST['name'],password_hash($_POST['password'],PASSWORD_DEFAULT),$_POST['message']);
+        insert_new_user($con);
         update_token($_POST['email'],$con);
         header('Location: '.$_SESSION['link']);
         die();
