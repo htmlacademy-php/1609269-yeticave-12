@@ -1,16 +1,17 @@
     <section class="lot-item container">
-      <h2><?=e($products['name'])?></h2>
+      <h2><?=e($lot['name'])?></h2>
       <div class="lot-item__content">
         <div class="lot-item__left">
           <div class="lot-item__image">
-            <img src="<?=$products['img_link']?>" width="730" height="548" alt="Сноуборд">
+            <img src="<?=e($lot['img_link'])?>" width="730" height="548" alt="Сноуборд">
           </div>
-          <p class="lot-item__category">Категория: <span><?=e($products['category'])?></span></p>
-          <p class="lot-item__description"><?=$products['description']?></p>
+          <p class="lot-item__category">Категория: <span><?=e($lot['category'])?></span></p>
+          <p class="lot-item__description"><?=e($lot['description'])?></p>
         </div>
         <div class="lot-item__right">
-        <?php list($hours,$min) = diff_time($products['date_completion'])?>
+        <?php list($hours,$min) = diff_time($lot['date_completion'])?>
         <?php $finishing = ($hours<1) ? "timer--finishing" : "" ?>
+<?php if($is_auth):?>
           <div class="lot-item__state">
               <div class="lot-item__timer timer <?=$finishing?>">
                 <?= e($hours.":".$min)?>
@@ -18,22 +19,22 @@
             <div class="lot-item__cost-state">
               <div class="lot-item__rate">
                 <span class="lot-item__amount">Текущая цена</span>
-                <span class="lot-item__cost"><?=e(price_format($products["price"]))?></span>
+                <span class="lot-item__cost"><?=e(price_format($lot["price"]))?></span>
               </div>
               <div class="lot-item__min-cost">
-                Мин. ставка <span><?=e(price_format($products["min_bid"]))?></span>
+                Мин. ставка <span><?=e(price_format($lot["min_bid"]))?></span>
               </div>
             </div>
             <form class="lot-item__form" action="https://echo.htmlacademy.ru" method="post" autocomplete="off">
               <p class="lot-item__form-item form__item form__item--invalid">
                 <label for="cost">Ваша ставка</label>
-                <input id="cost" type="text" name="cost" placeholder="<?=$products["min_bid"]?>">
+                <input id="cost" type="text" name="cost" placeholder="<?=e($lot["min_bid"])?>">
                 <span class="form__error">Введите наименование лота</span>
               </p>
               <button type="submit" class="button">Сделать ставку</button>
             </form>
           </div>
-
+<?php endif;?>
 <?php if(count($bids) != 0):?>
           <div class="history">
             <h3>История ставок (<span><?=e(count($bids))?></span>)</h3>

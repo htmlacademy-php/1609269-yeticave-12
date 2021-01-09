@@ -5,6 +5,7 @@
     <title><?=$title_name?></title>
     <link href="../css/normalize.min.css" rel="stylesheet">
     <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/flatpickr.min.css" rel="stylesheet">
 </head>
 <body>
 <div class="page-wrapper">
@@ -20,14 +21,12 @@
             <input class="main-header__search-btn" type="submit" name="find" value="Найти">
         </form>
         <a class="main-header__add-lot button" href="add.php">Добавить лот</a>
-
-        <nav class="user-menu">
-
         <?php if($is_auth == 1):?>
+        <nav class="user-menu">
         <div class="user-menu__logged">
         <p><?= $user_name?></p>
         <a class="user-menu__bets" href="#">Мои ставки</a>
-        <a class="user-menu__logout" href="?un_login">Выход</a>
+        <a class="user-menu__logout" href="<?="logout.php"?>">Выход</a>
        </div>
         <?php else:?>
             <ul class="user-menu__list">
@@ -111,7 +110,7 @@
     </div>
 </footer>
 
-<!--<script src="flatpickr.js"></script> -->
+<script src="flatpickr.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
