@@ -18,7 +18,7 @@
         </a>
         <form class="main-header__search" method="get" action="/search.php" autocomplete="off">
             <input type="search" name="search" placeholder="Поиск лота" value = "<?=e($_SESSION['search'] ?? "")?>">
-            <input class="main-header__search-btn" type="submit"> <!-- name="find" value="Найти" -->
+            <input class="main-header__search-btn" type="submit">
         </form>
         <a class="main-header__add-lot button" href="add.php">Добавить лот</a>
         <?php if($is_auth == 1):?>

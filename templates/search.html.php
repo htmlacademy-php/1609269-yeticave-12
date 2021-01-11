@@ -2,9 +2,9 @@
     <div class="container">
         <section class="lots">
             <?php if($lots):?>
-                <h2>Результаты поиска по запросу «<span><?=e($_GET['search'])?></span>»</h2>
+                <h3>Результаты поиска по запросу «<span><?=e($_GET['search'])?></span>»</h3>
             <?php else:?>
-                <h2>По запросу «<span><?=e($_GET['search'])?></span>» ничего не найдено!</h2>
+                <h3>По запросу «<span><?=e($_GET['search'])?></span>» ничего не найдено!</h3>
                 <p>Попробуйте ввести другой запрос или <a href = "index.php">перейдите в каталог</a>!</p>
             <?php endif;?>
             <ul class="lots__list">
@@ -19,7 +19,7 @@
                 <div class="lot__state">
                     <div class="lot__rate">
                     <span class="lot__amount">Стартовая цена</span>
-                    <span class="lot__cost"><?=e(price_format($lot['start_price']))?></span>
+                    <span class="lot__cost"><?=e(price_format($lot['price']))?></span>
                     </div>
                     <?php list($hours,$min) = diff_time($lot['date_completion'])?>
                     <div class="lot__timer timer <?=($hours<1) ? "timer--finishing" : "" ?>"><?=e($hours.":".$min)?>
@@ -31,10 +31,14 @@
         </section>
         <?php if($lots):?>
         <ul class="pagination-list">
-            <li class="pagination-item pagination-item-prev"><a>Назад</a></li>
-            <li class="pagination-item pagination-item-active"><a>1</a></li>
-            <li class="pagination-item"><a href="#">2</a></li>
-            <li class="pagination-item pagination-item-next"><a href="#">Вперед</a></li>
+            <li class="pagination-item pagination-item-prev">
+                <a <?=($_GET['page'] - 1 >= 1) ?'href="search.php?page='.($_GET['page']-1).'"':null?>>Назад</a></li>
+            <?php for($i = 0; $i < $count_page;$i++):?>
+            <li class="pagination-item <?=($_GET['page'] - 1 == $i) ? 'pagination-item-active':null?>">
+                <a <?='href="search.php?page='.($i+1).'"'?>><?=e($i + 1)?></a></li>
+            <?php endfor;?>
+            <li class="pagination-item pagination-item-next">
+                <a <?=($_GET['page'] + 1 <= $count_page) ?'href="search.php?page='.($_GET['page']+1).'"':null?>>Вперед</a></li>
         </ul>
         <?php endif;?>
     </div>

@@ -166,7 +166,7 @@ function page_404($categorys){
         $_SESSION['user']['name'] = null;
     }
     $title_name = 'Файл не найден';
-    $content = include_template("403.php",[]);
+    $content = include_template("404.php",[]);
     $page = include_template("layout.php",[ 'content' => $content,
                                             'is_auth' => $is_auth,
                                             'categorys' => $categorys,
