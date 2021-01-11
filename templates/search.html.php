@@ -5,6 +5,7 @@
                 <h2>Результаты поиска по запросу «<span><?=e($_GET['search'])?></span>»</h2>
             <?php else:?>
                 <h2>По запросу «<span><?=e($_GET['search'])?></span>» ничего не найдено!</h2>
+                <p>Попробуйте ввести другой запрос или <a href = "index.php">перейдите в каталог</a>!</p>
             <?php endif;?>
             <ul class="lots__list">
             <?php foreach($lots as $lot):?>
@@ -28,11 +29,13 @@
             <?php endforeach;?>
             </ul>
         </section>
+        <?php if($lots):?>
         <ul class="pagination-list">
             <li class="pagination-item pagination-item-prev"><a>Назад</a></li>
             <li class="pagination-item pagination-item-active"><a>1</a></li>
             <li class="pagination-item"><a href="#">2</a></li>
             <li class="pagination-item pagination-item-next"><a href="#">Вперед</a></li>
         </ul>
+        <?php endif;?>
     </div>
 </main>
