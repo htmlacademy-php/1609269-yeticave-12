@@ -1,7 +1,11 @@
 <main>
     <div class="container">
         <section class="lots">
-            <h2>Результаты поиска по запросу «<span><?=e($_GET['search'])?></span>»</h2>
+            <?php if($lots):?>
+                <h2>Результаты поиска по запросу «<span><?=e($_GET['search'])?></span>»</h2>
+            <?php else:?>
+                <h2>По запросу «<span><?=e($_GET['search'])?></span>» ничего не найдено!</h2>
+            <?php endif;?>
             <ul class="lots__list">
             <?php foreach($lots as $lot):?>
             <li class="lots__item lot">
@@ -10,7 +14,7 @@
                 </div>
                 <div class="lot__info">
                 <span class="lot__category"><?=e($lot['category'])?></span>
-                <h3 class="lot__title"><a class="text-link" href="lot.html"><?=e($lot['name'])?></a></h3>
+                <h3 class="lot__title"><a class="text-link" href="lot.php?id=<?=e($lot['id'])?>"><?=e($lot['name'])?></a></h3>
                 <div class="lot__state">
                     <div class="lot__rate">
                     <span class="lot__amount">Стартовая цена</span>
