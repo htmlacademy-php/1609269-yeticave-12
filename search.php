@@ -1,6 +1,5 @@
 <?php
 include(__DIR__.'/bootstrap.php');
-$products = select_lots($con);
 if(empty($_GET['search'])){
     header("Location: /index.php");
     die();
