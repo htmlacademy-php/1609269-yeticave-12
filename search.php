@@ -5,9 +5,7 @@ if(empty($_GET['search']) and !isset($_SESSION['search'])){
     die();
 };
 $_GET['page'] = (isset($_GET['page']) and $_GET['page'] > 0) ? $_GET['page']: 1;
-$_GET['search'] = ($_GET['search']) ?? $_SESSION['search'];
-$_SESSION['search'] = $_GET['search'];
-$limit = (!empty($_GET['limit']) and $_GET['limit'] > 0) ? $_GET['limit']: 6;
+$_GET['limit'] = (isset($_GET['limit']) and $_GET['limit'] > 0) ? $_GET['limit']: 6;
 
 
 $search = explode(" ",$_GET['search']);
@@ -30,14 +28,13 @@ $search_query =
 
 $founding_lots = prepared_query($search_query,$con,$search)->get_result();
 $lots = mysqli_fetch_all($founding_lots,MYSQLI_ASSOC);
-$count_page = ceil(count($lots)/$limit);
-
+$count_page = ceil(count($lots)/$_GET['limit']);
 if($_GET['page'] > $count_page){
     page_404($categorys);
 }
 
 $search_with_limit = $search_query." LIMIT ? OFFSET ?";
-$founding_lots_limit = prepared_query($search_with_limit,$con,array_merge($search,[$limit,($_GET['page']-1)*$limit]))->get_result();
+$founding_lots_limit = prepared_query($search_with_limit,$con,array_merge($search,[$_GET['limit'],($_GET['page']-1)*$_GET['limit']]))->get_result();
 $lots = mysqli_fetch_all($founding_lots_limit,MYSQLI_ASSOC);
 
 show_page("search.html.php","Результат поиска",['lots' =>$lots,'count_page' => $count_page],$categorys);
