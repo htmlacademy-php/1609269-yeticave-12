@@ -7,9 +7,6 @@ if(empty($_GET['search']) and !isset($_SESSION['search'])){
 $page = (isset($_GET['page']) and $_GET['page'] > 0) ? $_GET['page']: 1;
 $limit = (isset($_GET['limit']) and $_GET['limit'] > 0) ? $_GET['limit']: 6;
 $search = str_replace(["+","-","<",">","(",")","~","*",'"'],"",$_GET['search']);
-if(!trim($search)){
-    $search = null;
-}
 $search = preg_replace('/([^ ]+)/', '+$1*', $search);
 $search_query = 
 "SELECT COUNT(*) as count
