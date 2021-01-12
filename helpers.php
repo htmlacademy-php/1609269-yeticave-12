@@ -196,11 +196,8 @@ function show_page($tempates_name,$title_name,$content_array = [],$categorys){
         $is_auth = 0;
         $_SESSION['user']['name'] = null;
     }
-    $link = explode("?",$_SESSION['link']);
-    $_SESSION['search'] = (isset($_SESSION['search']) and $link[0] == "/search.php") ? $_SESSION['search']: null;
     $content = include_template($tempates_name,array_merge(['categorys' => $categorys,'is_auth' => $is_auth],$content_array));
     $page = include_template("layout.php",[ 'content' => $content,
-                                            'search' => $_SESSION['search'],
                                             'categorys' => $categorys,
                                             'is_auth' => $is_auth,
                                             'title_name' => $title_name,

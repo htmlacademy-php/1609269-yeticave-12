@@ -32,13 +32,13 @@
         <?php if($lots):?>
         <ul class="pagination-list">
             <li class="pagination-item pagination-item-prev">
-                <a <?=($_GET['page'] - 1 >= 1) ?'href="search.php?page='.($_GET['page']-1)."&limit=".$_GET['limit']."&search=".$_GET['search'].'"':null?>>Назад</a></li>
-            <?php for($i = 0; $i < $count_page;$i++):?>
-            <li class="pagination-item <?=($_GET['page']-1 == $i) ? 'pagination-item-active':null?>">
-                <a <?='href="search.php?page='.($i+1).'&search='.$_GET['search'].'&limit='.$_GET['limit'].'"'?>><?=e($i + 1)?></a></li>
-            <?php endfor;?>
+            <?=($page - 1 >= 1) ? '<a href="search.php?'.e($http($page-1)).'">Назад</a></li>':""?>
+                <?php for($i = 1; $i <= $count_page;$i++):?>
+                <li class="pagination-item <?=e(($page == $i) ? 'pagination-item-active':"")?>">
+                    <a <?='href="search.php?'.e($http($i)).'"'?>><?=e($i)?></a></li>
+                <?php endfor;?>
             <li class="pagination-item pagination-item-next">
-                <a <?=($_GET['page']+1 <= $count_page) ?'href="search.php?page='.($_GET['page']+1)."&limit=".$_GET['limit']."&search=".$_GET['search'].'"':null?>>Вперед</a></li>
+            <?=($page + 1 > $count_page) ? "":'<a href="search.php?'.e($http($page+1)).'">Вперед</a></li>'?>
         </ul>
         <?php endif;?>
     </div>
