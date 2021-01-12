@@ -6,36 +6,43 @@ if(empty($_GET['search']) and !isset($_SESSION['search'])){
 }
 $page = (isset($_GET['page']) and $_GET['page'] > 0) ? $_GET['page']: 1;
 $limit = (isset($_GET['limit']) and $_GET['limit'] > 0) ? $_GET['limit']: 6;
-$search = explode(" ",$_GET['search']);
-for($i = 0;$i < count($search);$i++){
-    $search[$i] = str_replace(["+","-","<",">","(",")","~","*",'"'],"",$search[$i]);
-    $search[$i] = (!$search[$i])? "":$search[$i]."*";
+$search = str_replace(["+","-","<",">","(",")","~","*",'"'],"",$_GET['search']);
+if(!trim($search)){
+    $search = null;
 }
+$search = explode(" ",preg_replace("/\s+/u", " ", $search));
+$count = count($search);
+for($i = 0;$i < $count;$i++){
+    if(!$search[$i]){
+        unset($search[$i]);
+    }else{
+        $search[$i] = "+".$search[$i]."*";
+    }
+}
+$search = implode(' ',$search);
 $search_query = 
 "SELECT COUNT(*) as count
-FROM lots
-WHERE lots.id IN(
+ FROM lots
+ WHERE lots.id IN(
     SELECT lots.id
     FROM lots
-    WHERE MATCH(lots.name, lots.description) AGAINST(? IN BOOLEAN MODE)".str_repeat(
-    " AND MATCH(lots.name, lots.description) AGAINST(? IN BOOLEAN MODE)",count($search) - 1).
-    " GROUP BY lots.id)";
-$founding_lots = prepared_query($search_query,$con,$search)->get_result();
+    WHERE MATCH(lots.name, lots.description) AGAINST(? IN BOOLEAN MODE)
+    GROUP BY lots.id)";
+$founding_lots = prepared_query($search_query,$con,[$search])->get_result();
 $count_lots = mysqli_fetch_assoc($founding_lots);
 $count_page = ceil($count_lots['count']/$limit);
 $search_with_limit = 
 "SELECT *,category, MAX(COALESCE(bids.price,lots.start_price)) AS price
-FROM lots
-LEFT JOIN bids
-ON lots.id = bids.lot_id
-LEFT JOIN categories
-ON lots.category_id = categories.id
-WHERE MATCH(lots.name, lots.description) AGAINST(? IN BOOLEAN MODE) ".str_repeat(
-" AND MATCH(lots.name, lots.description) AGAINST(? IN BOOLEAN MODE) ",count($search) - 1).
-"GROUP BY lots.id
-LIMIT ? 
-OFFSET ?";
-$founding_lots_limit = prepared_query($search_with_limit,$con,array_merge($search,[$limit,($page-1)*$limit]))->get_result();
+ FROM lots
+ LEFT JOIN bids
+ ON lots.id = bids.lot_id
+ LEFT JOIN categories
+ ON lots.category_id = categories.id
+ WHERE MATCH(lots.name, lots.description) AGAINST(? IN BOOLEAN MODE)
+ GROUP BY lots.id
+ LIMIT ? 
+ OFFSET ?";
+$founding_lots_limit = prepared_query($search_with_limit,$con,array_merge([$search],[$limit,($page-1)*$limit]))->get_result();
 $lots = mysqli_fetch_all($founding_lots_limit,MYSQLI_ASSOC);
 if($page > $count_page and $count_page > 0){
     page_404($categorys);
