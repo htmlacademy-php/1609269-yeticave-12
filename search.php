@@ -8,7 +8,8 @@ $page = (isset($_GET['page']) and $_GET['page'] > 0) ? $_GET['page']: 1;
 $limit = (isset($_GET['limit']) and $_GET['limit'] > 0) ? $_GET['limit']: 6;
 $search = explode(" ",$_GET['search']);
 for($i = 0;$i < count($search);$i++){
-    $search[$i] = $search[$i]."*";
+    $search[$i] = str_replace(["+","-","<",">","(",")","~","*",'"'],"",$search[$i]);
+    $search[$i] = (!$search[$i])? "":$search[$i]."*";
 }
 $search_query = 
 "SELECT COUNT(*) as count
