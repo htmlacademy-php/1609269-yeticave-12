@@ -35,7 +35,7 @@ function check_input_file($img,$mb_limit = 5, $extensions,$mime){
             return "Файл не должен превышать ".$mb_limit." мб";
         }else{        
             $ext = pathinfo(trim($_FILES[$img]['name']), PATHINFO_EXTENSION);
-            if(!in_array($ext,$extensions)){
+            if(!in_array(mb_strtolower($ext),$extensions)){
                 return "Файл может иметь формат(ы): ".implode(",",$extensions).", а не ".$ext;
             }
             $finfo = finfo_open(FILEINFO_MIME_TYPE);

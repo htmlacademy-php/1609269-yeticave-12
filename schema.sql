@@ -54,3 +54,5 @@ CREATE INDEX user_id ON bids(user_id);
 CREATE INDEX user_email ON users(email);
 CREATE INDEX user_name ON users(name);
 CREATE INDEX user_сontact ON users(сontact);
+
+CREATE FULLTEXT INDEX lot_search ON lots(name,description);

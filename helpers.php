@@ -166,7 +166,7 @@ function page_404($categorys){
         $_SESSION['user']['name'] = null;
     }
     $title_name = 'Файл не найден';
-    $content = include_template("403.php",[]);
+    $content = include_template("404.php",[]);
     $page = include_template("layout.php",[ 'content' => $content,
                                             'is_auth' => $is_auth,
                                             'categorys' => $categorys,
@@ -219,4 +219,7 @@ function un_login($cookies = [],$sessions = []){
     foreach($sessions as $session){
         unset($_SESSION[$session]);
     }
+}
+function http_creator($page,$limit,$search){
+    return http_build_query(['page' => $page,'limit' => $limit,'search' => $search]);
 }
