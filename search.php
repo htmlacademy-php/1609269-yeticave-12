@@ -18,12 +18,7 @@ if($page > $count_page and $count_page > 0){
     page_404($categorys);
 } 
 $lots = select_lots_by_search_query($con,$search_query,$limit,$page);
-
-$http = function($page) use ($limit){
-    return http_build_query(['page' => $page,'limit' => $limit,'search' => $_GET['search']]);
-};
 show_page("search.html.php","Результат поиска",['lots' =>$lots,
-                                                'http' =>$http,
                                                 'count_page' => $count_page,
                                                 'page' => $page,
                                                 'limit' => $limit],$categorys);
