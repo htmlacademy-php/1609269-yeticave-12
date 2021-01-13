@@ -3,7 +3,7 @@
       <h2>Мои ставки</h2>
       <table class="rates__list">
         <?php foreach($bids as $bid):?>
-        <tr class="rates__item <?=(!date_end($bid['date_completion'])) ? "rates__item--end" :""?>">       
+        <tr class="rates__item <?=(!$bid['lot_status']) ? "rates__item--end" :""?>">       
         <!-- rates__item--end , rates__item--win-->
           <td class="rates__info">
             <div class="rates__img">
@@ -11,13 +11,13 @@
             </div>
             <div>
                 <h3 class="rates__title"><a href="lot.html"><?=e($bid['name'])?></a></h3>
-                <p><?=($bid['contact']) ?? "";?></p>
+                <p><?=e(($bid['сontact']) ?? "")?></p>
         </div>
           </td>
           <td class="rates__category"><?=e($categorys[$bid['category_id']]['category'])?></td>
           <td class="rates__timer">
                 <?php list($hours,$min) = diff_time($bid['date_completion'])?>
-                <div class="timer<?=($hours<1) ? " timer--finishing " : "" ?><?=(date("Y-m-d h:i:s",strtotime($bid['date_completion']))<date("Y-m-d h:i:s")) ? " timer--end " :""?>">
+                <div class="timer<?=($hours<1 and $hours > 0) ? " timer--finishing " : "" ?><?=(!$bid['lot_status']) ? " timer--end " :""?>">
                     <?=e($hours.":".$min)?></div></td> <!-- timer--end timer--wind -->
           <td class="rates__price"><?=e(price_format($bid['price']))?></td>
           <td class="rates__time"><?=e($bid['date_create'])?></td>
