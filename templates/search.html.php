@@ -32,13 +32,13 @@
         <?php if($lots):?>
         <ul class="pagination-list">
             <li class="pagination-item pagination-item-prev">
-            <?=($page != 1) ? '<a href="search.php?'.e(http_creator($page-1,$limit)).'">Назад</a></li>':""?>
+            <?=($page != 1) ? '<a href="search.php?'.e(http_creator($page-1,$limit,$_GET['search'])).'">Назад</a></li>':""?>
                 <?php for($i = 1; $i <= $count_page;$i++):?>
                 <li class="pagination-item <?=e(($page == $i) ? 'pagination-item-active':"")?>">
-                    <a <?='href="search.php?'.e(http_creator($i,$limit)).'"'?>><?=e($i)?></a></li>
+                    <a <?='href="search.php?'.e(http_creator($i,$limit,$_GET['search'])).'"'?>><?=e($i)?></a></li>
                 <?php endfor;?>
             <li class="pagination-item pagination-item-next">
-            <?=($page >= $count_page) ? "":'<a href="search.php?'.e(http_creator($page+1,$limit)).'">Вперед</a></li>'?>
+            <?=($page >= $count_page) ? "":'<a href="search.php?'.e(http_creator($page+1,$limit,$_GET['search'])).'">Вперед</a></li>'?>
         </ul>
         <?php endif;?>
     </div>
