@@ -38,7 +38,7 @@ function select_lot_by_id($id,$sql_host){
 }
 function select_lots($sql_host){
     $select_lots = 
-    "SELECT lots.id ,name,start_price,img_link,
+    "SELECT lots.id ,lots.date_create,name,start_price,img_link,
     MAX(COALESCE(bids.price,lots.start_price)) AS price, 
     date_completion ,category
 
