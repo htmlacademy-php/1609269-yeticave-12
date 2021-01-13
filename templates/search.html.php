@@ -14,7 +14,7 @@
                 <img src="<?=e($lot['img_link'])?>" width="350" height="260" alt="Сноуборд">
                 </div>
                 <div class="lot__info">
-                <span class="lot__category"><?=e($lot['category'])?></span>
+                <span class="lot__category"><?=e($categorys[$lot['category_id']]['category'])?></span>
                 <h3 class="lot__title"><a class="text-link" href="lot.php?id=<?=e($lot['id'])?>"><?=e($lot['name'])?></a></h3>
                 <div class="lot__state">
                     <div class="lot__rate">

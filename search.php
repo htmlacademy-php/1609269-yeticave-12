@@ -1,6 +1,6 @@
 <?php
 include(__DIR__.'/bootstrap.php');
-if(empty($_GET['search']) and !isset($_SESSION['search'])){
+if(empty($_GET['search'])){
     header("Location: /index.php");
     die();
 }
@@ -11,19 +11,14 @@ $search = preg_replace('/([^ ]+)/', '+$1*', $search);
 $search_query = 
 "SELECT COUNT(*) as count
  FROM lots
- WHERE MATCH(lots.name, lots.description) AGAINST(? IN BOOLEAN MODE)";
+ WHERE MATCH(lots.name, lots.description) AGAINST(? IN BOOLEAN MODE)" ;
 $founding_lots = prepared_query($search_query,$con,[$search])->get_result();
 $count_lots = mysqli_fetch_assoc($founding_lots);
 $count_page = ceil($count_lots['count']/$limit);
-$search_with_limit = 
-"SELECT *,category, MAX(COALESCE(bids.price,lots.start_price)) AS price
+$search_with_limit =
+"SELECT lots.*, COALESCE((SELECT max(price) FROM bids WHERE lot_id = lots.id),lots.start_price) AS price
  FROM lots
- LEFT JOIN bids
- ON lots.id = bids.lot_id
- LEFT JOIN categories
- ON lots.category_id = categories.id
  WHERE MATCH(lots.name, lots.description) AGAINST(? IN BOOLEAN MODE)
- GROUP BY lots.id
  LIMIT ? 
  OFFSET ?";
 $founding_lots_limit = prepared_query($search_with_limit,$con,[$search,$limit,($page-1)*$limit])->get_result();
