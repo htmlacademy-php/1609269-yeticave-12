@@ -113,3 +113,21 @@ function update_token($email,$sql_host,$len_token = 30){
      setcookie("login",$email,strtotime('+1 years'),"/");
      setcookie("auth_token",$auth_token,strtotime('+1 years'),"/");
 }
+function count_lots_by_search_query($sql_host,$search_query){
+    $sql_query = 
+    "SELECT COUNT(*) as count
+     FROM lots
+     WHERE MATCH(lots.name, lots.description) AGAINST(? IN BOOLEAN MODE)" ;
+    $founding_lots = prepared_query($sql_query,$sql_host,[$search_query])->get_result();
+    return mysqli_fetch_assoc($founding_lots)['count'];
+}
+function select_lots_by_search_query($sql_host,$search_query,$limit,$page){
+    $search_with_limit =
+    "SELECT lots.*, COALESCE((SELECT MAX(price) FROM bids WHERE lot_id = lots.id),lots.start_price) AS price
+     FROM lots
+     WHERE MATCH(lots.name, lots.description) AGAINST(? IN BOOLEAN MODE)
+     LIMIT ? 
+     OFFSET ?";
+    $founding_lots_limit = prepared_query($search_with_limit,$sql_host,[$search_query,$limit,($page-1)*$limit])->get_result();
+    return mysqli_fetch_all($founding_lots_limit,MYSQLI_ASSOC);
+}
