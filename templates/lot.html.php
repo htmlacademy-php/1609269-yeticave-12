@@ -26,10 +26,10 @@
               </div>
             </div>
             <form class="lot-item__form" action="<?=$_SESSION['link']?>" method="post" autocomplete="off">
-              <p class="lot-item__form-item form__item <?=($error) ? "form__item--invalid":""?>">
+              <p class="lot-item__form-item form__item <?=e(($error) ? "form__item--invalid":"")?>">
                 <label for="cost">Ваша ставка</label>
-                <input id="cost" type="text" name="cost" placeholder="<?=e($lot["min_bid"])?>">
-                <span class="form__error"> <?=($error) ?? ""?></span>
+                <input id="cost" type="text" name="cost" placeholder="<?=e($lot["min_bid"])?>" value='<?=e($_POST['cost'] ?? "")?>'>
+                <span class="form__error"> <?=e(($error) ?? "")?></span>
               </p>
               <button type="submit" class="button">Сделать ставку</button>
             </form>
@@ -45,7 +45,7 @@
                 <td class="history__price"><?=e($bid['price'])?></td>
                 <td class="history__time"><?=e($bid['date_create'])?></td>
               </tr>
-        <?php endforeach?>
+          <?php endforeach?>
             </table>
           </div>
         <?php endif?>

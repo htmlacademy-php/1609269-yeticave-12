@@ -9,7 +9,8 @@ $bids = select_bids_by_id($id,$con);
 $lot = select_lot_by_id($id,$con);
 $error = "";
 if($_SERVER['REQUEST_METHOD'] == "POST"){
-    $error = ($lot['min_bid'] > $_POST['cost']) ? "Ваша ставка ниже минимальной!":false;
+    $error = check_input('cost',1,10000000,FILTER_VALIDATE_INT);
+    $error = (!$error and $lot['min_bid'] > $_POST['cost']) ? "Ваша ставка ниже минимальной!":$error;
     if(!$error){
         $insert_bid =
        "INSERT INTO bids(date_create,price,lot_id,user_id)
