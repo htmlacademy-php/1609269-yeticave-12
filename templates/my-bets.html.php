@@ -11,7 +11,7 @@
             </div>
             <div>
                 <h3 class="rates__title"><a href="lot.php?id=<?=e($bid['lot_id'])?>"><?=e($bid['name'])?></a></h3>
-                <p><?=e(($bid['сontact']) ?? "")?></p>
+                <p><?=e(($bid['contact']) ?? "")?></p>
             </div>
           </td>
           <td class="rates__category"><?=e($categorys[$bid['category_id']]['category'])?></td>
@@ -33,5 +33,19 @@
         </tr>
         <?php endforeach;?>
       </table>
+      <?php if($bids and $count_page > 1):?>
+        <ul class="pagination-list">
+            <li class="pagination-item pagination-item-prev">
+            <?=($page != 1) ? '<a href="my-bets.php?'.e(http_creator($page-1,$limit)).'">Назад</a></li>':""?>
+                <?php for($i = 1; $i <= $count_page;$i++):?>
+                <li class="pagination-item <?=e(($page == $i) ? 'pagination-item-active':"")?>">
+                    <a <?='href="my-bets.php?'.e(http_creator($i,$limit)).'"'?>><?=e($i)?></a></li>
+                <?php endfor;?>
+            <li class="pagination-item pagination-item-next">
+            <?=($page >= $count_page) ? "":'<a href="my-bets.php?'.e(http_creator($page+1,$limit)).'">Вперед</a></li>'?>
+        </ul>
+      <?php else:?>
+        <p>У вас пока нет ставок!</p>
+      <?php endif;?>
     </section>
   </main>

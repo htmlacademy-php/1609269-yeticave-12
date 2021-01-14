@@ -220,6 +220,6 @@ function un_login($cookies = [],$sessions = []){
         unset($_SESSION[$session]);
     }
 }
-function http_creator($page,$limit,$search){
-    return http_build_query(['page' => $page,'limit' => $limit,'search' => $search]);
+function http_creator($page,$limit,$key =null,$value = null){
+    return http_build_query(['page' => $page,'limit' => $limit,$key => $value]);
 }
