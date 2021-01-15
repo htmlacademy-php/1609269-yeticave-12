@@ -1,5 +1,5 @@
 <?php 
-include(__DIR__."/bootstrap.php");
+include __DIR__."/bootstrap.php";
 $page = (isset($_GET['page']) and $_GET['page'] > 0) ? $_GET['page']: 1;
 $limit = (isset($_GET['limit']) and $_GET['limit'] > 0) ? $_GET['limit']: 6;
 
@@ -18,7 +18,7 @@ $sql_query=
 "SELECT id,name,img_link,category_id,date_completion,
 COALESCE((SELECT max(price) FROM bids WHERE bids.lot_id = lots.id),start_price) as price
 FROM lots
-WHERE lots.category_id = ?
+WHERE lots.category_id = ? AND lots.date_completion >= NOW()
 LIMIT ?
 OFFSET ?";
 $lots = prepared_query($sql_query,$con,[$_GET['id'],$limit,($page-1)*$limit])->get_result();
