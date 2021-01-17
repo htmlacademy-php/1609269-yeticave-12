@@ -2,9 +2,11 @@
     <section class="rates container">
       <h2>Мои ставки</h2>
       <table class="rates__list">
-        <?php foreach($bids as $bid):?>
-        <tr class="rates__item <?=(!$bid['lot_status']) ? "rates__item--end" :""?>">       
-          <!-- rates__item--end , rates__item--win-->
+        <?php foreach($bids as $bid):
+        $w = $bid['winner_id'];
+        $p = $bid['price'];
+        $m_p = $bid['max_price']?>
+        <tr class="rates__item <?=(!$w) ?"":(($_SESSION['user']['id'] == $w && $p == $m_p)?"rates__item--win":"rates__item--end")?>">       
           <td class="rates__info">
             <div class="rates__img">
               <img src="<?=e($bid['img_link'])?>" width="54" height="40" alt="Сноуборд">
@@ -18,18 +20,15 @@
 
           <td class="rates__timer">
                 <?php list($hours,$min) = diff_time($bid['date_completion']);
-                      $s = $bid['lot_status'];
-                      $p = $bid['price'];
-                      $m_p_user = $bid['max_price_1_user'];
-                if(!$bid['winner_id']):?>
-                <div class="timer <?=($hours<1) ? "timer--finishing" : ""?>">
-                      <?=e($hours.":".$min)?></div>
-                <?php elseif($_SESSION['user']['id'] == $bid['winner_id']):?>
+                if(!$w):?>
+                <div class="timer <?=($hours<1) ? "timer--finishing" : (($p == $m_p) ? "": "timer timer--end")?>">
+                      <?=($p == $m_p) ? e($hours.":".$min):"Вы изменили ставку"?></div>
+                <?php elseif($_SESSION['user']['id'] == $w):?>
                 <div class="timer timer--win">
-                      <?=($s) ? e($hours.":".$min) :(($p == $m_p_user) ?"Ставка выиграла":"Вы изменили ставку")?></div>
+                  <?=(!$w) ? e($hours.":".$min) :(($p == $m_p) ?"Ставка выиграла":"Вы изменили ставку")?></div>
                 <?php else:?>
                 <div class="timer timer--end">
-                <?=($s) ? e($hours.":".$min) :(($p == $m_p_user) ?"Ставка проиграла":"Вы изменили ставку")?></div>
+                  <?=(!$w) ? e($hours.":".$min) :(($p == $m_p) ?"Ставка проиграла":"Вы изменили ставку")?></div>
                 <?php endif;?>
             </td>
 
