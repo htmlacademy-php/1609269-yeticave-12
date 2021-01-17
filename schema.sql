@@ -15,7 +15,7 @@ CREATE TABLE lots
    name varchar(255) not null,
    description varchar(4096) not null,
    user_id int not null,
-   winner_id int not null,
+   winner_id int null DEFAULT NULL,
    category_id int not null,
    img_link varchar(255) not null,
    start_price int not null,

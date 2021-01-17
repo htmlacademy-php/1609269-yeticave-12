@@ -73,19 +73,17 @@ function insert_new_lot($sql_host){
                         name,
                         description,
                         user_id,
-                        winner_id,
                         category_id,
                         img_link,
                         start_price,
                         date_completion,
                         step_rate)
-    VALUES (?,?,?,?,?,?,?,?,?,?);";
+    VALUES (?,?,?,?,?,?,?,?,?);";
     prepared_query($insert_add_pos,$sql_host,[
                         date("Y-m-d H:i:s"),
                         $_POST['lot-name'],
                         $_POST['message'],
                         $_SESSION['user']['id'],
-                        0,
                         $_POST['category'],
                         'None',
                         $_POST['lot-rate'],

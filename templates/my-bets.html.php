@@ -19,12 +19,17 @@
           <td class="rates__timer">
                 <?php list($hours,$min) = diff_time($bid['date_completion']);
                       $s = $bid['lot_status'];
-                if($_SESSION['user']['id'] != $bid['winner_id']):?>
-                <div class="timer <?=($hours<1 && $s) ? "timer--finishing" : ((!$s) ? "timer--end" :"") ?>">
-                      <?=($s) ? e($hours.":".$min):"Торги окончены"?></div>
+                      $p = $bid['price'];
+                      $m_p_user = $bid['max_price_1_user'];
+                if(!$bid['winner_id']):?>
+                <div class="timer <?=($hours<1) ? "timer--finishing" : ""?>">
+                      <?=e($hours.":".$min)?></div>
+                <?php elseif($_SESSION['user']['id'] == $bid['winner_id']):?>
+                <div class="timer timer--win">
+                      <?=($s) ? e($hours.":".$min) :(($p == $m_p_user) ?"Ставка выиграла":"Вы изменили ставку")?></div>
                 <?php else:?>
-                <div class="timer <?=($hours<1 && $s) ? "timer--finishing" : ((!$s) ? "timer--win" :"") ?>">
-                      <?=($s) ? e($hours.":".$min) :"Ставка выиграла"?></div>
+                <div class="timer timer--end">
+                <?=($s) ? e($hours.":".$min) :(($p == $m_p_user) ?"Ставка проиграла":"Вы изменили ставку")?></div>
                 <?php endif;?>
             </td>
 
@@ -44,7 +49,7 @@
             <li class="pagination-item pagination-item-next">
             <?=($page >= $count_page) ? "":'<a href="my-bets.php?'.e(http_creator($page+1,$limit)).'">Вперед</a></li>'?>
         </ul>
-      <?php else:?>
+      <?php elseif(!$bids):?>
         <p>У вас пока нет ставок!</p>
       <?php endif;?>
     </section>

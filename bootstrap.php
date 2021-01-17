@@ -20,18 +20,16 @@ if(!isset($_SESSION['user']['name']) and isset($_COOKIE['login']) and isset($_CO
 
 //Определитель победителя
 $sql_query =
-"SELECT id 
-FROM lots 
-WHERE date_completion < NOW() AND winner_id = 0;
-
-SELECT user_id,MAX(price) 
-FROM bids 
-WHERE lot_id = (SELECT id FROM lots WHERE date_completion < NOW() AND winner_id = 0)
-GROUP BY price AND user_id;
-
-UPDATE lots
-SET winner_id = user_id";
-prepared_query($sql_query,$con);
+"UPDATE lots
+ SET winner_id = COALESCE((
+   SELECT user_id
+   FROM bids
+   WHERE lot_id = lots.id
+   ORDER BY price DESC
+   limit 1),user_id)
+ WHERE date_completion < NOW() AND winner_id IS NULL";
+$stmt = $con -> prepare($sql_query);
+$stmt->execute();
 
 $select_categories =
     "SELECT categories.*
