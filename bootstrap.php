@@ -9,6 +9,12 @@ error_reporting(E_ALL);
 $con = mysqli_connect($db_host,$db_name,$db_password,$db_database);
 mysqli_set_charset($con, "utf8mb4");
 
+if (ini_get('display_errors')) {
+    set_exception_handler(function ($e){
+        error_page(500);
+    });
+}
+
 session_start();
 //Создние якоря для переадресация пользователя на последнюю открытую им страницу перед логином или регистрацией
 $_SESSION['link'] = (!isset($_SESSION['link'])) ? "index.php" : $_SESSION['link'];
