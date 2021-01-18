@@ -5,8 +5,9 @@
         <?php foreach($bids as $bid):
         $w = $bid['winner_id'];
         $p = $bid['price'];
-        $m_p = $bid['max_price']?>
-        <tr class="rates__item <?=(!$w) ?"":(($_SESSION['user']['id'] == $w && $p == $m_p)?"rates__item--win":"rates__item--end")?>">       
+        $m_p = $bid['max_price'];
+        $m_p_s = $bid['max_price_same_user']?>
+        <tr class="rates__item <?=(!$w) ?"":(($_SESSION['user']['id'] == $w && $p == $m_p_s)?"rates__item--win":"rates__item--end")?>">       
           <td class="rates__info">
             <div class="rates__img">
               <img src="<?=e($bid['img_link'])?>" width="54" height="40" alt="Сноуборд">
@@ -21,18 +22,18 @@
           <td class="rates__timer">
                 <?php list($hours,$min) = diff_time($bid['date_completion']);
                 if(!$w):?>
-                <div class="timer <?=($hours<1) ? "timer--finishing" : (($p == $m_p) ? "": "timer timer--end")?>">
-                      <?=($p == $m_p) ? e($hours.":".$min):"Вы изменили ставку"?></div>
+                <div class="timer <?=($hours<1) ? "timer--finishing" : (($p == $m_p_s) ? "": "timer timer--end")?>">
+                      <?=($p == $m_p_s) ? e($hours.":".$min):"Вы изменили ставку"?></div>
                 <?php elseif($_SESSION['user']['id'] == $w):?>
                 <div class="timer timer--win">
-                  <?=(!$w) ? e($hours.":".$min) :(($p == $m_p) ?"Ставка выиграла":"Вы изменили ставку")?></div>
+                  <?=(!$w) ? e($hours.":".$min) :(($p == $m_p_s) ?"Ставка выиграла":"Вы изменили ставку")?></div>
                 <?php else:?>
                 <div class="timer timer--end">
-                  <?=(!$w) ? e($hours.":".$min) :(($p == $m_p) ?"Ставка проиграла":"Вы изменили ставку")?></div>
+                  <?=(!$w) ? e($hours.":".$min) :(($p == $m_p_s) ?"Ставка проиграла":"Вы изменили ставку")?></div>
                 <?php endif;?>
             </td>
 
-          <td class="rates__price " style="color : <?=($bid['price']==$bid['max_price'])?"green":"red"?>;"><?=e(price_format($bid['price']))?></td>
+          <td class="rates__price " style="color : <?=($p == $m_p)?"green":"red"?>;"><?=e(price_format($bid['price']))?></td>
           <td class="rates__time"><?=e($bid['date_create'])?></td>
         </tr>
         <?php endforeach;?>

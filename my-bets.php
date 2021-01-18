@@ -19,9 +19,10 @@ if($page > $count_page and $count_page > 0){
 
 $select_bids = 
 "SELECT bids.id,bids.date_create,bids.user_id,lots.id AS lot_id,lots.name,img_link,bids.price,date_completion,
-lots.category_id,users.name AS user,lots.winner_id,lots.user_id,
+lots.category_id,lots.winner_id,lots.user_id,
 IF(lots.date_completion > NOW(),1,0) AS lot_status,
-(SELECT MAX(price) FROM bids WHERE lot_id = lots.id AND bids.user_id = users.id) AS max_price,
+(SELECT MAX(price) FROM bids WHERE lot_id = lots.id) AS max_price,
+(SELECT MAX(price) FROM bids WHERE lot_id = lots.id AND bids.user_id = users.id) AS max_price_same_user,
 (SELECT сontact FROM users WHERE id = lots.user_id) AS contact
 
 FROM bids
