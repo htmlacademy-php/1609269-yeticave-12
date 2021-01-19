@@ -1,8 +1,10 @@
 <?php
+require __DIR__."/vendor/autoload.php";
 require __DIR__."/helpers.php";
 require __DIR__."/form_validation.php";
 require __DIR__."/sql_models.php";
 require __DIR__."/config.php";
+require __DIR__."/email.php";
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 ini_set('display_errors',1);
 error_reporting(E_ALL);
@@ -18,7 +20,7 @@ if(!isset($_SESSION['user']['name']) and isset($_COOKIE['login']) and isset($_CO
     $_SESSION['user'] = select_user_by_token($_COOKIE['login'],$_COOKIE['auth_token'],$con);
 }
 
-//Определитель победителя
+
 $sql_query =
 "UPDATE lots
  SET winner_id = COALESCE((
@@ -30,6 +32,23 @@ $sql_query =
  WHERE date_completion <= NOW() AND winner_id IS NULL";
 $stmt = $con -> prepare($sql_query);
 $stmt->execute();
+
+// Конфигурация траспорта
+$transport = (new Swift_SmtpTransport('phpdemo.ru', 25))
+                                     ->setUsername('keks@phpdemo.ru')
+                                     ->setPassword('htmlacademy');
+// Формирование сообщения
+$message = new Swift_Message("Просмотры вашей гифки");
+$message->setSubject('Ваша ставка победила');
+$message->setFrom("keks@phpdemo.ru","Yeti Cave");
+$email_content = require __DIR__."/email.php";
+$message->setTo(["apgrayedd@mail.ru"]);
+$message->setBody(message("1","2","3","4"););
+
+// Отправка сообщения
+$mailer = new Swift_Mailer($transport);
+$mailer->send($message);
+
 
 $select_categories =
     "SELECT categories.*
