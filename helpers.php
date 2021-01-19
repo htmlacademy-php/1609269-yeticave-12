@@ -149,7 +149,7 @@ function diff_time($time){
     $min = floor(((strtotime($time) - time())/3600 - $hours)*60);
     $hours = str_pad($hours,2,"0",STR_PAD_LEFT);
     $min = str_pad($min,2,'0',STR_PAD_LEFT);
-    return [$hours,$min,];
+    return [$hours,$min];
 }
 function prepared_query($sql_query,$msqli,$passed_variables=[],$types_variables =""){
     $types = $types_variables ?: str_repeat("s",count($passed_variables));
@@ -220,6 +220,6 @@ function un_login($cookies = [],$sessions = []){
         unset($_SESSION[$session]);
     }
 }
-function http_creator($page,$limit,$search){
-    return http_build_query(['page' => $page,'limit' => $limit,'search' => $search]);
+function http_creator($page,$limit,$key =null,$value = null){
+    return http_build_query(['page' => $page,'limit' => $limit,$key => $value]);
 }

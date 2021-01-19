@@ -2,6 +2,7 @@
 include(__DIR__.'/bootstrap.php');
 if(isset($_SESSION['user']['name'])){
     page_403($categorys,"Для доступа к данному ресурсу необходимо выйти с аккаунта.");
+    exit();
 }
 $errors = [];
 if($_SERVER['REQUEST_METHOD'] == 'POST'){

@@ -24,7 +24,7 @@
         <nav class="user-menu">
         <div class="user-menu__logged">
         <p><?= $user_name?></p>
-        <a class="user-menu__bets" href="#">Мои ставки</a>
+        <a class="user-menu__bets" href="my-bets.php">Мои ставки</a>
         <a class="user-menu__logout" href="<?="logout.php"?>">Выход</a>
        </div>
         <?php else:?>
@@ -46,8 +46,8 @@
     <nav class="nav">
       <ul class="nav__list container">
       <?php foreach($categorys as $category):?>
-        <li class="nav__item">
-          <a href="all-lots.html"><?=$category["category"]?></a>
+        <li class="nav__item <?=($_GET['id'] == $category["id"]) ? "nav__item--current":""?>">
+          <a href="all-lots.php?id=<?=e($category["id"])?>"><?=e($category["category"])?></a>
         </li>
         <?php endforeach;?>
       </ul>
@@ -61,8 +61,8 @@
     <nav class="nav">
       <ul class="nav__list container">
         <?php foreach($categorys as $category):?>
-        <li class="nav__item">
-          <a href="all-lots.html"><?=$category["category"]?></a>
+        <li class="nav__item <?=($_GET['id'] == $category["id"]) ? "nav__item--current":""?>">
+          <a href="all-lots.php?id=<?=e($category["id"])?>"><?=e($category["category"])?></a>
         </li>
         <?php endforeach;?>
       </ul>

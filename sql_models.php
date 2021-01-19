@@ -21,7 +21,8 @@ function select_lot_by_id($id,$sql_host){
     "SELECT lots.id ,name,start_price,img_link,
     MAX(COALESCE(bids.price,lots.start_price)) AS price, 
     date_completion ,category,description, 
-    MAX(COALESCE(bids.price,lots.start_price)) + step_rate AS min_bid
+    MAX(COALESCE(bids.price,lots.start_price)) + step_rate AS min_bid,
+    IF(lots.date_completion > NOW(),1,0) AS lot_status
 
     FROM lots
     LEFT JOIN bids
@@ -38,7 +39,7 @@ function select_lot_by_id($id,$sql_host){
 }
 function select_lots($sql_host){
     $select_lots = 
-    "SELECT lots.id ,name,start_price,img_link,
+    "SELECT lots.id ,lots.date_create,name,start_price,img_link,
     MAX(COALESCE(bids.price,lots.start_price)) AS price, 
     date_completion ,category
 
@@ -54,15 +55,16 @@ function select_lots($sql_host){
     ORDER BY lots.date_create DESC;";
     return mysqli_fetch_all(mysqli_query($sql_host,$select_lots),MYSQLI_ASSOC);
 }
-function select_bids_by_id($id,$sql_host){
+function select_bids_by_id($id,$sql_host,$limit = 10){
     $select_bids = 
     "SELECT bids.date_create, bids.price ,users.name
     FROM bids
     JOIN users
     ON users.id = bids.user_id
     WHERE bids.lot_id = ?
-    ORDER BY bids.date_create DESC;";
-    $bids_query = prepared_query($select_bids,$sql_host,[$id])->get_result();
+    ORDER BY bids.date_create DESC
+    limit ?;";
+    $bids_query = prepared_query($select_bids,$sql_host,[$id,$limit])->get_result();
     return mysqli_fetch_all($bids_query,MYSQLI_ASSOC);;
 }
 function insert_new_lot($sql_host){
@@ -71,19 +73,17 @@ function insert_new_lot($sql_host){
                         name,
                         description,
                         user_id,
-                        winner_id,
                         category_id,
                         img_link,
                         start_price,
                         date_completion,
                         step_rate)
-    VALUES (?,?,?,?,?,?,?,?,?,?);";
+    VALUES (?,?,?,?,?,?,?,?,?);";
     prepared_query($insert_add_pos,$sql_host,[
                         date("Y-m-d H:i:s"),
                         $_POST['lot-name'],
                         $_POST['message'],
                         $_SESSION['user']['id'],
-                        0,
                         $_POST['category'],
                         'None',
                         $_POST['lot-rate'],
