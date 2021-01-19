@@ -2,6 +2,7 @@
 include(__DIR__.'/bootstrap.php');
 if(empty($_GET['id'])){
     page_404($categorys);
+    exit();
 }else{
     $id = $_GET['id'];
 }
@@ -22,6 +23,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 }
 if(!$lot){
     page_404($categorys);
+    exit();
 }else{
     show_page("lot.html.php",$lot['name'],['lot' =>$lot,'bids' => $bids,'error' => $error],$categorys);
 }

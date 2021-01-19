@@ -12,6 +12,7 @@ $count_lots =  mysqli_fetch_assoc($founding_lots)['count'];
 $count_page = ceil($count_lots/$limit);
 if($page > $count_page and $count_page > 0){
     page_404($categorys);
+    exit();
 } 
 
 $sql_query=

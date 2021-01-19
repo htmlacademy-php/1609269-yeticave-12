@@ -14,7 +14,7 @@
             </div>
             <div>
                 <h3 class="rates__title"><a href="lot.php?id=<?=e($bid['lot_id'])?>"><?=e($bid['name'])?></a></h3>
-                <p><?=e(($bid['contact']) ?? "")?></p>
+                <p><?=($w && $_SESSION['user']['id'] == $w)? e($bid['contact']):""?></p>
             </div>
           </td>
           <td class="rates__category"><?=e($categorys[$bid['category_id']]['category'])?></td>

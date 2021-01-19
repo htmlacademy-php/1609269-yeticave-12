@@ -6,13 +6,6 @@ require __DIR__."/config.php";
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 ini_set('display_errors',1);
 error_reporting(E_ALL);
-if (ini_get('display_errors')) {
-    set_exception_handler(
-        function ($e){
-            error_page(500);
-        });
-}
-
 $con = mysqli_connect($db_host,$db_name,$db_password,$db_database);
 mysqli_set_charset($con, "utf8mb4");
 session_start();

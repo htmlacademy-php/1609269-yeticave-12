@@ -28,7 +28,7 @@
             <form class="lot-item__form" action="<?=$_SESSION['link']?>" method="post" autocomplete="off">
               <p class="lot-item__form-item form__item <?=e(($error) ? "form__item--invalid":"")?>">
                 <label for="cost">Ваша ставка</label>
-                <input id="cost" type="text" name="cost" placeholder="<?=e($lot["min_bid"])?>" value='<?=e($_POST['cost'] ?? "")?>'>
+                <input id="cost" type="text" name="cost" value='<?=e($_POST['cost'] ?? e($lot["min_bid"]))?>'>
                 <span class="form__error"> <?=e(($error) ?? "")?></span>
               </p>
               <button type="submit" class="button">Сделать ставку</button>
@@ -40,7 +40,7 @@
             <h3>Последние <span><?=e(count($bids))?></span> ставок(ка)</h3>
           <table class="history__list">
           <?php foreach($bids as $bid):?>
-              <tr class="history__item">
+              <tr class="history__item" <?=($_SESSION['user']['name'] == $bid['name']) ? 'style ="background-color:#FFFFE0"':""?>>
                 <td class="history__name"><?=e($bid['name'])?></td>
                 <td class="history__price"><?=e($bid['price'])?></td>
                 <td class="history__time"><?=e($bid['date_create'])?></td>

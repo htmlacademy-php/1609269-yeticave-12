@@ -16,6 +16,7 @@ $count_lots = count_lots_by_search_query($con,$search_query);
 $count_page = ceil($count_lots/$limit);
 if($page > $count_page and $count_page > 0){
     page_404($categorys);
+    exit();
 } 
 $lots = select_lots_by_search_query($con,$search_query,$limit,$page);
 show_page("search.html.php","Результат поиска",['lots' =>$lots,

@@ -2,6 +2,7 @@
 include __DIR__."/bootstrap.php";
 if(!isset($_SESSION['user']['name'])){
     page_403($categorys,'Для доступа к данному ресурсу необходимо <a href ="login.php">авторизоваться</a>');
+    exit();
 }
 $page = (isset($_GET['page']) and $_GET['page'] > 0) ? $_GET['page']: 1;
 $limit = (isset($_GET['limit']) and $_GET['limit'] > 0) ? $_GET['limit']: 10;
@@ -15,6 +16,7 @@ $count_bids =  mysqli_fetch_assoc($founding_bids)['count'];
 $count_page = ceil($count_bids/$limit);
 if($page > $count_page and $count_page > 0){
     page_404($categorys);
+    exit();
 } 
 
 $select_bids = 
@@ -34,7 +36,6 @@ LEFT JOIN lots
 ON bids.lot_id = lots.id
 
 WHERE bids.user_id = ?
-GROUP BY bids.id
 ORDER BY lot_status DESC,bids.date_create DESC
 limit ?
 OFFSET ?";
