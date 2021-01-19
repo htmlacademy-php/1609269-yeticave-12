@@ -1,6 +1,5 @@
 <?php
 require __DIR__."/bootstrap.php";
-print($_SERVER['HTTP_HOST']);
 $find_winners_query =
 "SELECT bids.user_id,users.name,lot_id,lots.name AS lot_name,email
  FROM bids
@@ -21,7 +20,7 @@ extract([$winners]);
 require __DIR__."/email.php";
 $page = ob_get_clean();
 
-$transport = (new Swift_SmtpTransport('smtp.zoho.com', 25))
+$transport = (new Swift_SmtpTransport('phpdemo.ru', 25))
                                      ->setUsername('keks@phpdemo.ru')
                                      ->setPassword('htmlacademy');
 // Формирование сообщения
