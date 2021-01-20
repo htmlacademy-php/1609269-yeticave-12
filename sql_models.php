@@ -67,7 +67,7 @@ function select_bids_by_id($id,$sql_host,$limit = 10){
     $bids_query = prepared_query($select_bids,$sql_host,[$id,$limit])->get_result();
     return mysqli_fetch_all($bids_query,MYSQLI_ASSOC);;
 }
-function insert_new_lot($sql_host){
+function insert_new_lot($sql_host,$date,$lot_name,$comment,$user_id,$category,$rate,$date_end,$step){
     $insert_add_pos=
     "INSERT INTO lots  (date_create,
                         name,
@@ -80,21 +80,28 @@ function insert_new_lot($sql_host){
                         step_rate)
     VALUES (?,?,?,?,?,?,?,?,?);";
     prepared_query($insert_add_pos,$sql_host,[
-                        date("Y-m-d H:i:s"),
-                        $_POST['lot-name'],
-                        $_POST['message'],
-                        $_SESSION['user']['id'],
-                        $_POST['category'],
+                        $date,
+                        $lot_name,
+                        $comment,
+                        $user_id,
+                        $category,
                         'None',
-                        $_POST['lot-rate'],
-                        $_POST['lot-date'],
-                        $_POST['lot-step']]);   
+                        $rate,
+                        $date_end,
+                        $step]);   
 }
-function insert_new_user($sql_host){
+function insert_new_user($sql_host,$date,$email,$name,$password,$message){
+    $password_hash = password_hash($password,PASSWORD_DEFAULT);
     $insert_new_user = 
     "INSERT INTO users(date_create,email,name,password,сontact)  
      VALUES (?,?,?,?,?)";
-     prepared_query($insert_new_user,$sql_host,[date("Y-m-d H:i:s"),$_POST['email'],$_POST['name'],password_hash($_POST['password'],PASSWORD_DEFAULT),$_POST['message']]);
+     prepared_query($insert_new_user,$sql_host,[$date,$email,$name,$password_hash,$message]);
+}
+function insert_new_bid($sql_host,$date,$price,$lot_id,$user_id){
+    $insert_bid =
+   "INSERT INTO bids(date_create,price,lot_id,user_id)
+    VALUES(?,?,?,?)";
+    prepared_query($insert_bid,$sql_host,[$date,$price,$lot_id,$user_id]);
 }
 function update_file_link($id,$file_url,$sql_host){
     $update_file_link=
@@ -113,6 +120,18 @@ function update_token($email,$sql_host,$len_token = 30){
      setcookie("login",$email,strtotime('+1 years'),"/");
      setcookie("auth_token",$auth_token,strtotime('+1 years'),"/");
 }
+function update_winner($sql_host){
+    $update_winner_query=
+    "UPDATE lots 
+    SET winner_id = COALESCE((
+        SELECT user_id
+        FROM bids
+        WHERE lot_id = lots.id
+        ORDER BY price DESC
+        limit 1),user_id)
+    WHERE date_completion <= NOW() AND winner_id IS NULL";
+    prepared_query($update_winner_query,$sql_host);
+}
 function count_lots_by_search_query($sql_host,$search_query){
     $sql_query = 
     "SELECT COUNT(*) as count
@@ -130,4 +149,76 @@ function select_lots_by_search_query($sql_host,$search_query,$limit,$page){
      OFFSET ?";
     $founding_lots_limit = prepared_query($search_with_limit,$sql_host,[$search_query,$limit,($page-1)*$limit])->get_result();
     return mysqli_fetch_all($founding_lots_limit,MYSQLI_ASSOC);
+}
+function count_bids_by_user_id($sql_host,$user_id){
+    $sql_query = 
+   "SELECT COUNT(*) as count
+    FROM bids
+    WHERE bids.user_id = ?";
+    $founding_bids = prepared_query($sql_query,$sql_host,[$user_id])->get_result();
+    return mysqli_fetch_assoc($founding_bids)['count'];
+}
+function count_lots_by_category_id($sql_host,$category_id){
+    $sql_query = 
+    "SELECT COUNT(*) as count
+    FROM lots
+    WHERE lots.category_id = ?";
+    $founding_lots = prepared_query($sql_query,$sql_host,[$category_id])->get_result();
+    return mysqli_fetch_assoc($founding_lots)['count'];
+}
+function select_lots_by_category_id($sql_host,$user_id,$limit,$page){
+    $sql_query=
+   "SELECT id,name,img_link,category_id,date_completion,
+    COALESCE((SELECT max(price) FROM bids WHERE bids.lot_id = lots.id),start_price) as price
+    FROM lots
+    WHERE lots.category_id = ? AND lots.date_completion >= NOW()
+    LIMIT ?
+    OFFSET ?";
+    $lots = prepared_query($sql_query,$sql_host,[$user_id,$limit,($page-1)*$limit])->get_result();
+    return mysqli_fetch_all($lots,MYSQLI_ASSOC);
+}
+function select_bids_by_user_id($sql_host,$user_id,$limit,$page){
+    $select_bids = 
+   "SELECT bids.id,bids.date_create,bids.user_id,lots.id AS lot_id,lots.name,img_link,bids.price,date_completion,
+    lots.category_id,lots.winner_id,lots.user_id,
+    IF(lots.date_completion > NOW(),1,0) AS lot_status,
+    (SELECT MAX(price) FROM bids WHERE lot_id = lots.id) AS max_price,
+    (SELECT MAX(price) FROM bids WHERE lot_id = lots.id AND bids.user_id = users.id) AS max_price_same_user,
+    (SELECT сontact FROM users WHERE id = lots.user_id) AS contact
+
+    FROM bids
+
+    LEFT JOIN users
+    ON bids.user_id= users.id
+
+    LEFT JOIN lots
+    ON bids.lot_id = lots.id
+
+    WHERE bids.user_id = ?
+    ORDER BY lot_status DESC,bids.date_create DESC
+    limit ?
+    OFFSET ?";
+    $bids_prepared = prepared_query($select_bids,$sql_host,[$user_id,$limit,($page-1)*$limit])->get_result();
+    return mysqli_fetch_all($bids_prepared,MYSQLI_ASSOC);
+}
+function select_bids_by_date_and_winner($sql_host){
+    $find_winners_query =
+    "SELECT bids.*,users.name,users.email,lots.name AS lot_name
+    FROM bids
+
+    LEFT JOIN lots
+    ON bids.lot_id = lots.id
+
+    LEFT JOIN users
+    ON bids.user_id = users.id
+
+    WHERE bids.price = (
+        SELECT price
+        FROM bids
+        WHERE lot_id = lots.id
+        ORDER BY price DESC
+        limit 1)
+    AND date_completion <= NOW() AND winner_id IS NULL";
+    $find_winners_prep = prepared_query($find_winners_query,$sql_host)->get_result();
+    return mysqli_fetch_all($find_winners_prep,MYSQLI_ASSOC);
 }

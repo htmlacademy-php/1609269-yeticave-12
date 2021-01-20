@@ -13,10 +13,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
     $error = check_input('cost',1,10000000,FILTER_VALIDATE_INT);
     $error = (!$error and $lot['min_bid'] > $_POST['cost']) ? "Ваша ставка ниже минимальной!":$error;
     if(!$error){
-        $insert_bid =
-       "INSERT INTO bids(date_create,price,lot_id,user_id)
-        VALUES(?,?,?,?)";
-        prepared_query($insert_bid,$con,[date("Y-m-d H:i:s"),$_POST['cost'],$_GET['id'],$_SESSION['user']['id']]);
+        insert_new_bid($con,date("Y-m-d H:i:s"),$_POST['cost'],$_GET['id'],$_SESSION['user']['id']);
         header("Location: /lot.php?id=".$id);
         die();
     }

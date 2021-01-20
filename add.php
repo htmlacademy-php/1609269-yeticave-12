@@ -15,7 +15,15 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $errors['lot-img'] = check_input_file('lot-img',10,['jpeg','jpg','png'],['image/jpeg','image/png']);
     $errors = array_filter($errors);
     if(!$errors){
-        insert_new_lot($con); 
+        insert_new_lot( $con,date("Y-m-d H:i:s"),
+                        $_POST['lot-name'],
+                        $_POST['message'],
+                        $_SESSION['user']['id'],
+                        $_POST['category'],
+                        'None',
+                        $_POST['lot-rate'],
+                        $_POST['lot-date'],
+                        $_POST['lot-step']); 
         $id =  mysqli_insert_id($con);
         $file_name = $id.".".pathinfo(trim($_FILES['lot-img']['name']), PATHINFO_EXTENSION);
         move_file($file_name,$_FILES['lot-img']['tmp_name'],'uploads');

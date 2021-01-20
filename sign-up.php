@@ -14,7 +14,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $errors['name'] = check_input('name',1,30);
     $errors['message'] = check_input('message',0,2000);
     if(!array_filter($errors)){
-        insert_new_user($con);
+        insert_new_user($con,
+                        date("Y-m-d H:i:s"),
+                        $_POST['email'],
+                        $_POST['name'],
+                        $_POST['password'],
+                        $_POST['message']);
         update_token($_POST['email'],$con);
         header('Location: '.$_SESSION['link']);
         die();
