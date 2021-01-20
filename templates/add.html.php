@@ -13,7 +13,7 @@
             
             <option value="">Выберите категорию</option>
           <?php foreach($categorys as $category):?>
-            <option <?=(e($_POST['category'] ?? "")==$category['id'])?"selected":""?> value='<?=e($category['id'])?>'><?=e($category['category'])?></option>
+            <option <?=($_POST['category'] ?? ""==$category['id'])?"selected":""?> value='<?=e($category['id'])?>'><?=e($category['category'])?></option>
           <?php endforeach;?>
 
           </select>
