@@ -14,7 +14,8 @@
  *
  * @return bool true при совпадении с форматом 'ГГГГ-ММ-ДД', иначе false
  */
-function is_date_valid(string $date) : bool {
+function is_date_valid(string $date) : bool
+{
     $format_to_check = 'Y-m-d';
     $dateTimeObj = date_create_from_format($format_to_check, $date);
 
@@ -30,7 +31,8 @@ function is_date_valid(string $date) : bool {
  *
  * @return mysqli_stmt Подготовленное выражение
  */
-function db_get_prepare_stmt($link, $sql, $data = []) {
+function db_get_prepare_stmt($link, $sql, $data = [])
+{
     $stmt = mysqli_prepare($link, $sql);
 
     if ($stmt === false) {
@@ -47,11 +49,9 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
 
             if (is_int($value)) {
                 $type = 'i';
-            }
-            else if (is_string($value)) {
+            } elseif (is_string($value)) {
                 $type = 's';
-            }
-            else if (is_double($value)) {
+            } elseif (is_double($value)) {
                 $type = 'd';
             }
 
@@ -97,7 +97,7 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
  *
  * @return string Рассчитанная форма множественнго числа
  */
-function get_noun_plural_form (int $number, string $one, string $two, string $many): string
+function get_noun_plural_form(int $number, string $one, string $two, string $many): string
 {
     $number = (int) $number;
     $mod10 = $number % 10;
@@ -128,11 +128,13 @@ function get_noun_plural_form (int $number, string $one, string $two, string $ma
  * @return string Итоговый HTML
  */
 
-function price_format($price){
-    return number_format(ceil($price),0,'',' ') . ' ₽'; 
+function price_format($price)
+{
+    return number_format(ceil($price), 0, '', ' ') . ' ₽';
 }
 
-function include_template($name, array $data = []) {
+function include_template($name, array $data = [])
+{
     $name = __DIR__ .'/templates/' . $name;
     $result = '';
 
@@ -145,84 +147,93 @@ function include_template($name, array $data = []) {
     return $result;
 }
 
-function diff_time($time){
+function diff_time($time)
+{
     $hours = floor((strtotime($time) - time())/3600);
     $min = floor(((strtotime($time) - time())/3600 - $hours)*60);
-    $hours = str_pad($hours,2,"0",STR_PAD_LEFT);
-    $min = str_pad($min,2,'0',STR_PAD_LEFT);
+    $hours = str_pad($hours, 2, "0", STR_PAD_LEFT);
+    $min = str_pad($min, 2, '0', STR_PAD_LEFT);
     return [$hours,$min];
 }
-function prepared_query($sql_query,$msqli,$passed_variables=[],$types_variables =""){
-    $types = $types_variables ?: str_repeat("s",count($passed_variables));
+function prepared_query($sql_query, $msqli, $passed_variables=[], $types_variables ="")
+{
+    $types = $types_variables ?: str_repeat("s", count($passed_variables));
     $stmt = $msqli->prepare($sql_query);
-    if($types){
+    if ($types) {
         $stmt->bind_param($types, ...$passed_variables);
     }
     $stmt->execute();
     return $stmt;
 }
-function page_404($categorys){
+function page_404($categorys)
+{
     http_response_code(404);
     $is_auth = 1;
-    if(!isset($_SESSION['user']['name'])){
+    if (!isset($_SESSION['user']['name'])) {
         $is_auth = 0;
         $_SESSION['user']['name'] = null;
     }
     $title_name = 'Файл не найден';
-    $content = include_template("404.php",[]);
-    $page = include_template("layout.php",[ 'content' => $content,
+    $content = include_template("404.php", []);
+    $page = include_template("layout.php", [ 'content' => $content,
                                             'is_auth' => $is_auth,
                                             'categorys' => $categorys,
                                             'title_name' => $title_name,
                                             'user_name' => $_SESSION['user']['name']]);
     print($page);
 }
-function page_403($categorys,$text){
+function page_403($categorys, $text)
+{
     http_response_code(403);
     $is_auth = 1;
-    if(!isset($_SESSION['user']['name'])){
+    if (!isset($_SESSION['user']['name'])) {
         $is_auth = 0;
         $_SESSION['user']['name'] = null;
     }
     $title_name = 'Страница недоступна';
-    $content = include_template("403.php",['text' => $text]);
-    $page = include_template("layout.php",[ 'content' => $content,
+    $content = include_template("403.php", ['text' => $text]);
+    $page = include_template("layout.php", [ 'content' => $content,
                                             'is_auth' => $is_auth,
                                             'categorys' => $categorys,
                                             'title_name' => $title_name,
                                             'user_name' => $_SESSION['user']['name']]);
     print($page);
 }
-function show_page($tempates_name,$title_name,$content_array = [],$categorys){
+function show_page($tempates_name, $title_name, $content_array = [], $categorys)
+{
     $is_auth = 1;
-    if(!isset($_SESSION['user']['name'])){
+    if (!isset($_SESSION['user']['name'])) {
         $is_auth = 0;
         $_SESSION['user']['name'] = null;
     }
-    $content = include_template($tempates_name,array_merge(['categorys' => $categorys,'is_auth' => $is_auth],$content_array));
-    $page = include_template("layout.php",[ 'content' => $content,
+    $content = include_template($tempates_name, array_merge(['categorys' => $categorys,'is_auth' => $is_auth], $content_array));
+    $page = include_template("layout.php", [ 'content' => $content,
                                             'categorys' => $categorys,
                                             'is_auth' => $is_auth,
                                             'title_name' => $title_name,
                                             'user_name' => $_SESSION['user']['name']]);
     print($page);
 }
-function e($output){
-    return htmlspecialchars($output,ENT_QUOTES);
+function e($output)
+{
+    return htmlspecialchars($output, ENT_QUOTES);
 }
-function move_file($file_name,$fime_tmp,$folder){
+function move_file($file_name, $fime_tmp, $folder)
+{
     $file_path = __DIR__ . '/'.$folder.'/';
     move_uploaded_file($fime_tmp, $file_path . $file_name);
 }
-function un_login($cookies = [],$sessions = []){
-    foreach($cookies as $cookie){
+function un_login($cookies = [], $sessions = [])
+{
+    foreach ($cookies as $cookie) {
         unset($_COOKIE[$cookie]);
         setcookie($cookie, null, -1, '/');
     }
-    foreach($sessions as $session){
+    foreach ($sessions as $session) {
         unset($_SESSION[$session]);
     }
 }
-function http_creator($page,$limit,$key =null,$value = null){
+function http_creator($page, $limit, $key =null, $value = null)
+{
     return http_build_query(['page' => $page,'limit' => $limit,$key => $value]);
 }

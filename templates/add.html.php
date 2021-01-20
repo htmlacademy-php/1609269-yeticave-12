@@ -12,7 +12,7 @@
           <select id="category" name="category">
             
             <option value="">Выберите категорию</option>
-          <?php foreach($categorys as $category):?>
+          <?php foreach ($categorys as $category):?>
             <option <?=($_POST['category'] ?? ""==$category['id'])?"selected":""?> value='<?=e($category['id'])?>'><?=e($category['category'])?></option>
           <?php endforeach;?>
 
