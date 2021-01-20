@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Проверяет переданную дату на соответствие формату 'ГГГГ-ММ-ДД'
  *
@@ -154,7 +155,9 @@ function diff_time($time){
 function prepared_query($sql_query,$msqli,$passed_variables=[],$types_variables =""){
     $types = $types_variables ?: str_repeat("s",count($passed_variables));
     $stmt = $msqli->prepare($sql_query);
-    $stmt->bind_param($types, ...$passed_variables);
+    if($types){
+        $stmt->bind_param($types, ...$passed_variables);
+    }
     $stmt->execute();
     return $stmt;
 }
