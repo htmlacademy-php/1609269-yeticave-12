@@ -13,7 +13,7 @@ function select_user_by_token($email, $auth_token, $sql_host)
     $select_user_by_token =
    "SELECT users.*
     FROM users
-    WHERE email = ? 
+    WHERE email = ?
     AND auth_token = ?";
     $user_query = prepared_query($select_user_by_token, $sql_host, [$email,$auth_token])->get_result();
     return mysqli_fetch_assoc($user_query);
@@ -22,8 +22,8 @@ function select_lot_by_id($id, $sql_host)
 {
     $select_lots =
     "SELECT lots.id ,name,start_price,img_link,
-    MAX(COALESCE(bids.price,lots.start_price)) AS price, 
-    date_completion ,category,description, 
+    MAX(COALESCE(bids.price,lots.start_price)) AS price,
+    date_completion ,category,description,
     MAX(COALESCE(bids.price,lots.start_price)) + step_rate AS min_bid,
     IF(lots.date_completion > NOW(),1,0) AS lot_status
 
@@ -44,7 +44,7 @@ function select_lots($sql_host)
 {
     $select_lots =
     "SELECT lots.id ,lots.date_create,name,start_price,img_link,
-    MAX(COALESCE(bids.price,lots.start_price)) AS price, 
+    MAX(COALESCE(bids.price,lots.start_price)) AS price,
     date_completion ,category
 
     FROM lots
@@ -101,7 +101,7 @@ function insert_new_user($sql_host, $date, $email, $name, $password, $message)
 {
     $password_hash = password_hash($password, PASSWORD_DEFAULT);
     $insert_new_user =
-    "INSERT INTO users(date_create,email,name,password,сontact)  
+    "INSERT INTO users(date_create,email,name,password,сontact)
      VALUES (?,?,?,?,?)";
     prepared_query($insert_new_user, $sql_host, [$date,$email,$name,$password_hash,$message]);
 }
@@ -134,7 +134,7 @@ function update_token($email, $sql_host, $len_token = 30)
 function update_winner($sql_host)
 {
     $update_winner_query=
-    "UPDATE lots 
+    "UPDATE lots
     SET winner_id = COALESCE((
         SELECT user_id
         FROM bids
@@ -159,7 +159,7 @@ function select_lots_by_search_query($sql_host, $search_query, $limit, $page)
     "SELECT lots.*, COALESCE((SELECT MAX(price) FROM bids WHERE lot_id = lots.id),lots.start_price) AS price
      FROM lots
      WHERE MATCH(lots.name, lots.description) AGAINST(? IN BOOLEAN MODE)
-     LIMIT ? 
+     LIMIT ?
      OFFSET ?";
     $founding_lots_limit = prepared_query($search_with_limit, $sql_host, [$search_query,$limit,($page-1)*$limit])->get_result();
     return mysqli_fetch_all($founding_lots_limit, MYSQLI_ASSOC);
