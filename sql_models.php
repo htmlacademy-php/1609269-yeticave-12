@@ -136,7 +136,7 @@ function update_winner($sql_host,$winner)
     $update_winner_query=
     'UPDATE lots
     SET winner_id = 1
-    WHERE name IN (?'.str_repeat(", ?",count($winner)-1).');';
+    WHERE id IN (?'.str_repeat(", ?",count($winner)-1).');';
     prepared_query($update_winner_query, $sql_host,$winner);
 }
 function count_lots_by_search_query($sql_host, $search_query)
@@ -217,7 +217,8 @@ function select_bids_by_user_id($sql_host, $user_id, $limit, $page)
 function select_bids_by_date_and_winner($sql_host)
 {
     $find_winners_query =
-    "SELECT bids.*,users.name,users.email,lots.name AS lot_name
+    "SELECT bids.*,users.name,users.email,lots.name AS lot_name, lots.id as lot_id,
+    (SELECT MAX(price) FROM bids WHERE lot_id = lots.id) AS max_price
     FROM bids
 
     LEFT JOIN lots
@@ -226,13 +227,8 @@ function select_bids_by_date_and_winner($sql_host)
     LEFT JOIN users
     ON bids.user_id = users.id
 
-    WHERE bids.price = (
-        SELECT price
-        FROM bids
-        WHERE lot_id = lots.id
-        ORDER BY price DESC
-        limit 1)
-    AND date_completion <= NOW() AND winner_id IS NULL";
+    WHERE date_completion <= NOW() AND winner_id IS NULL
+    GROUP BY max_price";
     $find_winners_prep = prepared_query($find_winners_query, $sql_host)->get_result();
     return mysqli_fetch_all($find_winners_prep, MYSQLI_ASSOC);
 }

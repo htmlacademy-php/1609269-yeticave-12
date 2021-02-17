@@ -1,7 +1,7 @@
 <?php
 $winners = select_bids_by_date_and_winner($con);
 if($winners){
-    $lot_winners = array_column($winners,"lot_name");
+    $lot_winners = array_column($winners,"lot_id");
     update_winner($con,$lot_winners);
     $transport = (new Swift_SmtpTransport($mailer["host"], $mailer["port"]))
     ->setUsername($mailer['username'])
