@@ -238,14 +238,11 @@ function http_creator($page, $limit, $key =null, $value = null)
     return http_build_query(['page' => $page,'limit' => $limit,$key => $value]);
 }
 
-function sending_message($mailer=[],$sender_name,$recipient,$mail_subject,$mail_info,$type_mail_info)
+function sending_message($transport,$username,$sender_name,$recipient,$mail_subject,$mail_info,$type_mail_info)
 {
-    $transport = (new Swift_SmtpTransport($mailer[0], $mailer[1]))
-    ->setUsername($mailer[3])
-    ->setPassword($mailer[4]);
     $message = new Swift_Message();
     $message->setSubject($mail_subject);
-    $message->setFrom($mailer[3], $sender_name);
+    $message->setFrom($username, $sender_name);
     $message->setTo($recipient);
     $message->setBody($mail_info, $type_mail_info);
 

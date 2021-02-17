@@ -131,18 +131,13 @@ function update_token($email, $sql_host, $len_token = 30)
     setcookie("login", $email, strtotime('+1 years'), "/");
     setcookie("auth_token", $auth_token, strtotime('+1 years'), "/");
 }
-function update_winner($sql_host)
+function update_winner($sql_host,$winner)
 {
     $update_winner_query=
-    "UPDATE lots
-    SET winner_id = COALESCE((
-        SELECT user_id
-        FROM bids
-        WHERE lot_id = lots.id
-        ORDER BY price DESC
-        limit 1),user_id)
-    WHERE date_completion <= NOW() AND winner_id IS NULL";
-    prepared_query($update_winner_query, $sql_host);
+    'UPDATE lots
+    SET winner_id = 1
+    WHERE name IN (?'.str_repeat(", ?",count($winner)-1).');';
+    prepared_query($update_winner_query, $sql_host,$winner);
 }
 function count_lots_by_search_query($sql_host, $search_query)
 {
