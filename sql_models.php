@@ -131,14 +131,6 @@ function update_token($email, $sql_host, $len_token = 30)
     setcookie("login", $email, strtotime('+1 years'), "/");
     setcookie("auth_token", $auth_token, strtotime('+1 years'), "/");
 }
-function update_winner($sql_host,$winner)
-{
-    $update_winner_query=
-    'UPDATE lots
-    SET winner_id = 1
-    WHERE id IN (?'.str_repeat(", ?",count($winner)-1).');';
-    prepared_query($update_winner_query, $sql_host,$winner);
-}
 function count_lots_by_search_query($sql_host, $search_query)
 {
     $sql_query =
@@ -228,7 +220,24 @@ function select_bids_by_date_and_winner($sql_host)
     ON bids.user_id = users.id
 
     WHERE date_completion <= NOW() AND winner_id IS NULL
-    GROUP BY max_price";
+    GROUP BY max_price;";
     $find_winners_prep = prepared_query($find_winners_query, $sql_host)->get_result();
+
+    $update_winner_id=
+    'UPDATE lots
+    SET lots.winner_id = lots.user_id
+    WHERE date_completion <= NOW() AND winner_id IS NULL;';
+    prepared_query($update_winner_id, $sql_host);
+
     return mysqli_fetch_all($find_winners_prep, MYSQLI_ASSOC);
+}
+function update_winner($sql_host,$winners)
+{
+    $update_winner_query=
+    'UPDATE lots
+    SET winner_id = ?
+    WHERE id = ?;';
+    foreach($winners as $winner){
+        prepared_query($update_winner_query, $sql_host,[$winner['user_id'],$winner['lot_id']]);
+    }
 }

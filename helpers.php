@@ -159,6 +159,7 @@ function prepared_query($sql_query, $msqli, $passed_variables=[], $types_variabl
 {
     $types = $types_variables ?: str_repeat("s", count($passed_variables));
     $stmt = $msqli->prepare($sql_query);
+    print($types_variables);
     if ($types) {
         $stmt->bind_param($types, ...$passed_variables);
     }
