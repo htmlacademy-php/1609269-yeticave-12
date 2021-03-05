@@ -1,0 +1,15 @@
+{
+    "name": "user/proect",
+    "type": "true",
+    "authors": [
+        {
+            "name": "Dmitry Aqq",
+            "email": "apgrayedd@mail.ru"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "swiftmailer/swiftmailer": "^6.2",
+        "imagine/imagine": "^1.2"
+    }
+}

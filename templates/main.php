@@ -5,7 +5,7 @@
         <ul class="promo__list">
 
         <!-- Перебор простого массива -->
-        <?php foreach($categorys as $category):?>
+        <?php foreach ($categorys as $category):?>
 
             <li class="promo__item promo__item--<?=e($category['code'])?>">
                 <a class="promo__link" href="all-lots.php?id=<?=e($category['id'])?>"><?=e($category['category'])?></a>
@@ -19,7 +19,7 @@
             <h2>Открытые лоты</h2>
         </div>
         <ul class="lots__list">
-        <?php foreach($lots as $lot):?>
+        <?php foreach ($lots as $lot):?>
             <li class="lots__item lot">
                 <div class="lot__image">
                     <img src="<?=e($lot['img_link'])?>" width="350" height="260" alt="">
@@ -32,7 +32,7 @@
                             <span class="lot__amount">Стартовая цена</span>
                             <span class="lot__cost"><?=e(price_format($lot['price']))?></span>
                         </div>
-                        <?php list($hours,$min) = diff_time($lot['date_completion'])?>
+                        <?php list($hours, $min) = diff_time($lot['date_completion'])?>
                         <?php $finishing = ($hours<1) ? "timer--finishing" : "" ?>
                         <div class="lot__timer timer <?= $finishing ?>">
                            <?=e($hours.":".$min)?>

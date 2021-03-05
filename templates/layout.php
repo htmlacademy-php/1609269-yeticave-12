@@ -20,7 +20,7 @@
             <input class="main-header__search-btn" type="submit">
         </form>
         <a class="main-header__add-lot button" href="add.php">Добавить лот</a>
-        <?php if($is_auth == 1):?>
+        <?php if ($is_auth == 1):?>
         <nav class="user-menu">
         <div class="user-menu__logged">
         <p><?= $user_name?></p>
@@ -41,11 +41,11 @@
         </nav>
     </div>
 </header>
-<?php if($_SERVER["REQUEST_URI"] != '/index.php'):?>
+<?php if ($_SERVER["REQUEST_URI"] != '/index.php'):?>
 <main>
     <nav class="nav">
       <ul class="nav__list container">
-      <?php foreach($categorys as $category):?>
+      <?php foreach ($categorys as $category):?>
         <li class="nav__item <?=($_GET['id'] == $category["id"]) ? "nav__item--current":""?>">
           <a href="all-lots.php?id=<?=e($category["id"])?>"><?=e($category["category"])?></a>
         </li>
@@ -60,7 +60,7 @@
 <footer class="main-footer">
     <nav class="nav">
       <ul class="nav__list container">
-        <?php foreach($categorys as $category):?>
+        <?php foreach ($categorys as $category):?>
         <li class="nav__item <?=($_GET['id'] == $category["id"]) ? "nav__item--current":""?>">
           <a href="all-lots.php?id=<?=e($category["id"])?>"><?=e($category["category"])?></a>
         </li>

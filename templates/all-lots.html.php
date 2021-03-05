@@ -3,8 +3,8 @@
       <section class="lots">
         <h2>Все лоты в категории <span><?=e($categorys[$_GET['id']]['category'])?></span></h2>
         <ul class="lots__list">
-        <?php if($lots):?>
-        <?php foreach($lots as $lot):?>
+        <?php if ($lots):?>
+        <?php foreach ($lots as $lot):?>
           <li class="lots__item lot">
             <div class="lot__image">
               <img src="<?=e($lot['img_link'])?>" width="350" height="260" alt="Сноуборд">
@@ -17,7 +17,7 @@
                   <span class="lot__amount">Стартовая цена</span>
                   <span class="lot__cost"><?=e(price_format($lot['price']))?></span>
                 </div>
-                <?php list($hours,$min) = diff_time($lot['date_completion'])?>
+                <?php list($hours, $min) = diff_time($lot['date_completion'])?>
                 <div class="lot__timer timer <?=e(($hours<1)? "timer--finishing":"")?>">
                 <?=e($hours.":".$min)?>
                 </div>
@@ -29,16 +29,16 @@
             <p>Данная категория пуста!</p>
         <?php endif;?>
       </section>
-      <?php if($lots and $count_page > 1):?>
+      <?php if ($lots and $count_page > 1):?>
         <ul class="pagination-list">
             <li class="pagination-item pagination-item-prev">
-            <?=($page != 1) ? '<a href="all-lots.php?'.e(http_creator($page-1,$limit,'id',$_GET['id'])).'">Назад</a></li>':""?>
-                <?php for($i = 1; $i <= $count_page;$i++):?>
+            <?=($page != 1) ? '<a href="all-lots.php?'.e(http_creator($page-1, $limit, 'id', $_GET['id'])).'">Назад</a></li>':""?>
+                <?php for ($i = 1; $i <= $count_page;$i++):?>
                 <li class="pagination-item <?=e(($page == $i) ? 'pagination-item-active':"")?>">
-                    <a <?='href="all-lots.php?'.e(http_creator($i,$limit,'id',$_GET['id'])).'"'?>><?=e($i)?></a></li>
+                    <a <?='href="all-lots.php?'.e(http_creator($i, $limit, 'id', $_GET['id'])).'"'?>><?=e($i)?></a></li>
                 <?php endfor;?>
             <li class="pagination-item pagination-item-next">
-            <?=($page >= $count_page) ? "":'<a href="all-lots.php?'.e(http_creator($page+1,$limit,'id',$_GET['id'])).'">Вперед</a></li>'?>
+            <?=($page >= $count_page) ? "":'<a href="all-lots.php?'.e(http_creator($page+1, $limit, 'id', $_GET['id'])).'">Вперед</a></li>'?>
         </ul>
       <?php endif;?>
     </div>
